@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 2 | Teoría de Juegos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2.5rem;
+            background-color: #fff;
+            border-bottom: 1px solid #dee2e6;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .top-header .logo img { max-height: 75px; }
+        .main-nav a { margin: 0 1.5rem; text-decoration: none; color: #495057; font-weight: 600; transition: color 0.3s; }
+        .main-nav a:hover { color: #007bff; }
+
+        .content-area { padding: 2rem 2.5rem 4rem 2.5rem; }
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .card h2 {
+            font-size: 2rem; font-weight: 700; margin-top: 0; margin-bottom: 2rem;
+            border-bottom: 2px solid #007bff; padding-bottom: 0.8rem; display: flex; align-items: center;
+        }
+        .card h2 .fa { margin-right: 1rem; color: #007bff; }
+        
+        footer {
+            text-align: center; padding: 3rem 0;
+            background-color: #343a40;
+            color: #fff;
+        }
+        .cta-button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+        .cta-button:hover { background-color: #0056b3; }
+        .collapsible-header {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 1rem;
+            font-size: 1.8rem; /* Adjust as needed */
+            font-weight: 700;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+        .collapsible-header:hover {
+            color: #0056b3;
+        }
+        .collapsible-header .icon {
+            margin-left: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .collapsible-header.active .icon {
+            transform: rotate(90deg);
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            padding-left: 1rem; /* Indent content slightly */
+            border-left: 3px solid #007bff;
+            margin-bottom: 1.5rem;
+        }
+        .collapsible-content.show {
+            max-height: 2000px; /* Arbitrary large value, adjust if content is longer */
+            padding-top: 1rem; /* Add some padding when shown */
+            padding-bottom: 1rem; /* Add some padding when shown */
+            transition: max-height 0.7s ease-in, padding 0.7s ease-in;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="logo">
+            <a href="index.html"><img src="recursos/logo.png" alt="Logo del Curso"></a>
+        </div>
+        <nav class="main-nav">
+            <a href="clase1.html">Sesión Anterior</a>
+            <a href="index.html">Temario</a>
+            <a href="clase3.html">Sesión Siguiente</a>
+        </nav>
+    </header>
+
+    <main class="content-area">
+        <div id="clase2-contenido" class="card">
+            <h2><i class="fas fa-chalkboard-teacher"></i> Sesión 2: Juegos Estáticos con Información Completa</h2>
+            
+            <h3 class="collapsible-header">Introducción a los Juegos Estáticos y la Información Completa <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>En la Sesión 1, establecimos las bases de la Teoría de Juegos, explorando sus orígenes, conceptos fundamentales y la idea central del Equilibrio de Nash. En esta sesión, profundizaremos en una categoría específica y fundamental de juegos: los <strong>Juegos Estáticos con Información Completa</strong>.</p>
+                <p>Un juego es <strong>estático</strong> cuando todos los jugadores toman sus decisiones de forma simultánea, o al menos sin conocer las decisiones de los demás jugadores. Es decir, no hay una secuencia de movimientos; cada jugador elige su estrategia una única vez, sin observar las acciones de los otros.</p>
+                <p>La condición de <strong>información completa</strong> implica que todos los aspectos del juego son de conocimiento común para todos los jugadores. Esto incluye:</p>
+                <ul>
+                    <li>Las identidades de todos los jugadores.</li>
+                    <li>Todas las estrategias posibles para cada jugador.</li>
+                    <li>Los pagos (utilidades) asociados a cada combinación de estrategias para cada jugador.</li>
+                    <li>La racionalidad de todos los jugadores (cada uno busca maximizar su propio pago y sabe que los demás también lo hacen).</li>
+                </ul>
+                <p>Esta combinación de simultaneidad en las decisiones y conocimiento perfecto de la estructura del juego nos permite analizar situaciones estratégicas de manera directa, utilizando herramientas como la matriz de pagos y el concepto de Equilibrio de Nash.</p>
+            </div>
+
+            <hr style="margin: 2.5rem 0;">
+
+            <h3 class="collapsible-header">Representación de Juegos Estáticos: La Forma Normal <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>Los juegos estáticos con información completa se representan comúnmente en su <strong>forma normal</strong> (o forma estratégica). Esta representación consiste en:</p>
+                <ol>
+                    <li>Un conjunto de jugadores.</li>
+                    <li>Un conjunto de estrategias disponibles para cada jugador.</li>
+                    <li>Una función de pagos para cada jugador, que asigna un valor numérico a cada combinación posible de estrategias.</li>
+                </ol>
+                <p>La forma más visual y utilizada para juegos de dos jugadores con un número limitado de estrategias es la <strong>matriz de pagos</strong>.</p>
+
+                <h4 style="margin-top: 2rem;">Ejemplo 1: Competencia de Precios en un Duopolio</h4>
+                <p>Consideremos un juego de competencia entre dos empresas, Coca-Cola y Pepsi, que dominan el mercado de refrescos. Deben decidir simultáneamente si establecer un precio alto o un precio bajo para su producto estrella.</p>
+                <table style="width:100%; border-collapse: collapse; margin-top: 1rem; text-align: center; border: 2px solid #dee2e6;">
+                    <thead style="background-color: #e9ecef;">
+                        <tr>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;"></th>
+                            <th colspan="2" style="padding: 12px; border: 1px solid #dee2e6;">Pepsi</th>
+                        </tr>
+                        <tr>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;"></th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600;">Precio Bajo</th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600;">Precio Alto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th rowspan="2" style="background-color: #e9ecef; vertical-align: middle; padding: 12px; border: 1px solid #dee2e6;">Coca-Cola</th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600; background-color: #f8f9fa;">Precio Bajo</th>
+                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(100, 100)</td>
+                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(300, 50)</td>
+                        </tr>
+                        <tr>
+                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600; background-color: #f8f9fa;">Precio Alto</th>
+                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(50, 300)</td>
+                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(200, 200)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1rem;">En cada celda, el primer número es el pago (ganancia en millones) para Coca-Cola y el segundo para Pepsi.</p>
+                <p style="margin-top: 1rem; background-color: #e9f7ff; border-left: 4px solid #007bff; padding: 10px;">
+                    <strong>Clarificación sobre el cálculo de pagos (cuotas de mercado):</strong> Los pagos en este tipo de modelos se derivan de la cuota de mercado que cada empresa captura. Por ejemplo:
+                    <ul>
+                        <li>Si ambas eligen <strong>Precio Alto</strong>, mantienen el status quo, dividiéndose el mercado equitativamente con altos márgenes (pago de 200 para cada una).</li>
+                        <li>Si ambas eligen <strong>Precio Bajo</strong>, inician una guerra de precios. Ganan cuota de mercado frente a otras bebidas, pero sus márgenes de ganancia se reducen drásticamente, resultando en un pago menor (100 para cada una).</li>
+                        <li>Si Coca-Cola elige <strong>Precio Bajo</strong> y Pepsi <strong>Precio Alto</strong>, Coca-Cola captura una gran porción del mercado de Pepsi, ya que los consumidores prefieren el producto más barato. Esto resulta en un pago alto para Coca-Cola (300) y uno muy bajo para Pepsi (50), y viceversa.</li>
+                    </ul>
+                </p>
+
+                <h4 style="margin-top: 2rem;">Ejemplo 2: Dilema de Gasto en Campaña Electoral (Ciencia Política)</h4>
+                <p>Dos partidos políticos, Partido Azul y Partido Rojo, deben decidir si lanzar una campaña de "alto gasto" (con muchos anuncios y eventos) o una de "bajo gasto".</p>
+                <table style="width:100%; border-collapse: collapse; margin-top: 1rem; text-align: center; border: 2px solid #dee2e6;">
+                    <thead style="background-color: #e9ecef;">
+                        <tr>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;"></th>
+                            <th colspan="2" style="padding: 12px; border: 1px solid #dee2e6;">Partido Rojo</th>
+                        </tr>
+                        <tr>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;"></th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600;">Alto Gasto</th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600;">Bajo Gasto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th rowspan="2" style="background-color: #e9ecef; vertical-align: middle; padding: 12px; border: 1px solid #dee2e6;">Partido Azul</th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600; background-color: #f8f9fa;">Alto Gasto</th>
+                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(-5, -5)</td>
+                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(10, -10)</td>
+                        </tr>
+                        <tr>
+                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600; background-color: #f8f9fa;">Bajo Gasto</th>
+                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(-10, 10)</td>
+                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(5, 5)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1rem;">Los pagos representan una combinación de probabilidad de ganar y el costo de la campaña.
+                    <ul>
+                        <li><strong>(Alto, Alto)</strong>: Ambos partidos gastan enormes sumas de dinero, pero el efecto se anula mutuamente. El resultado es una gran pérdida de recursos para ambos (-5, -5).</li>
+                        <li><strong>(Bajo, Bajo)</strong>: Ambos ahorran recursos y compiten en base a sus méritos, logrando un resultado positivo para ambos en términos de eficiencia (5, 5).</li>
+                        <li><strong>(Alto, Bajo)</strong>: El partido que gasta más obtiene una ventaja decisiva en visibilidad, ganando la elección (pago de 10), mientras que el otro no solo pierde, sino que parece débil (pago de -10).</li>
+                    </ul>
+                Este es un ejemplo clásico del "Dilema del Prisionero", donde la opción racional individual (Alto Gasto) lleva a un resultado colectivo peor.
+                </p>
+
+                <h4 style="margin-top: 2rem;">Ejemplo 3: Guerra de Formatos (Empresas Reales)</h4>
+                <p>Recordemos la batalla entre Sony (con Blu-ray) y Toshiba (con HD-DVD) a mediados de los 2000. Ambas empresas tenían que decidir si lanzar su formato de disco de alta definición de forma agresiva o esperar. Los pagos representan el control del mercado (valorado en miles de millones).</p>
+                <table style="width:100%; border-collapse: collapse; margin-top: 1rem; text-align: center; border: 2px solid #dee2e6;">
+                    <thead style="background-color: #e9ecef;">
+                        <tr>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;"></th>
+                            <th colspan="2" style="padding: 12px; border: 1px solid #dee2e6;">Toshiba (HD-DVD)</th>
+                        </tr>
+                        <tr>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;"></th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600;">Lanzamiento Agresivo</th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600;">Lanzamiento Limitado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th rowspan="2" style="background-color: #e9ecef; vertical-align: middle; padding: 12px; border: 1px solid #dee2e6;">Sony (Blu-ray)</th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600; background-color: #f8f9fa;">Lanzamiento Agresivo</th>
+                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(20, 20)</td>
+                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(80, 10)</td>
+                        </tr>
+                        <tr>
+                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600; background-color: #f8f9fa;">Lanzamiento Limitado</th>
+                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(10, 80)</td>
+                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(40, 40)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1rem;">
+                    <ul>
+                        <li><strong>(Agresivo, Agresivo)</strong>: Ambas inundan el mercado, fragmentándolo y confundiendo al consumidor. La guerra de precios reduce las ganancias potenciales para ambas (20, 20).</li>
+                        <li><strong>(Limitado, Limitado)</strong>: Ambas coexisten en nichos, obteniendo ganancias moderadas pero estables (40, 40).</li>
+                        <li><strong>(Agresivo, Limitado)</strong>: La empresa agresiva (Sony) logra acuerdos exclusivos (como con PlayStation 3) y domina el mercado rápidamente, dejando a la otra con una cuota mínima (80, 10). Esto es, en esencia, lo que ocurrió.</li>
+                    </ul>
+                </p>
+            </div>
+
+            <hr style="margin: 2.5rem 0;">
+
+            <h3 class="collapsible-header">Equilibrio de Nash en Estrategias Puras <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>El <strong>Equilibrio de Nash en estrategias puras</strong> es una combinación de estrategias (una para cada jugador) tal que ningún jugador puede mejorar su pago cambiando unilateralmente su estrategia, asumiendo que los demás jugadores mantienen las suyas.</p>
+                <p>Para encontrarlo en una matriz de pagos, podemos seguir un proceso de "mejor respuesta":</p>
+                <ol>
+                    <li>Para cada estrategia de un jugador, identificamos la mejor respuesta del otro jugador.</li>
+                    <li>Las celdas donde ambas estrategias son mejores respuestas mutuas son Equilibrios de Nash.</li>
+                </ol>
+                <h4>Ejemplo: Encontrando el Equilibrio de Nash</h4>
+                <p>Volvamos al ejemplo de las empresas A y B:</p>
+                <table border="1" style="width:100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th colspan="2">Empresa B</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>Publicitar</th>
+                            <th>No Publicitar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th rowspan="2">Empresa A</th>
+                            <th>Publicitar</th>
+                            <td>(5, 5)</td>
+                            <td>(10, 0)</td>
+                        </tr>
+                        <tr>
+                            <th>No Publicitar</th>
+                            <td>(0, 10)</td>
+                            <td>(2, 2)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1rem;">Analicemos las mejores respuestas:</p>
+                <ul>
+                    <li><strong>Para la Empresa A:</strong>
+                        <ul>
+                            <li>Si B elige Publicitar, la mejor respuesta de A es Publicitar (5 > 0).</li>
+                            <li>Si B elige No Publicitar, la mejor respuesta de A es Publicitar (10 > 2).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Para la Empresa B:</strong>
+                        <ul>
+                            <li>Si A elige Publicitar, la mejor respuesta de B es Publicitar (5 > 0).</li>
+                            <li>Si A elige No Publicitar, la mejor respuesta de B es Publicitar (10 > 2).</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>En este caso, la estrategia "Publicitar" es una estrategia dominante para ambas empresas. El único Equilibrio de Nash en estrategias puras es <strong>(Publicitar, Publicitar)</strong>, con pagos (5, 5).</p>
+            </div>
+
+            <hr style="margin: 2.5rem 0;">
+
+            <h3 class="collapsible-header">Dominancia: Estrategias Dominantes y Dominadas <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>El concepto de <strong>dominancia</strong> es una herramienta poderosa para simplificar juegos y, en algunos casos, predecir el resultado sin necesidad de buscar el Equilibrio de Nash directamente.</p>
+                <h4>Estrategia Dominante</h4>
+                <p>Una estrategia es <strong>estrictamente dominante</strong> para un jugador si le proporciona un pago estrictamente mayor que cualquier otra de sus estrategias, <em>independientemente de lo que hagan los demás jugadores</em>.</p>
+                <p>Si un jugador tiene una estrategia estrictamente dominante, un jugador racional siempre la elegirá. Si todos los jugadores tienen una estrategia estrictamente dominante, el resultado del juego es una combinación de estas estrategias dominantes, y este resultado será un Equilibrio de Nash.</p>
+                <h4>Estrategia Dominada</h4>
+                <p>Una estrategia es <strong>estrictamente dominada</strong> para un jugador si existe otra estrategia que le proporciona un pago estrictamente mayor, <em>independientemente de lo que hagan los demás jugadores</em>.</p>
+                <p>Los jugadores racionales nunca elegirán una estrategia estrictamente dominada. Esto nos permite eliminar estas estrategias de la matriz de pagos, simplificando el juego. Este proceso se conoce como <strong>Eliminación Iterada de Estrategias Estrictamente Dominadas (EIED)</strong>. Si este proceso conduce a una única combinación de estrategias, esa combinación será el único Equilibrio de Nash del juego.</p>
+                <h4>Ejemplo de EIED</h4>
+                <p>Consideremos el siguiente juego:</p>
+                <table border="1" style="width:100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th colspan="3">Jugador 2</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>Izquierda</th>
+                            <th>Centro</th>
+                            <th>Derecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th rowspan="2">Jugador 1</th>
+                            <th>Arriba</th>
+                            <td>(3, 1)</td>
+                            <td>(1, 2)</td>
+                            <td>(0, 0)</td>
+                        </tr>
+                        <tr>
+                            <th>Abajo</th>
+                            <td>(2, 0)</td>
+                            <td>(0, 1)</td>
+                            <td>(1, 3)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1rem;"><strong>Paso 1: Jugador 1</strong></p>
+                <ul>
+                    <li>Si Jugador 2 elige Izquierda: Arriba (3) > Abajo (2)</li>
+                    <li>Si Jugador 2 elige Centro: Arriba (1) > Abajo (0)</li>
+                    <li>Si Jugador 2 elige Derecha: Abajo (1) > Arriba (0)</li>
+                </ul>
+                <p>Ninguna estrategia es estrictamente dominante o dominada para el Jugador 1.</p>
+                <p><strong>Paso 2: Jugador 2</strong></p>
+                <ul>
+                    <li>Si Jugador 1 elige Arriba: Centro (2) > Izquierda (1) y Derecha (0).</li>
+                    <li>Si Jugador 1 elige Abajo: Derecha (3) > Centro (1) y Izquierda (0).</li>
+                </ul>
+                <p>La estrategia "Izquierda" del Jugador 2 es dominada por "Centro" (1 < 2, 0 < 1). Eliminamos la columna "Izquierda".</p>
+                <table border="1" style="width:100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th colspan="2">Jugador 2</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>Centro</th>
+                            <th>Derecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th rowspan="2">Jugador 1</th>
+                            <th>Arriba</th>
+                            <td>(1, 2)</td>
+                            <td>(0, 0)</td>
+                        </tr>
+                        <tr>
+                            <th>Abajo</th>
+                            <td>(0, 1)</td>
+                            <td>(1, 3)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1rem;"><strong>Paso 3: Jugador 1 (después de la eliminación)</strong></p>
+                <ul>
+                    <li>Si Jugador 2 elige Centro: Arriba (1) > Abajo (0)</li>
+                    <li>Si Jugador 2 elige Derecha: Abajo (1) > Arriba (0)</li>
+                </ul>
+                <p>Ninguna estrategia es estrictamente dominante o dominada para el Jugador 1 en la matriz reducida.</p>
+                <p><strong>Paso 4: Jugador 2 (después de la eliminación)</strong></p>
+                <ul>
+                    <li>Si Jugador 1 elige Arriba: Centro (2) > Derecha (0)</li>
+                    <li>Si Jugador 1 elige Abajo: Derecha (3) > Centro (1)</li>
+                </ul>
+                <p>Ninguna estrategia es estrictamente dominante o dominada para el Jugador 2 en la matriz reducida.</p>
+                <p>En este caso, la EIED no nos lleva a un único resultado, lo que significa que debemos buscar Equilibrios de Nash en la matriz reducida.</p>
+            </div>
+
+            <hr style="margin: 2.5rem 0;">
+
+            <h3 class="collapsible-header">Equilibrio de Nash en Estrategias Mixtas <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>Hasta ahora, hemos asumido que los jugadores eligen una estrategia específica con certeza (estrategias puras). Sin embargo, en muchos juegos, especialmente cuando no hay un Equilibrio de Nash en estrategias puras, los jugadores pueden optar por <strong>estrategias mixtas</strong>.</p>
+                <p>Una estrategia mixta es una distribución de probabilidad sobre las estrategias puras de un jugador. Es decir, un jugador elige aleatoriamente entre sus estrategias puras con ciertas probabilidades.</p>
+                <p>El <strong>Equilibrio de Nash en estrategias mixtas</strong> es una combinación de estrategias mixtas (una para cada jugador) tal que ningún jugador puede mejorar su pago esperado cambiando unilateralmente su estrategia mixta, asumiendo que los demás jugadores mantienen las suyas.</p>
+                <h4>¿Por qué estrategias mixtas?</h4>
+                <ul>
+                    <li><strong>Impredecibilidad:</strong> Si un jugador siempre elige la misma estrategia, el oponente puede explotar esa predictibilidad. Las estrategias mixtas introducen un elemento de sorpresa.</li>
+                    <li><strong>Existencia:</strong> Un teorema fundamental de Nash (1950) establece que todo juego finito con un número finito de jugadores y estrategias puras tiene al menos un Equilibrio de Nash, ya sea en estrategias puras o mixtas.</li>
+                </ul>
+                <h4>Cálculo de un Equilibrio de Nash en Estrategias Mixtas</h4>
+                <p>Para calcular un Equilibrio de Nash en estrategias mixtas, cada jugador debe estar indiferente entre sus estrategias puras que se juegan con probabilidad positiva, dado que el otro jugador está jugando su estrategia mixta de equilibrio. Esto significa que el pago esperado de cada estrategia pura utilizada en la mezcla debe ser el mismo.</p>
+                <h4>Ejemplo: Juego de "Pares o Nones"</h4>
+                <p>Dos jugadores muestran uno o dos dedos. Si la suma es par, el Jugador 1 gana. Si la suma es impar, el Jugador 2 gana.</p>
+                <table border="1" style="width:100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th colspan="2">Jugador 2</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>1 Dedo</th>
+                            <th>2 Dedos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th rowspan="2">Jugador 1</th>
+                            <th>1 Dedo</th>
+                            <td>(1, -1)</td>
+                            <td>(-1, 1)</td>
+                        </tr>
+                        <tr>
+                            <th>2 Dedos</th>
+                            <td>(-1, 1)</td>
+                            <td>(1, -1)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1rem;">No hay Equilibrio de Nash en estrategias puras. Si el Jugador 1 elige 1 Dedo, el Jugador 2 querrá elegir 2 Dedos. Pero si el Jugador 2 elige 2 Dedos, el Jugador 1 querrá elegir 2 Dedos, y así sucesivamente.</p>
+                <p>En este juego, el Equilibrio de Nash en estrategias mixtas es que ambos jugadores elijan cada estrategia pura (1 Dedo o 2 Dedos) con una probabilidad de 0.5. Esto hace que el oponente sea indiferente entre sus propias estrategias, ya que el pago esperado es cero para ambas.</p>
+            </div>
+
+            <hr style="margin: 2.5rem 0;">
+
+            <h3 class="collapsible-header">Aplicaciones en Competencia Política <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>La teoría de juegos estáticos con información completa es una herramienta invaluable para analizar la competencia política, donde los actores (partidos, candidatos, votantes) toman decisiones simultáneas que afectan los resultados electorales o legislativos.</p>
+                <h4>Modelo de Hotelling (Competencia Espacial)</h4>
+                <p>Uno de los modelos más influyentes es el <strong>Modelo de Hotelling</strong>, que originalmente describía la ubicación de tiendas en una calle, pero se ha adaptado para explicar la competencia política.</p>
+                <ul>
+                    <li><strong>Contexto:</strong> Dos partidos políticos compiten por los votos de los ciudadanos, que se distribuyen a lo largo de un espectro ideológico (ej. de izquierda a derecha).</li>
+                    <li><strong>Estrategias:</strong> La posición ideológica que cada partido elige adoptar.</li>
+                    <li><strong>Pagos:</strong> El número de votos obtenidos (o la probabilidad de ganar la elección).</li>
+                </ul>
+                <p>El modelo predice que, bajo ciertas condiciones (votantes que eligen al partido más cercano a su ideología, distribución uniforme de votantes), ambos partidos convergerán hacia el <strong>centro del espectro ideológico</strong>. Esto se conoce como el <strong>Teorema del Votante Mediano</strong>. El Equilibrio de Nash es que ambos partidos se posicionen en la mediana de la distribución de votantes, ya que cualquier desviación permitiría al oponente capturar más votos.</p>
+                <p>Este modelo ayuda a explicar por qué los partidos políticos en sistemas bipartidistas a menudo adoptan plataformas moderadas y similares durante las elecciones generales.</p>
+                <h4>Dilemas de Financiación de Campañas</h4>
+                <p>Consideremos dos candidatos que deben decidir si gastar mucho o poco en publicidad de campaña. Los pagos pueden reflejar la probabilidad de ganar y el costo de la campaña.</p>
+                <table border="1" style="width:100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th colspan="2">Candidato B</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>Gastar Mucho</th>
+                            <th>Gastar Poco</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th rowspan="2">Candidato A</th>
+                            <th>Gastar Mucho</th>
+                            <td>(0, 0)</td>
+                            <td>(1, -1)</td>
+                        </tr>
+                        <tr>
+                            <th>Gastar Poco</th>
+                            <td>(-1, 1)</td>
+                            <td>(0, 0)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1rem;">En este juego, si ambos gastan mucho, se anulan y ambos obtienen 0. Si uno gasta mucho y el otro poco, el que gasta mucho gana (1) y el otro pierde (-1). Si ambos gastan poco, ambos obtienen 0. Este es un juego de tipo "Guerra de Desgaste" o "Dilema del Prisionero" modificado, donde el Equilibrio de Nash puede ser que ambos gasten mucho, resultando en un derroche de recursos sin un beneficio claro para ninguno.</p>
+            </div>
+
+            <hr style="margin: 2.5rem 0;">
+
+            <h3 class="collapsible-header">Aplicaciones en Bienes Públicos <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>La provisión de bienes públicos es un área clásica de aplicación de la teoría de juegos, especialmente los juegos estáticos. Un <strong>bien público</strong> se caracteriza por ser no-rival (el consumo de uno no impide el consumo de otro) y no-excluyente (es difícil o imposible impedir que alguien lo consuma una vez que ha sido provisto).</p>
+                <h4>El Problema del Free-Rider (Gorrón)</h4>
+                <p>El problema central en la provisión de bienes públicos es el <strong>problema del free-rider</strong>. Cada individuo tiene un incentivo para no contribuir a la provisión del bien, esperando que otros lo hagan, y así disfrutar del beneficio sin incurrir en el costo. Esto a menudo lleva a una subprovisión del bien público.</p>
+                <h4>Ejemplo: Contribución a un Parque Público</h4>
+                <p>Imagina dos vecinos que deben decidir si contribuir (C) o no contribuir (NC) a la creación de un parque público. El parque tiene un valor de 10 para cada vecino, y el costo total es de 12. Si solo uno contribuye, paga 12 y el otro 0. Si ambos contribuyen, cada uno paga 6.</p>
+                <table border="1" style="width:100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th colspan="2">Vecino 2</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>Contribuir</th>
+                            <th>No Contribuir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th rowspan="2">Vecino 1</th>
+                            <th>Contribuir</th>
+                            <td>(4, 4)</td>
+                            <td>(-2, 10)</td>
+                        </tr>
+                        <tr>
+                            <th>No Contribuir</th>
+                            <td>(10, -2)</td>
+                            <td>(0, 0)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 1rem;">Analicemos las mejores respuestas:</p>
+                <ul>
+                    <li><strong>Para Vecino 1:</strong>
+                        <ul>
+                            <li>Si Vecino 2 contribuye: No Contribuir (10 > 4).</li>
+                            <li>Si Vecino 2 no contribuye: No Contribuir (0 > -2).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Para Vecino 2:</strong>
+                        <ul>
+                            <li>Si Vecino 1 contribuye: No Contribuir (10 > 4).</li>
+                            <li>Si Vecino 1 no contribuye: No Contribuir (0 > -2).</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>La estrategia "No Contribuir" es estrictamente dominante para ambos vecinos. El único Equilibrio de Nash es <strong>(No Contribuir, No Contribuir)</strong>, con pagos (0, 0). Este resultado es subóptimo, ya que si ambos hubieran contribuido, ambos habrían obtenido un pago de 4.</p>
+                <p>Este ejemplo ilustra por qué los gobiernos a menudo tienen que intervenir (a través de impuestos o regulaciones) para asegurar la provisión de bienes públicos, ya que el mercado por sí solo no puede resolver el problema del free-rider.</p>
+            </div>
+
+            <hr style="margin: 2.5rem 0;">
+
+            <h3 class="collapsible-header">Conclusiones de la Sesión 2 <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>En esta sesión, hemos explorado los Juegos Estáticos con Información Completa, una categoría fundamental en la Teoría de Juegos. Hemos aprendido a representarlos mediante matrices de pagos y a identificar el Equilibrio de Nash en estrategias puras, así como a utilizar el concepto de dominancia para simplificar el análisis. También hemos introducido la idea de Equilibrio de Nash en estrategias mixtas, crucial para juegos donde no existe un equilibrio en estrategias puras.</p>
+                <p>Las aplicaciones en competencia política y provisión de bienes públicos demuestran la relevancia de estos conceptos para entender fenómenos del mundo real, desde la convergencia ideológica de los partidos hasta el persistente problema del free-rider.</p>
+                <p>La próxima sesión nos llevará al mundo de los juegos dinámicos, donde la secuencia de movimientos añade una nueva capa de complejidad y estrategia.</p>
+            </div>
+        </div>
+        <div class="text-center">
+             <a href="index.html" class="cta-button">Volver al Temario</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Dr. Marco Antonio Leon Zaragoza</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const headers = document.querySelectorAll('.collapsible-header');
+            headers.forEach(header => {
+                header.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling; // Assuming content is immediately after header
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                        content.classList.remove('show');
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        content.classList.add('show');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+### Guion para Video de Bienvenida: "Teoría de Juegos: El Arte del Pensamiento Estratégico"
+
+**Duración Estimada:** 2.5 minutos
+
+**Objetivo:** Dar la bienvenida a los estudiantes al curso, presentar la Teoría de Juegos de una manera atractiva y explicar su relevancia fundamental para los profesionales de la ciencia política y la administración pública.
+
+---
+
+**(0:00-0:15) - Introducción y Bienvenida**
+
+*   **Visual:** Inicio con el logo del Colegio Libre de Hidalgo y el título del curso. Transición suave a una toma del Dr. Marco Antonio Leon Zaragoza en un entorno profesional y académico (una biblioteca, un estudio, etc.).
+*   **Audio:** Música de fondo inspiradora y sutil.
+
+> **Dr. Leon:** "Bienvenidos al curso de Teoría de Juegos y Modelado Formal. Soy el Dr. Marco Antonio Leon Zaragoza, y es un placer guiarlos en este fascinante viaje intelectual. En un mundo cada vez más complejo e interconectado, la capacidad de anticipar, strategize, y tomar decisiones óptimas no es un lujo, es una necesidad."
+
+---
+
+**(0:15-1:00) - ¿Qué es la Teoría de Juegos? (El Lenguaje de la Estrategia)**
+
+*   **Visual:** Gráficos animados simples que ilustran conceptos básicos: dos jugadores, opciones (cooperar/competir), y resultados (payoffs). Se pueden usar íconos para representar a los actores (ej. dos políticos, dos países).
+*   **Audio:** El tono del Dr. Leon es entusiasta y claro.
+
+> **Dr. Leon:** "Pero, ¿qué es exactamente la Teoría de Juegos? Imaginen que no es una teoría en el sentido abstracto, sino un lenguaje. Es el lenguaje de la estrategia. Nos proporciona las herramientas para analizar situaciones en las que el éxito de nuestras decisiones depende de las decisiones de otros. Desde una negociación comercial hasta una campaña electoral, desde la gestión de recursos públicos hasta las relaciones internacionales, la vida está llena de 'juegos' estratégicos."
+
+---
+
+**(1:00-2:00) - ¿Por qué es Vital para la Ciencia Política y la Administración Pública?**
+
+*   **Visual:** Escenas de video o imágenes de alta calidad que representen los ejemplos:
+    *   Un debate político intenso.
+    *   Una mesa de negociación de un tratado internacional.
+    *   Un equipo de funcionarios públicos planificando un proyecto de infraestructura.
+    *   Gráficos que muestren la asignación de recursos.
+*   **Audio:** La música sube ligeramente de intensidad para enfatizar la importancia.
+
+> **Dr. Leon:** "Para nosotros, como politólogos y administradores públicos, esta disciplina es fundamental. ¿Cómo puede un partido político diseñar una plataforma que atraiga al votante mediano sin perder a su base? ¿Cómo pueden dos naciones evitar un conflicto costoso cuando sus intereses chocan? ¿Cómo diseñamos una subasta de contratos públicos que garantice la eficiencia y minimice la corrupción? La Teoría de Juegos no nos da respuestas mágicas, pero sí nos ofrece un mapa. Nos ayuda a entender la lógica detrás de las acciones de los demás, a prever las consecuencias de nuestras propias jugadas y, lo más importante, a diseñar 'las reglas del juego' –instituciones, políticas y normativas– que incentiven la cooperación y conduzcan a mejores resultados para la sociedad."
+
+---
+
+**(2:00-2:30) - Conclusión y Llamada a la Acción**
+
+*   **Visual:** El Dr. Leon vuelve a la cámara, con una expresión de entusiasmo y motivación. El logo del curso y la información de contacto aparecen en la pantalla.
+*   **Audio:** La música llega a un crescendo y luego se desvanece suavemente.
+
+> **Dr. Leon:** "En este curso, no solo aprenderán los conceptos teóricos. Se ensuciarán las manos. Analizarán casos reales, construirán modelos y debatirán soluciones. Se prepararán para ser no solo observadores, sino arquitectos del cambio. Estoy convencido de que al final de este viaje, verán el mundo de una manera completamente nueva. Empecemos."
+
+---

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 4 | Teoría de Juegos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2.5rem;
+            background-color: #fff;
+            border-bottom: 1px solid #dee2e6;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .top-header .logo img { max-height: 75px; }
+        .main-nav a { margin: 0 1.5rem; text-decoration: none; color: #495057; font-weight: 600; transition: color 0.3s; }
+        .main-nav a:hover { color: #007bff; }
+
+        .content-area { padding: 2rem 2.5rem 4rem 2.5rem; }
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .card h2 {
+            font-size: 2rem; font-weight: 700; margin-top: 0; margin-bottom: 2rem;
+            border-bottom: 2px solid #007bff; padding-bottom: 0.8rem; display: flex; align-items: center;
+        }
+        .card h2 .fa { margin-right: 1rem; color: #007bff; }
+        
+        footer {
+            text-align: center; padding: 3rem 0;
+            background-color: #343a40;
+            color: #fff;
+        }
+        .cta-button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+        .cta-button:hover { background-color: #0056b3; }
+        .collapsible-header {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 1rem;
+            font-size: 1.8rem; /* Adjust as needed */
+            font-weight: 700;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+        .collapsible-header:hover {
+            color: #0056b3;
+        }
+        .collapsible-header .icon {
+            margin-left: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .collapsible-header.active .icon {
+            transform: rotate(90deg);
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            padding-left: 1rem; /* Indent content slightly */
+            border-left: 3px solid #007bff;
+            margin-bottom: 1.5rem;
+        }
+        .collapsible-content.show {
+            max-height: 2000px; /* Arbitrary large value, adjust if content is longer */
+            padding-top: 1rem; /* Add some padding when shown */
+            padding-bottom: 1rem; /* Add some padding when shown */
+            transition: max-height 0.7s ease-in, padding 0.7s ease-in;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="logo">
+            <a href="index.html"><img src="recursos/logo.png" alt="Logo del Curso"></a>
+        </div>
+        <nav class="main-nav">
+            <a href="clase3.html">Sesión Anterior</a>
+            <a href="index.html">Temario</a>
+            <a href="clase5.html">Sesión Siguiente</a>
+        </nav>
+    </header>
+
+    <main class="content-area">
+        <div id="clase4-contenido" class="card">
+            <h2><i class="fas fa-chalkboard-teacher"></i> Sesión 4: Juegos Estáticos con Información Incompleta (Juegos Bayesianos)</h2>
+            
+            <h3 class="collapsible-header">Introducción a los Juegos con Información Incompleta <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>Hasta ahora, hemos analizado juegos bajo el supuesto de <strong>información completa</strong>, donde todos los jugadores conocen perfectamente la estructura del juego, incluyendo las funciones de pagos de los demás. Sin embargo, en el mundo real, esta suposición rara vez se cumple. Los actores políticos, económicos y sociales a menudo operan con información limitada sobre las preferencias, capacidades o intenciones de sus oponentes.</p>
+                <p>Los <strong>Juegos con Información Incompleta</strong> abordan esta realidad. En estos juegos, al menos un jugador no conoce algún aspecto relevante del juego. Por ejemplo, un candidato político puede no saber la verdadera ideología de un votante, o una empresa puede no conocer los costos de producción de su competidor.</p>
+                <p>La clave para modelar la información incompleta es el concepto de <strong>"tipo"</strong> de un jugador. Cada jugador puede ser de diferentes tipos, y su tipo determina su función de pagos o sus estrategias disponibles. La información incompleta surge cuando un jugador no conoce el tipo de otro jugador.</p>
+                <h4>Información Incompleta vs. Información Imperfecta</h4>
+                <ul>
+                    <li><strong>Información Incompleta:</strong> Un jugador no conoce la función de pagos o los tipos de otros jugadores. Es decir, no conoce todos los elementos del juego.</li>
+                    <li><strong>Información Imperfecta:</strong> Un jugador no conoce las acciones que otros jugadores han tomado previamente en el juego. Esto es común en juegos dinámicos donde las acciones son simultáneas o no observables.</li>
+                </ul>
+                <p>En esta sesión, nos centraremos en juegos estáticos con información incompleta, que se resuelven utilizando el concepto de <strong>Equilibrio de Nash Bayesiano</strong>.</p>
+            </div>
+
+            <hr style="margin: 2.5rem 0;">
+
+            <h3 class="collapsible-header">Juegos Bayesianos: Tipos y Creencias <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>Para modelar la información incompleta, Harsanyi (Premio Nobel 1994) propuso transformar un juego con información incompleta en un juego con información completa pero imperfecta, introduciendo el concepto de <strong>"tipos"</strong> y <strong>"creencias"</strong>.</p>
+                <h4>Tipos de Jugadores</h4>
+                <p>Cada jugador tiene un <strong>tipo</strong>, que es información privada conocida solo por ese jugador. El tipo de un jugador resume toda la información relevante que solo él conoce y que afecta sus pagos o estrategias. Por ejemplo:</p>
+                <ul>
+                    <li>En una subasta, el tipo de un postor podría ser su valoración privada del objeto.</li>
+                    <li>En política, el tipo de un votante podría ser su ideología o su nivel de interés en un tema.</li>
+                    <li>En un conflicto, el tipo de un país podría ser su fuerza militar o su determinación.</li>
+                </ul>
+                <p>El conjunto de tipos posibles para un jugador se conoce como el <strong>espacio de tipos</strong> de ese jugador.</p>
+                <h4>Creencias</h4>
+                <p>Aunque un jugador no conoce el tipo exacto de otro, sí tiene <strong>creencias</strong> sobre los tipos posibles de los demás. Estas creencias se expresan como una distribución de probabilidad sobre el espacio de tipos de los otros jugadores. Estas probabilidades son de conocimiento común (conocimiento común de las creencias).</p>
+                <p>Por ejemplo, un candidato político puede no saber si un votante es de "izquierda" o "derecha", pero puede creer que hay un 60% de probabilidad de que sea de izquierda y un 40% de que sea de derecha.</p>
+                <p>Un <strong>Juego Bayesiano</strong> es un juego donde los jugadores tienen tipos privados y creencias probabilísticas sobre los tipos de los demás. La estrategia de un jugador en un juego Bayesiano es un plan de acción que especifica qué acción tomar para cada tipo posible que podría ser.</p>
+            </div>
+
+            <hr style="margin: 2.5rem 0;">
+
+            <h3 class="collapsible-header">Equilibrio de Nash Bayesiano <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>El <strong>Equilibrio de Nash Bayesiano (ENB)</strong> es el concepto de solución para juegos estáticos con información incompleta. Es una extensión del Equilibrio de Nash que incorpora los tipos y las creencias de los jugadores.</p>
+                <p>Una combinación de estrategias es un ENB si cada jugador elige una estrategia que maximiza su pago esperado, dadas sus creencias sobre los tipos de los otros jugadores y dadas las estrategias que los otros jugadores están siguiendo.</p>
+                <p>Formalmente, para cada jugador y para cada tipo posible de ese jugador, la estrategia elegida debe ser una mejor respuesta a las estrategias de los otros jugadores, promediando sobre las creencias del jugador sobre los tipos de los demás.</p>
+                <h4>Características Clave del ENB:</h4>
+                <ul>
+                    <li><strong>Maximización del pago esperado:</strong> Los jugadores eligen acciones que maximizan su utilidad esperada, considerando las probabilidades de los tipos de los oponentes.</li>
+                    <li><strong>Consistencia de creencias:</strong> Las creencias de los jugadores sobre los tipos de los demás son consistentes con la distribución de probabilidad común de los tipos.</li>
+                    <li><strong>Estrategias dependientes del tipo:</strong> La estrategia de un jugador puede variar según su propio tipo.</li>
+                </ul>
+                <h4>Ejemplo: El Juego del "Dilema del Prisionero" con Información Incompleta</h4>
+                <p>Imagina un Dilema del Prisionero donde el Jugador 1 no sabe si el Jugador 2 es "cooperador" (siempre coopera si el otro coopera) o "egoísta" (siempre traiciona). El Jugador 1 cree que el Jugador 2 es cooperador con probabilidad 'p' y egoísta con probabilidad '1-p'.</p>
+                <p>El Jugador 2 conoce su propio tipo. El Jugador 1 debe decidir si coopera o traiciona, sin saber el tipo de Jugador 2. El Jugador 2, si es cooperador, decidirá si coopera o traiciona, y si es egoísta, también decidirá. El ENB implicaría que el Jugador 1 elige su mejor respuesta esperada, y el Jugador 2 elige su mejor respuesta para cada uno de sus tipos.</p>
+                <p>Este tipo de análisis permite modelar situaciones donde la incertidumbre sobre las motivaciones o características de los oponentes es un factor clave.</p>
+            </div>
+
+            <hr style="margin: 2.5rem 0;">
+
+            <h3 class="collapsible-header">Aplicaciones en Subastas <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>Las subastas son un campo fértil para la aplicación de los juegos Bayesianos, ya que la valoración que cada postor tiene del objeto es típicamente información privada (su "tipo").</p>
+                <h4>Tipos Comunes de Subastas:</h4>
+                <ul>
+                    <li><strong>Subasta Inglesa (Ascendente):</strong> El precio sube gradualmente, y los postores se retiran hasta que solo queda uno.</li>
+                    <li><strong>Subasta Holandesa (Descendente):</strong> El precio baja gradualmente desde un máximo, y el primer postor que acepta el precio gana.</li>
+                    <li><strong>Subasta de Primer Precio Sellado:</strong> Los postores presentan sus ofertas en secreto, y el que ofrece más alto gana y paga su oferta.</li>
+                    <li><strong>Subasta de Segundo Precio Sellado (Vickrey):</strong> Los postores presentan sus ofertas en secreto, el que ofrece más alto gana, pero paga el precio de la segunda oferta más alta.</li>
+                </ul>
+                <p>En cada tipo de subasta, la estrategia óptima de un postor depende de su propia valoración (su tipo) y de sus creencias sobre las valoraciones de los otros postores. El ENB nos ayuda a determinar la estrategia de puja óptima.</p>
+                <h4>Ejemplo: Subasta de Segundo Precio Sellado (Vickrey)</h4>
+                <p>En una subasta Vickrey, la estrategia dominante (y por lo tanto parte de un ENB) para un postor es pujar su verdadera valoración del objeto, independientemente de sus creencias sobre los otros postores. Esto se debe a que pujar más bajo podría hacerle perder el objeto si su valoración es mayor que la segunda oferta más alta, y pujar más alto podría hacerle ganar el objeto a un precio mayor que su propia valoración.</p>
+                <p>Este resultado es muy importante porque simplifica la estrategia para los participantes y fomenta la revelación de la verdadera valoración.</p>
+            </div>
+
+            <hr style="margin: 2.5rem 0;">
+
+            <h3 class="collapsible-header">Aplicaciones en Modelos de Votante <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>Los juegos Bayesianos son esenciales para modelar el comportamiento de los votantes y los candidatos en contextos electorales donde la información es incompleta.</p>
+                <h4>Votantes con Información Privada</h4>
+                <p>En muchos modelos, los votantes tienen información privada sobre sus preferencias ideológicas, su nivel de interés en la política, o su valoración de los candidatos. Los candidatos, por su parte, no conocen el tipo exacto de cada votante, pero tienen creencias sobre la distribución de estos tipos en la población.</p>
+                <p>Un ENB en este contexto implicaría que:</p>
+                <ul>
+                    <li>Cada votante, dado su tipo privado, vota por el candidato que maximiza su utilidad esperada.</li>
+                    <li>Cada candidato elige una plataforma o estrategia de campaña que maximiza su probabilidad de ganar (o su margen de victoria), dadas sus creencias sobre los tipos de los votantes y cómo estos reaccionarán.</li>
+                </ul>
+                <h4>Ejemplo: Campaña Electoral con Votantes Indecisos</h4>
+                <p>Imagina dos candidatos y un grupo de votantes indecisos. Los votantes indecisos pueden ser de "tipo A" (ligeramente inclinados a un candidato) o "tipo B" (ligeramente inclinados al otro), pero los candidatos no saben el tipo exacto de cada votante, solo la proporción de cada tipo.</p>
+                <p>Los candidatos deben decidir si enfocan su campaña en temas económicos o sociales. La estrategia óptima de cada candidato dependerá de sus creencias sobre la distribución de los tipos de votantes y de cómo cada tipo reaccionaría a los diferentes mensajes de campaña. El ENB nos ayudaría a predecir las plataformas que los candidatos elegirían y el comportamiento de voto de los diferentes tipos de votantes.</p>
+            </div>
+
+            <hr style="margin: 2.5rem 0;">
+
+            <h3 class="collapsible-header">Señalización (Introducción) <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>En juegos con información incompleta, un jugador con información privada (el "informado") puede intentar <strong>señalizar</strong> su tipo a otros jugadores (los "no informados") a través de sus acciones. La señalización es una acción costosa que solo ciertos tipos de jugadores estarían dispuestos a realizar, revelando así su información privada.</p>
+                <h4>Ejemplo Clásico: Educación como Señal</h4>
+                <p>Un ejemplo clásico es el de la educación en el mercado laboral. Los empleadores no saben la "productividad" real de un candidato (su tipo). Los candidatos pueden obtener un título universitario.</p>
+                <ul>
+                    <li>Si obtener un título es más fácil para los candidatos de alta productividad que para los de baja productividad (es decir, el costo de la educación es menor para los productivos), entonces un título puede servir como una señal creíble de alta productividad.</li>
+                    <li>Los empleadores, al observar el título, infieren el tipo del candidato y ofrecen salarios acordes.</li>
+                </ul>
+                <p>La señalización es un concepto fundamental en juegos dinámicos con información incompleta, pero su introducción aquí nos permite entender cómo los jugadores intentan gestionar la asimetría de información.</p>
+            </div>
+
+            <hr style="margin: 2.5rem 0;">
+
+            <h3 class="collapsible-header">Conclusiones de la Sesión 4 <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>En esta sesión, hemos abordado la complejidad de los <strong>Juegos Estáticos con Información Incompleta</strong>, un paso crucial para acercar la teoría de juegos a la realidad. Hemos introducido los conceptos de <strong>tipos</strong> y <strong>creencias</strong> como herramientas fundamentales para modelar la información privada de los jugadores.</p>
+                <p>El <strong>Equilibrio de Nash Bayesiano</strong> nos ha proporcionado un marco para analizar cómo los jugadores toman decisiones óptimas cuando no conocen con certeza las características de sus oponentes, maximizando su pago esperado dadas sus creencias.</p>
+                <p>Las aplicaciones en <strong>subastas</strong> y <strong>modelos de votante</strong> demuestran la potencia de estos conceptos para entender fenómenos económicos y políticos donde la asimetría de información es clave. Finalmente, hemos tenido una breve introducción a la <strong>señalización</strong>, un mecanismo por el cual los jugadores informados intentan revelar su tipo a través de acciones creíbles.</p>
+                <p>La próxima sesión continuará explorando la información incompleta, pero en el contexto de juegos dinámicos, lo que nos llevará a conceptos aún más sofisticados como el Equilibrio Bayesiano Perfecto.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Dr. Marco Antonio Leon Zaragoza</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const headers = document.querySelectorAll('.collapsible-header');
+            headers.forEach(header => {
+                header.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling; // Assuming content is immediately after header
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                        content.classList.remove('show');
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        content.classList.add('show');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

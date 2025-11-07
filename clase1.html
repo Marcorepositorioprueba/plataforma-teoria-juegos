@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 1 | Teoría de Juegos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2.5rem;
+            background-color: #fff;
+            border-bottom: 1px solid #dee2e6;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .top-header .logo img { max-height: 75px; }
+        .main-nav a { margin: 0 1.5rem; text-decoration: none; color: #495057; font-weight: 600; transition: color 0.3s; }
+        .main-nav a:hover { color: #007bff; }
+
+        .content-area { padding: 2rem 2.5rem 4rem 2.5rem; }
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .card h2 {
+            font-size: 2rem; font-weight: 700; margin-top: 0; margin-bottom: 2rem;
+            border-bottom: 2px solid #007bff; padding-bottom: 0.8rem; display: flex; align-items: center;
+        }
+        .card h2 .fa { margin-right: 1rem; color: #007bff; }
+        
+        footer {
+            text-align: center; padding: 3rem 0;
+            background-color: #343a40;
+            color: #fff;
+        }
+        .cta-button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+        .cta-button:hover { background-color: #0056b3; }
+        .collapsible-header {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 1rem;
+            font-size: 1.8rem; /* Adjust as needed */
+            font-weight: 700;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+        .collapsible-header:hover {
+            color: #0056b3;
+        }
+        .collapsible-header .icon {
+            margin-left: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .collapsible-header.active .icon {
+            transform: rotate(90deg);
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out; /* Add padding to transition */
+            padding-left: 1rem; /* Indent content slightly */
+            border-left: 3px solid #007bff;
+            margin-bottom: 1.5rem;
+        }
+        .collapsible-content.show {
+            max-height: 2000px; /* Arbitrary large value, adjust if content is longer */
+            padding-top: 1rem; /* Add some padding when shown */
+            padding-bottom: 1rem; /* Add some padding when shown */
+            transition: max-height 0.7s ease-in, padding 0.7s ease-in; /* Add padding to transition */
+        }
+
+        /* Estilos para el Modal */
+        .modal-trigger-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        .modal-trigger-btn:hover { background-color: #0056b3; }
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1001; 
+            padding-top: 60px; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.9);
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+        .modal-content {
+            animation-name: zoom;
+            animation-duration: 0.6s;
+        }
+        @keyframes zoom {
+            from {transform:scale(0)} 
+            to {transform:scale(1)}
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .close-modal:hover,
+        .close-modal:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Estilos para video responsivo */
+        .video-responsive {
+            overflow: hidden;
+            padding-bottom: 56.25%; /* Proporción 16:9 */
+            position: relative;
+            height: 0;
+            margin: 1rem 0;
+        }
+        .video-responsive iframe {
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            border-radius: 8px; /* Bordes redondeados para el video */
+        }
+    </style>
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="logo">
+            <a href="index.html"><img src="recursos/logo.png" alt="Logo del Curso"></a>
+        </div>
+        <nav class="main-nav">
+            <a href="index.html">Temario</a>
+            <a href="clase2.html">Sesión Siguiente</a>
+        </nav>
+    </header>
+
+    <main class="content-area">
+        <div id="clase1-contenido" class="card">
+            <h2><i class="fas fa-chalkboard-teacher"></i> Sesión 1: Introducción al Pensamiento Estratégico</h2>
+            <div style="text-align: center; margin: 2rem 0; padding: 1.5rem; background-color: #e9ecef; border-radius: 8px;">
+                <h4 style="font-size: 1.2rem; font-weight: 600; color: #495057;">Video Introductorio: La Estrategia en Acción</h4>
+                <p style="margin: 1rem 0;">La siguiente escena de "Una Mente Maravillosa" ilustra un concepto clave de la teoría de juegos. Haz clic en el botón para verla directamente en YouTube.</p>
+                <a href="https://www.youtube.com/watch?v=1DmgbYE2GqM" target="_blank" class="cta-button" style="background-color: #c82333; border-color: #bd2130;">
+                    <i class="fab fa-youtube" style="margin-right: 8px;"></i>Ver Video en YouTube
+                </a>
+            </div>
+            <h3 class="collapsible-header">¿Qué es la teoría de juegos? Historia y fundamentos. <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+            <p>La Teoría de Juegos es mucho más que el estudio de juegos de mesa como el ajedrez o el póker, aunque comparte con ellos una idea fundamental: el análisis de las <strong>decisiones estratégicas</strong>. En esencia, es una rama de las matemáticas y la economía que nos proporciona un marco formal para entender situaciones en las que el resultado de nuestras decisiones depende no solo de lo que nosotros hacemos, sino también de lo que hacen los demás.</p>
+            <p>Imagina que eres el gerente de una empresa que debe decidir si bajar o no los precios de un producto. Si tu competencia mantiene sus precios, bajarlos podría atraer a muchos clientes. Pero si la competencia también baja sus precios, ambos podrían terminar con menores márgenes de ganancia. ¿Qué haces? Esta encrucijada, donde los destinos están entrelazados, es el corazón de la Teoría de Juegos.</p>
+            <h4 style="margin-top: 2rem;">Los Pilares de la Teoría de Juegos:</h4>
+            <ul>
+              <li><strong>Jugadores:</strong> Son los agentes que toman las decisiones. En nuestro ejemplo, las dos empresas. En política, podrían ser dos países negociando un tratado.</li>
+              <li><strong>Estrategias:</strong> Son las acciones que cada jugador puede tomar. <button class="modal-trigger-btn" data-modal="modal-estrategia">Ver Ejemplo Visual</button></li>
+              <li><strong>Pagos (o Utilidades):</strong> Es el resultado o la recompensa que un jugador recibe al final del juego. Puede ser ganancia monetaria, poder, satisfacción, etc.</li>
+              <li><strong>Racionalidad:</strong> Es la suposición clave. Asumimos que cada jugador actúa de manera lógica para maximizar su propio pago, y sabe que los demás jugadores también lo hacen. <button class="modal-trigger-btn" data-modal="modal-racionalidad">Ver Ejemplo Visual</button></li>
+            </ul>
+            <p>La Teoría de Juegos utiliza <strong>modelos matemáticos</strong> <button class="modal-trigger-btn" data-modal="modal-modelos">Ver Ejemplo Visual</button> para analizar estas interacciones. No busca decirnos cómo se comportan las personas en la vida real (que a menudo es irracional), sino cómo se comportarían si fueran perfectamente lógicas y estuvieran enfocadas en sus propios objetivos. Su poder radica en que, al modelar este comportamiento ideal, podemos predecir tendencias, entender conflictos, explicar la cooperación y, lo más importante, diseñar mejores sistemas y políticas.</p>
+            <p>Desde negociaciones comerciales y campañas políticas hasta la competencia entre especies en biología, sus aplicaciones son increíblemente amplias, convirtiéndola en una herramienta indispensable para el analista moderno.</p>
+            <div style="margin-top: 1.5rem; padding: 1rem; border-top: 1px solid #eee;">
+                <h5 style="margin-bottom: 0.5rem;">Recurso Adicional:</h5>
+                <a href="https://www.youtube.com/watch?v=DVWT_8UomvM" target="_blank" class="cta-button" style="background-color: #17a2b8;">
+                    <i class="fab fa-youtube" style="margin-right: 8px;"></i>Ver Video Complementario
+                </a>
+            </div>
+            </div>
+            <hr style="margin: 2.5rem 0;">
+            <h3 class="collapsible-header">Referentes Históricos: De Mitos Antiguos a la Ciencia Moderna <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+            <p>Aunque la Teoría de Juegos como ciencia formal es un desarrollo del siglo XX, la idea de analizar la estrategia en las interacciones humanas es tan antigua como la civilización misma. Podemos encontrar intuiciones sobre el pensamiento estratégico en textos clásicos y relatos antiguos.</p>
+            <h4 style="margin-top: 2rem;">Precursores y Primeras Ideas</h4>
+            <ul>
+              <li><strong>Antoine Augustin Cournot (1838):</strong> <img src="recursos/cournot.jpg" alt="Antoine Augustin Cournot" style="float: right; margin: 0 0 10px 15px; width: 200px; border-radius: 5px;"> Este matemático y economista francés es considerado un precursor clave. En su obra "Recherches sur les principes mathématiques de la teoría de las riquezas", analizó la competencia entre un pequeño número de empresas (oligopolio), introduciendo un concepto de equilibrio que es un antecedente directo del Equilibrio de Nash. Su modelo de competencia de cantidades es un ejemplo temprano y brillante de interacción estratégica.</li>
+              <li><strong>Émile Borel (1921):</strong> <img src="recursos/Borel.jpg" alt="Émile Borel" style="float: left; margin: 0 15px 10px 0; width: 200px; border-radius: 5px;"> El matemático francés Émile Borel realizó importantes contribuciones tempranas a la teoría de juegos, particularmente en el estudio de juegos de matriz y estrategias mixtas. Su trabajo sentó algunas de las bases para el desarrollo posterior de la teoría.</li>
+              
+            </ul>
+            <h4 style="margin-top: 2rem;">El Nacimiento Formal de la Teoría de Juegos</h4>
+            <ul>
+              <li><strong>Ernst Zermelo (1913):</strong> Fue uno de los primeros en usar la lógica matemática para estudiar juegos. Zermelo probó que en juegos como el ajedrez (de dos jugadores, por turnos, con información perfecta y sin empates), siempre existe una estrategia óptima que garantiza la victoria o el empate para uno de los jugadores.</li>
+              <li><strong>John von Neumann y Oskar Morgenstern (1944):</strong> <img src="recursos/JohnvonNeumann.jpg" alt="John von Neumann" style="float: left; margin: 0 15px 10px 0; width: 200px; border-radius: 5px;"> La publicación de su obra cumbre, <em>"Theory of Games and Economic Behavior"</em>, marcó el verdadero nacimiento de la Teoría de Juegos como disciplina formal. Von Neumann, un genio matemático, y Morgenstern, un economista, establecieron un marco matemático riguroso para analizar una amplia variedad de juegos, especialmente los de "suma cero" (donde la ganancia de un jugador es la pérdida exacta del otro). Su trabajo no solo definió los conceptos fundamentales, sino que también demostró la existencia de soluciones para estos juegos, sentando las bases para toda la investigación posterior.</li>
+              <li><strong>John Nash (Años 50):</strong> <img src="recursos/nash.jpg" alt="John Nash" style="float: right; margin: 0 0 10px 15px; width: 200px; border-radius: 5px;"> La contribución de John Nash fue revolucionaria. Su concepto de "Equilibrio de Nash" extendió la aplicabilidad de la teoría a juegos "no cooperativos" donde puede haber ganancias mutuas. Este avance abrió la puerta a la aplicación de la teoría en la economía, la política y la biología.</li>
+            </ul>
+            <p>Estos hitos transformaron el análisis estratégico de una anécdota a una ciencia rigurosa, dándonos las herramientas que exploraremos a lo largo de este curso.</p>
+            <h4 style="margin-top: 2rem;">Premios Nobel y el Reconocimiento de la Teoría de Juegos</h4>
+            <p>La importancia de la Teoría de Juegos en la comprensión de fenómenos económicos y sociales ha sido reconocida con varios Premios Nobel de Economía. Destacan:</p>
+            <ul>
+              <li><strong>1994: John Harsanyi, John Nash y Reinhard Selten.</strong> <img src="recursos/johnnashyselten.jpg" alt="John Harsanyi, John Nash y Reinhard Selten" style="float: left; margin: 0 15px 10px 0; width: 200px; border-radius: 5px;">
+                <p>Estos tres economistas y matemáticos fueron galardonados por su "análisis pionero de los equilibrios en la teoría de los juegos no cooperativos".</p>
+                <ul>
+                  <li><strong>John Nash:</strong> Su contribución más famosa es el concepto de <strong>Equilibrio de Nash</strong>, una solución para juegos no cooperativos donde ningún jugador puede mejorar su resultado cambiando unilateralmente su estrategia, dadas las estrategias de los demás. Este concepto revolucionó la economía al permitir analizar una vasta gama de interacciones estratégicas más allá de los juegos de suma cero.</li>
+                  <li><strong>John Harsanyi:</strong> Extendió la teoría de juegos a situaciones de <strong>información incompleta</strong>, donde los jugadores no conocen completamente las preferencias o tipos de los otros. Desarrolló el concepto de <strong>Equilibrio Bayesiano de Nash</strong>, que incorpora las creencias de los jugadores sobre la información privada de los demás.</li>
+                  <li><strong>Reinhard Selten:</strong> Se centró en el refinamiento de los conceptos de equilibrio, introduciendo el concepto de <strong>Equilibrio Perfecto en Subjuegos</strong> para juegos dinámicos. Esto permitió eliminar equilibrios "no creíbles" basados en amenazas vacías, asegurando que las estrategias sean óptimas en cada etapa del juego.</li>
+                </ul>
+              </li>
+              <li><strong>2005: Robert Aumann y Thomas Schelling.</strong> <img src="recursos/Robertythomas.jpg" alt="Robert Aumann y Thomas Schelling" style="float: right; margin: 0 0 10px 15px; width: 200px; border-radius: 5px;">
+                <p>Recibieron el premio por "haber mejorado nuestra comprensión del conflicto y la cooperación a través del análisis de la teoría de juegos".</p>
+                <ul>
+                  <li><strong>Robert Aumann:</strong> Su trabajo se centró en los <strong>juegos repetidos</strong> y la cooperación a largo plazo. Demostró cómo la posibilidad de futuras interacciones puede fomentar la cooperación, incluso en situaciones donde la traición sería la estrategia dominante en un juego de una sola vez (Teorema Folk).</li>
+                  <li><strong>Thomas Schelling:</strong> Exploró la dinámica de la <strong>negociación y la disuasión</strong>. Su análisis de la estrategia militar y las relaciones internacionales mostró cómo la amenaza creíble, el compromiso y la comunicación pueden influir en los resultados estratégicos, incluso en ausencia de reglas formales.</li>
+                </ul>
+              </li>
+              <li><strong>2012: Alvin Roth y Lloyd Shapley.</strong> <img src="recursos/AlvinyLioyd.jpg" alt="Alvin Roth y Lloyd Shapley" style="float: left; margin: 0 15px 10px 0; width: 200px; border-radius: 5px;">
+                <p>Fueron premiados por la teoría de las asignaciones estables y el diseño de mercados.</p>
+                <ul>
+                  <li><strong>Lloyd Shapley:</strong> Desarrolló algoritmos para encontrar <strong>asignaciones estables</strong> en mercados sin precios, como el problema del matrimonio estable o la asignación de estudiantes a escuelas. Su concepto de "valor de Shapley" es una forma de distribuir las ganancias en juegos cooperativos.</li>
+                  <li><strong>Alvin Roth:</strong> Aplicó y extendió la teoría de Shapley al <strong>diseño de mercados</strong> en la práctica, ayudando a rediseñar sistemas de asignación en áreas como la asignación de médicos residentes a hospitales, la donación de órganos y la asignación de estudiantes a escuelas públicas.</li>
+                </ul>
+              </li>
+            </ul>
+            <p>Estos reconocimientos subrayan la profunda influencia de la Teoría de Juegos en la economía moderna y en otras ciencias sociales.</p>
+            </div>
+            <hr style="margin: 2.5rem 0;">
+            <h3 class="collapsible-header">Conceptos Básicos del Juego <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+            <p>Para analizar cualquier interacción estratégica, necesitamos un lenguaje común. La Teoría de Juegos nos lo proporciona a través de un conjunto de conceptos fundamentales que definen la estructura de cualquier "juego".</p>
+            <dl>
+              <dt style="font-weight: bold; margin-top: 1rem;">Juego</dt>
+              <dd>Formalmente, un <strong>juego</strong> es cualquier situación de interacción estratégica con reglas bien definidas. No se limita al ocio; describe desde una negociación salarial hasta una carrera armamentista. La clave es que el resultado para cada participante depende de las decisiones de todos.</dd>
+            
+              <dt style="font-weight: bold; margin-top: 1rem;">Jugadores</dt>
+              <dd>Son los individuos o entidades (empresas, partidos políticos, animales) que participan en el juego y toman decisiones. Un supuesto fundamental es que son <strong>racionales</strong>, es decir, que tienen preferencias claras y eligen las acciones que creen que les darán el mejor resultado posible.</dd>
+            
+              <dt style="font-weight: bold; margin-top: 1rem;">Estrategia</dt>
+              <dd>Una <strong>estrategia</strong> es un plan de acción completo que un jugador seguirá en cualquier situación que pueda surgir dentro del juego. No es solo una jugada, sino una política general. Por ejemplo, en el dilema del prisionero, una estrategia sería "siempre traicionar" o "siempre cooperar".</dd>
+            
+              <dt style="font-weight: bold; margin-top: 1rem;">Ganancia (Pago o Utilidad)</dt>
+              <dd>La <strong>ganancia</strong> es el valor que un jugador asocia a cada posible resultado del juego. Es la cuantificación de su recompensa o satisfacción. Para una empresa, puede ser la utilidad neta; para un político, la cantidad de votos obtenidos.</dd>
+            
+              <dt style="font-weight: bold; margin-top: 1rem;">Resultados</dt>
+              <dd>Un <strong>resultado</strong> es la consecuencia final del juego, determinada por la combinación de estrategias elegidas por todos los jugadores. Cada resultado tiene asociado un pago específico para cada jugador.</dd>
+            </dl>
+                        <p style="margin-top: 1.5rem;">Entender estos elementos es el primer paso para poder modelar una situación y, eventualmente, predecir el equilibrio del juego.</p>
+            <h4 style="margin-top: 2rem;">Intuición: El Juego de Repartir un Pastel</h4>
+            <p>Para visualizar cómo se distribuyen las ganancias y los resultados, podemos usar la clásica analogía de "repartir un pastel". Imagina que dos personas deben dividir un pastel. Si una persona lo corta y la otra elige la porción, la primera tiene un incentivo para cortar el pastel en partes iguales para asegurarse una porción justa. Este simple juego ilustra cómo las reglas (quién corta, quién elige) y las estrategias (cortar equitativamente, elegir la porción más grande) determinan los pagos (el tamaño de la porción de pastel) y el resultado final de la interacción.</p>
+            <p style="margin-top: 1.5rem;">Entender estos elementos es el primer paso para poder modelar una situación y, eventualmente, predecir el equilibrio del juego.</p>
+            </div>
+            <hr style="margin: 2.5rem 0;">
+            <h3 class="collapsible-header">El Equilibrio de Nash: El Corazón de la Teoría de Juegos <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+            <p>Una vez que tenemos los componentes de un juego, la pregunta natural es: ¿qué pasará? El concepto más famoso para predecir el resultado de un juego es el <strong>Equilibrio de Nash</strong>, nombrado así por el matemático John Forbes Nash, ganador del Premio Nobel.</p>
+            <p>En términos sencillos, un Equilibrio de Nash es una situación en la que todos los jugadores han elegido su mejor estrategia posible, <strong>dadas las estrategias que han elegido los demás</strong>. Es un punto de estabilidad, un estado en el que nadie tiene un incentivo para cambiar su decisión si los demás mantienen la suya. Es como un "acuerdo no escrito" al que llegan los jugadores racionales.</p>
+            <h4 style="margin-top: 2rem;">La Lógica del "No Arrepentimiento"</h4>
+            <p>La mejor forma de entenderlo es con la idea del "no arrepentimiento". Si un juego está en un Equilibrio de Nash, ningún jugador mirará hacia atrás y dirá: "¡Debería haber hecho otra cosa!", porque, considerando lo que los otros hicieron, su elección fue la óptima.</p>
+            <p>Pensemos en el tráfico de la ciudad. Cada conductor elige una ruta para llegar a su destino. Si todos los conductores están en un Equilibrio de Nash, significa que ninguno puede encontrar una ruta más rápida cambiando de calle por sí solo (asumiendo que el tráfico en las otras calles no cambia). Todos están haciendo lo mejor que pueden, dada la congestión creada por los demás.</p>
+            <p>Es crucial entender que un Equilibrio de Nash <strong>no significa necesariamente el mejor resultado para el grupo</strong>. A menudo, los equilibrios pueden llevar a resultados subóptimos para todos los implicados, como en el famoso "Dilema del Prisionero", donde la traición mutua es un Equilibrio de Nash, aunque la cooperación mutua beneficiaría a ambos. Exploraremos este y otros juegos importantes en la siguiente sección.</p>
+            </div>
+            <hr style="margin: 2.5rem 0;">
+            <h3 class="collapsible-header">Juegos Clásicos: Dilemas, Batallas y Coordinación <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+            <p>La mejor manera de entender los conceptos de la Teoría de Juegos es a través de ejemplos. A lo largo de la historia, han surgido algunos "juegos" tan ilustrativos que se han convertido en piedras angulares del campo. Estos nos ayudan a entender la tensión entre el interés individual y el bien común.</p>
+            <h4 style="margin-top: 2rem;">1. El Dilema del Prisionero</h4>
+            <p>Este es, quizás, el juego más famoso. Imagina que dos sospechosos de un crimen son arrestados y puestos en celdas separadas, sin posibilidad de comunicarse. La policía no tiene pruebas suficientes para una condena grave, a menos que uno de ellos confiese (traicione al otro).</p>
+            <ul>
+              <li>Si ninguno confiesa (<strong>cooperan</strong> entre sí), ambos reciben una pena menor (ej. 1 año de cárcel).</li>
+              <li>Si uno confiesa (<strong>traiciona</strong>) y el otro no, el traidor queda libre y el otro recibe una pena muy dura (ej. 10 años).</li>
+              <li>Si ambos confiesan (<strong>traicionan</strong> mutuamente), ambos reciben una pena intermedia (ej. 5 años).</li>
+            </ul>
+            <p>El "dilema" es que, desde una perspectiva individual, la mejor estrategia es siempre traicionar. El resultado (Equilibrio de Nash) es que ambos se traicionan y terminan peor de lo que estarían si ambos hubieran cooperado. Este juego es un modelo poderoso para entender por qué fallan los acuerdos de paz o las negociaciones climáticas.</p>
+            <h4 style="margin-top: 2rem;">2. La Batalla de los Sexos</h4>
+            <p>Este juego describe una situación diferente: dos personas quieren pasar tiempo juntas, pero tienen preferencias distintas sobre qué hacer. Digamos que uno prefiere ir a la ópera y el otro al fútbol.</p>
+            <ul>
+              <li>Ambos prefieren ir juntos a cualquier actividad que ir solos.</li>
+              <li>El jugador 1 prefiere que ambos vayan al fútbol.</li>
+              <li>El jugador 2 prefiere que ambos vayan a la ópera.</li>
+            </ul>
+            <p>Aquí hay dos Equilibrios de Nash: (Fútbol, Fútbol) y (Ópera, Ópera). Es un <strong>juego de coordinación</strong>, pero con un conflicto de intereses. Muestra cómo pueden existir múltiples resultados estables y cómo la comunicación o las normas sociales pueden ser cruciales para decidir a cuál equilibrio se llega.</p>
+            <h4 style="margin-top: 2rem;">3. El Juego de Coordinación (o La Caza del Ciervo)</h4>
+            <p>Este juego ilustra los beneficios de la confianza y la cooperación. Dos cazadores van a cazar. Tienen dos presas posibles: un ciervo o liebres.</p>
+            <ul>
+              <li>Para cazar un <strong>ciervo</strong>, necesitan la cooperación de ambos. Si lo logran, obtienen un gran festín (pago alto).</li>
+              <li>En cualquier momento, uno puede abandonar la caza del ciervo para cazar una <strong>liebre</strong> por su cuenta. Esto le da un pago pequeño pero seguro, mientras que el que se quedó esperando al ciervo no obtiene nada.</li>
+            </ul>
+                        <p>Aquí también hay dos Equilibrios de Nash: (Cazar Ciervo, Cazar Ciervo) y (Cazar Liebre, Cazar Liebre). Si confías en que el otro cooperará, tu mejor opción es cooperar también. Pero si temes que el otro te abandonará, tu mejor opción es ir a lo seguro. Este juego modela situaciones como la inversión en bienes públicos, donde el éxito depende de la acción colectiva.</p>
+            </div>
+            <hr style="margin: 2.5rem 0;">
+            <h3 class="collapsible-header">Juegos Repetidos: La Sombra del Futuro <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+            <p>Hasta ahora, hemos analizado juegos que se juegan una sola vez. Sin embargo, muchas interacciones en la vida real se repiten. La posibilidad de futuras interacciones proyecta lo que se conoce como "la sombra del futuro" sobre el presente, introduciendo dos elementos clave: la <strong>reputación</strong> y la posibilidad de <strong>represalias</strong>.</p>
+            <h4 style="margin-top: 2rem;">Juegos Finitos vs. Infinitos</h4>
+            <p>La clave para entender los juegos repetidos es saber si tienen un final conocido.</p>
+            <ul>
+              <li><strong>Juegos Finitos:</strong> Si un juego como el Dilema del Prisionero se repite un número fijo de veces (ej. 10 rondas), la lógica se desentraña desde el final. En la última ronda, no hay futuro, por lo que la única jugada racional es traicionar. Sabiendo esto, tampoco hay incentivo para cooperar en la penúltima ronda, y así sucesivamente. La traición se extiende a todas las rondas.</li>
+              <li><strong>Juegos Infinitos (o de horizonte incierto):</strong> Si los jugadores no saben cuándo terminará el juego, la cooperación se vuelve una posibilidad real. Como siempre hay "una próxima ronda", el beneficio a corto plazo de una traición puede ser superado por el beneficio a largo plazo de la cooperación mutua.</li>
+            </ul>
+            <h4 style="margin-top: 2rem;">La Estrategia "Ojo por Ojo" (Tit-for-Tat)</h4>
+            <p>En este contexto, una de las estrategias más famosas y efectivas es el "Ojo por Ojo".</p>
+            <ol>
+              <li><strong>Empieza cooperando</strong> en la primera ronda.</li>
+              <li>A partir de ahí, <strong>haz lo que tu oponente hizo en la ronda anterior</strong>.</li>
+            </ol>
+                        <p>Esta estrategia es exitosa porque es <strong>amable</strong> (nunca es la primera en traicionar), <strong>implacable</strong> (castiga la traición inmediatamente), <strong>indulgente</strong> (vuelve a cooperar si el oponente lo hace) y <strong>clara</strong>. Demuestra que en interacciones duraderas, la cooperación puede surgir no del altruismo, sino de un cálculo racional.</p>
+            </div>
+            <hr style="margin: 2.5rem 0;">
+            <h3 class="collapsible-header">Juegos Consecutivos y la Inducción hacia Atrás <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+            <p>No todas las decisiones se toman al mismo tiempo. En muchos escenarios, los jugadores actúan en secuencia, observando las acciones de quienes los precedieron. Estos son los <strong>juegos consecutivos</strong> o secuenciales.</p>
+            <h4 style="margin-top: 2rem;">El Árbol de Decisión: Visualizando el Futuro</h4>
+            <p>En lugar de una matriz, estos juegos se representan como un <strong>árbol de decisión</strong>. El primer jugador está en el "tronco" y elige una rama. El segundo jugador, al ver qué rama ha elegido el primero, se encuentra en un nuevo punto de decisión y elige su propia rama. El juego termina en las "hojas" del árbol, donde se encuentran los pagos para cada jugador.</p>
+            <h4 style="margin-top: 2rem;">Inducción hacia Atrás: Pensar del Final al Principio</h4>
+            <p>La clave para "resolver" un juego consecutivo es la <strong>inducción hacia atrás</strong>. En lugar de pensar en qué hacer primero, empezamos por el final del juego.</p>
+            <ol>
+              <li>Ve al último punto de decisión del juego.</li>
+              <li>Determina qué acción tomaría un jugador racional en ese punto para maximizar su pago.</li>
+              <li>"Poda" las otras ramas; esas acciones no se tomarán.</li>
+              <li>Retrocede al penúltimo punto de decisión. El jugador en este punto, anticipando el resultado de la jugada final, ahora puede tomar su propia decisión óptima.</li>
+              <li>Repite este proceso hasta llegar al inicio del juego.</li>
+            </ol>
+            <p>Al pensar del final al principio, podemos predecir la secuencia de jugadas que constituirá el equilibrio del juego (conocido como Equilibrio Perfecto en Subjuegos) y descartar amenazas "no creíbles".</p>
+            </div>
+            <hr style="margin: 2.5rem 0;">
+            <h3 class="collapsible-header">Conclusiones de la Sesión 1 <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+            <p>En esta primera sesión, hemos sentado las bases fundamentales de la Teoría de Juegos. Desde sus orígenes históricos y la distinción crucial con la teoría de la decisión, hasta los conceptos básicos que la definen y el pilar del Equilibrio de Nash. Hemos explorado cómo los juegos clásicos ilustran dilemas estratégicos y cómo la repetición de interacciones y el orden de las jugadas transforman el comportamiento racional. Esta sesión es solo el comienzo de un viaje fascinante hacia la comprensión de la estrategia en el análisis político y la administración pública.</p>
+            <p>Te invitamos a revisar los conceptos y a reflexionar sobre cómo estas ideas se manifiestan en tu entorno. ¡El mundo está lleno de juegos!</p>
+            </div>
+        </div>
+        <div class="text-center">
+             <a href="index.html" class="cta-button">Volver al Temario</a>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div id="modal-estrategia" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" src="recursos/emodal.png">
+    </div>
+
+    <div id="modal-racionalidad" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" src="recursos/olson.png">
+    </div>
+
+    <div id="modal-modelos" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" src="recursos/models.png">
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Dr. Marco Antonio Leon Zaragoza</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Script para secciones colapsables
+            const headers = document.querySelectorAll('.collapsible-header');
+            headers.forEach(header => {
+                header.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling;
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                        content.classList.remove('show');
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        content.classList.add('show');
+                    }
+                });
+            });
+
+            // Script general para múltiples modales
+            const modalTriggers = document.querySelectorAll(".modal-trigger-btn");
+            const closeButtons = document.querySelectorAll(".close-modal");
+
+            modalTriggers.forEach(btn => {
+                btn.onclick = function() {
+                    let modalId = this.getAttribute('data-modal');
+                    document.getElementById(modalId).style.display = "block";
+                }
+            });
+
+            closeButtons.forEach(btn => {
+                btn.onclick = function() {
+                    this.closest('.modal').style.display = "none";
+                }
+            });
+
+            window.onclick = function(event) {
+                if (event.target.classList.contains('modal')) {
+                    event.target.style.display = "none";
+                }
+            }
+        });
+    </script>
+</body>
+</html>
