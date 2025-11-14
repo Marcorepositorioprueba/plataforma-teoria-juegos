@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clase 2 | Teoría de Juegos</title>
-    <base href="/plataforma-teoria-juegos/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -33,6 +32,10 @@
         .top-header .logo img { max-height: 75px; }
         .main-nav a { margin: 0 1.5rem; text-decoration: none; color: #495057; font-weight: 600; transition: color 0.3s; }
         .main-nav a:hover { color: #007bff; }
+        .main-nav a.active {
+            color: #007bff;
+            font-weight: 700;
+        }
 
         .content-area { padding: 2rem 2.5rem 4rem 2.5rem; }
         .card {
@@ -102,6 +105,127 @@
             padding-bottom: 1rem; /* Add some padding when shown */
             transition: max-height 0.7s ease-in, padding 0.7s ease-in;
         }
+
+        /* --- Duopoly Simulator Styles --- */
+        #duopoly-sim {
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            background-color: #fdfdfd;
+            margin-top: 1rem;
+        }
+        .sim-controls { text-align: center; margin-bottom: 1.5rem; }
+        .sim-controls h5 { margin-bottom: 0.5rem; font-size: 1.2rem; }
+        .sim-btn {
+            background-color: #007bff; color: white; border: none; padding: 10px 20px;
+            font-size: 1rem; font-weight: 600; border-radius: 5px; cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s; margin: 0 10px;
+        }
+        .sim-btn:hover { background-color: #0056b3; transform: translateY(-2px); }
+        .sim-btn:disabled { background-color: #6c757d; cursor: not-allowed; transform: none; }
+        
+        .sim-matrix {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 5px;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .matrix-header {
+            background-color: #e9ecef;
+            padding: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .matrix-cell {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            transition: background-color 0.5s, transform 0.3s;
+        }
+        .matrix-cell.highlight-player { background-color: #cce5ff; }
+        .matrix-cell.highlight-ai { background-color: #fff3cd; }
+        .matrix-cell.final-outcome {
+            background-color: #28a745;
+            color: white;
+            transform: scale(1.05);
+            border-color: #1e7e34;
+        }
+        
+        .sim-result-display {
+            text-align: center;
+            padding: 1rem;
+            background-color: #e9f7ff;
+            border-left: 5px solid #007bff;
+            border-radius: 5px;
+            min-height: 50px;
+        }
+        .sim-result-display p { margin: 0; font-size: 1.1rem; }
+        .sim-result-display strong { color: #0056b3; }
+
+        /* --- EIED Analyzer Styles --- */
+        #eied-sim {
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            padding: 1.5rem;
+            background-color: #fdfdfd;
+        }
+        .eied-matrix {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 5px;
+            text-align: center;
+        }
+        .matrix-header-eied {
+            background-color: #e9ecef;
+            padding: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s, opacity 0.5s;
+        }
+        .matrix-header-eied.clickable {
+            cursor: pointer;
+        }
+        .matrix-header-eied.clickable:hover {
+            background-color: #d4edda; /* Greenish tint */
+        }
+        .matrix-cell-eied {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            transition: opacity 0.5s;
+        }
+        .strategy-eliminated {
+            opacity: 0.3;
+            background-color: #f8d7da !important;
+            cursor: not-allowed !important;
+            text-decoration: line-through;
+        }
+
+        /* --- Mixed Strategy Simulator Styles --- */
+        #mixed-sim {
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 1.5rem;
+            background-color: #fdfdfd;
+        }
+        .mixed-stats {
+            display: flex;
+            justify-content: space-around;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            background-color: #fff3cd;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -111,13 +235,31 @@
             <a href="index.html"><img src="recursos/logo.png" alt="Logo del Curso"></a>
         </div>
         <nav class="main-nav">
-            <a href="clase1.html">Sesión Anterior</a>
             <a href="index.html">Temario</a>
-            <a href="clase3.html">Sesión Siguiente</a>
+            <a href="clase1.html">Sesión 1</a>
+            <a href="clase2.html" class="active">Sesión 2</a>
+            <a href="clase2_practica.html" style="color: #28a745;">Práctica S2</a>
+            <a href="clase3.html">Sesión 3</a>
+            <a href="clase3_practica.html" style="color: #28a745;">Práctica S3</a>
+            <a href="clase4.html">Sesión 4</a>
         </nav>
     </header>
 
     <main class="content-area">
+        <div id="backend-tarea" class="card">
+            <h2><i class="fas fa-server"></i> Backend: Tarea</h2>
+            <p>A continuación se presenta un resumen de las lecturas asignadas para esta sesión:</p>
+            
+            <h4>"Studying Political Violence Using Game Theory Models" (Wajzer & Cukier-Syguła, 2020)</h4>
+            <p>Este artículo introduce la aplicación de modelos de teoría de juegos al estudio de la violencia política. Explora conceptos fundamentales como la racionalidad del jugador, el equilibrio de Nash y las estrategias evolutivamente estables. Utiliza los juegos del "Dilema del Prisionero" y "Gallina" (Chicken) como ejemplos para modelar interacciones estratégicas en contextos de violencia política, como los esfuerzos antiterroristas entre países. El texto está diseñado como una introducción accesible para quienes no tienen un conocimiento previo profundo de la teoría de juegos.</p>
+        
+            <h4>"A Survey of Game Theory Models on Peace and War"</h4>
+            <p>Este documento ofrece una revisión exhaustiva de los modelos de teoría de juegos aplicados al análisis de la paz y la guerra. Examina cómo diversas aproximaciones teóricas pueden utilizarse para comprender el conflicto, la cooperación y la negociación entre actores internacionales. El texto abarca desde juegos simples de 2x2 hasta modelos más complejos con información incompleta o dinámica, aplicándolos al estudio de fenómenos como las carreras armamentistas, la disuasión y la resolución de conflictos.</p>
+        
+            <h4>"Análisis de Conflictos y Teoría de Juegos" (Héctor, 2014)</h4>
+            <p>Este texto probablemente presenta un caso de estudio específico o un modelo teórico novedoso dentro del campo de la teoría de juegos y su aplicación a conflictos políticos. Podría analizar un evento histórico particular, un problema de política pública o proponer una variante de un modelo de juego para capturar mejor las complejidades de una interacción estratégica específica. El enfoque probablemente se centra en cómo la modelización formal puede generar hipótesis y predicciones sobre el comportamiento de los actores en situaciones de conflicto.</p>
+        </div>
+
         <div id="clase2-contenido" class="card">
             <h2><i class="fas fa-chalkboard-teacher"></i> Sesión 2: Juegos Estáticos con Información Completa</h2>
             
@@ -147,35 +289,34 @@
                 </ol>
                 <p>La forma más visual y utilizada para juegos de dos jugadores con un número limitado de estrategias es la <strong>matriz de pagos</strong>.</p>
 
-                <h4 style="margin-top: 2rem;">Ejemplo 1: Competencia de Precios en un Duopolio</h4>
-                <p>Consideremos un juego de competencia entre dos empresas, Coca-Cola y Pepsi, que dominan el mercado de refrescos. Deben decidir simultáneamente si establecer un precio alto o un precio bajo para su producto estrella.</p>
-                <table style="width:100%; border-collapse: collapse; margin-top: 1rem; text-align: center; border: 2px solid #dee2e6;">
-                    <thead style="background-color: #e9ecef;">
-                        <tr>
-                            <th style="padding: 12px; border: 1px solid #dee2e6;"></th>
-                            <th colspan="2" style="padding: 12px; border: 1px solid #dee2e6;">Pepsi</th>
-                        </tr>
-                        <tr>
-                            <th style="padding: 12px; border: 1px solid #dee2e6;"></th>
-                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600;">Precio Bajo</th>
-                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600;">Precio Alto</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th rowspan="2" style="background-color: #e9ecef; vertical-align: middle; padding: 12px; border: 1px solid #dee2e6;">Coca-Cola</th>
-                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600; background-color: #f8f9fa;">Precio Bajo</th>
-                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(100, 100)</td>
-                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(300, 50)</td>
-                        </tr>
-                        <tr>
-                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600; background-color: #f8f9fa;">Precio Alto</th>
-                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(50, 300)</td>
-                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(200, 200)</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p style="margin-top: 1rem;">En cada celda, el primer número es el pago (ganancia en millones) para Coca-Cola y el segundo para Pepsi.</p>
+                <h4 style="margin-top: 2rem;">Ejemplo 1: Simulador Interactivo de Duopolio</h4>
+                <p>En lugar de solo ver la tabla, ¡juega! Eres <strong>Coca-Cola</strong> y compites contra Pepsi (la IA). Debes decidir simultáneamente si establecer un precio alto o un precio bajo. Elige tu estrategia y observa el resultado.</p>
+                
+                <div id="duopoly-sim">
+                    <div class="sim-controls">
+                        <h5>Tu Estrategia (Coca-Cola):</h5>
+                        <button id="coke-low" class="sim-btn">Precio Bajo</button>
+                        <button id="coke-high" class="sim-btn">Precio Alto</button>
+                    </div>
+                
+                    <div class="sim-matrix">
+                        <div class="matrix-header"></div>
+                        <div class="matrix-header"><b>Pepsi:</b> Precio Bajo</div>
+                        <div class="matrix-header"><b>Pepsi:</b> Precio Alto</div>
+                        <div class="matrix-header"><b>Tú:</b> Precio Bajo</div>
+                        <div class="matrix-cell" id="cell-0-0">(100, 100)</div>
+                        <div class="matrix-cell" id="cell-0-1">(300, 50)</div>
+                        <div class="matrix-header"><b>Tú:</b> Precio Alto</div>
+                        <div class="matrix-cell" id="cell-1-0">(50, 300)</div>
+                        <div class="matrix-cell" id="cell-1-1">(200, 200)</div>
+                    </div>
+                
+                    <div id="sim-result" class="sim-result-display">
+                        <p>Elige tu estrategia para ver el resultado.</p>
+                    </div>
+                    <button id="sim-reset" class="cta-button" style="display: none; margin-top: 1rem;">Jugar de Nuevo</button>
+                </div>
+                
                 <p style="margin-top: 1rem; background-color: #e9f7ff; border-left: 4px solid #007bff; padding: 10px;">
                     <strong>Clarificación sobre el cálculo de pagos (cuotas de mercado):</strong> Los pagos en este tipo de modelos se derivan de la cuota de mercado que cada empresa captura. Por ejemplo:
                     <ul>
@@ -185,34 +326,34 @@
                     </ul>
                 </p>
 
-                <h4 style="margin-top: 2rem;">Ejemplo 2: Dilema de Gasto en Campaña Electoral (Ciencia Política)</h4>
-                <p>Dos partidos políticos, Partido Azul y Partido Rojo, deben decidir si lanzar una campaña de "alto gasto" (con muchos anuncios y eventos) o una de "bajo gasto".</p>
-                <table style="width:100%; border-collapse: collapse; margin-top: 1rem; text-align: center; border: 2px solid #dee2e6;">
-                    <thead style="background-color: #e9ecef;">
-                        <tr>
-                            <th style="padding: 12px; border: 1px solid #dee2e6;"></th>
-                            <th colspan="2" style="padding: 12px; border: 1px solid #dee2e6;">Partido Rojo</th>
-                        </tr>
-                        <tr>
-                            <th style="padding: 12px; border: 1px solid #dee2e6;"></th>
-                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600;">Alto Gasto</th>
-                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600;">Bajo Gasto</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th rowspan="2" style="background-color: #e9ecef; vertical-align: middle; padding: 12px; border: 1px solid #dee2e6;">Partido Azul</th>
-                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600; background-color: #f8f9fa;">Alto Gasto</th>
-                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(-5, -5)</td>
-                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(10, -10)</td>
-                        </tr>
-                        <tr>
-                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600; background-color: #f8f9fa;">Bajo Gasto</th>
-                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(-10, 10)</td>
-                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(5, 5)</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h4 style="margin-top: 2rem;">Ejemplo 2: Simulador de Gasto en Campaña</h4>
+                <p>Ahora eres el estratega del <strong>Partido Azul</strong>. Tu oponente es el Partido Rojo. ¿Decides hacer un 'Alto Gasto' para maximizar tu visibilidad, o un 'Bajo Gasto' para conservar recursos? Juega y descubre el dilema.</p>
+
+                <div id="campaign-sim">
+                    <div class="sim-controls">
+                        <h5>Tu Estrategia (Partido Azul):</h5>
+                        <button id="blue-high" class="sim-btn">Alto Gasto</button>
+                        <button id="blue-low" class="sim-btn">Bajo Gasto</button>
+                    </div>
+
+                    <div class="sim-matrix">
+                        <div class="matrix-header"></div>
+                        <div class="matrix-header"><b>P. Rojo:</b> Alto Gasto</div>
+                        <div class="matrix-header"><b>P. Rojo:</b> Bajo Gasto</div>
+                        <div class="matrix-header"><b>Tú:</b> Alto Gasto</div>
+                        <div class="matrix-cell" id="cell-camp-0-0">(-5, -5)</div>
+                        <div class="matrix-cell" id="cell-camp-0-1">(10, -10)</div>
+                        <div class="matrix-header"><b>Tú:</b> Bajo Gasto</div>
+                        <div class="matrix-cell" id="cell-camp-1-0">(-10, 10)</div>
+                        <div class="matrix-cell" id="cell-camp-1-1">(5, 5)</div>
+                    </div>
+
+                    <div id="sim-result-campaign" class="sim-result-display">
+                        <p>Elige tu estrategia de campaña para ver el resultado.</p>
+                    </div>
+                    <button id="sim-reset-campaign" class="cta-button" style="display: none; margin-top: 1rem;">Jugar de Nuevo</button>
+                </div>
+
                 <p style="margin-top: 1rem;">Los pagos representan una combinación de probabilidad de ganar y el costo de la campaña.
                     <ul>
                         <li><strong>(Alto, Alto)</strong>: Ambos partidos gastan enormes sumas de dinero, pero el efecto se anula mutuamente. El resultado es una gran pérdida de recursos para ambos (-5, -5).</li>
@@ -222,34 +363,34 @@
                 Este es un ejemplo clásico del "Dilema del Prisionero", donde la opción racional individual (Alto Gasto) lleva a un resultado colectivo peor.
                 </p>
 
-                <h4 style="margin-top: 2rem;">Ejemplo 3: Guerra de Formatos (Empresas Reales)</h4>
-                <p>Recordemos la batalla entre Sony (con Blu-ray) y Toshiba (con HD-DVD) a mediados de los 2000. Ambas empresas tenían que decidir si lanzar su formato de disco de alta definición de forma agresiva o esperar. Los pagos representan el control del mercado (valorado en miles de millones).</p>
-                <table style="width:100%; border-collapse: collapse; margin-top: 1rem; text-align: center; border: 2px solid #dee2e6;">
-                    <thead style="background-color: #e9ecef;">
-                        <tr>
-                            <th style="padding: 12px; border: 1px solid #dee2e6;"></th>
-                            <th colspan="2" style="padding: 12px; border: 1px solid #dee2e6;">Toshiba (HD-DVD)</th>
-                        </tr>
-                        <tr>
-                            <th style="padding: 12px; border: 1px solid #dee2e6;"></th>
-                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600;">Lanzamiento Agresivo</th>
-                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600;">Lanzamiento Limitado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th rowspan="2" style="background-color: #e9ecef; vertical-align: middle; padding: 12px; border: 1px solid #dee2e6;">Sony (Blu-ray)</th>
-                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600; background-color: #f8f9fa;">Lanzamiento Agresivo</th>
-                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(20, 20)</td>
-                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(80, 10)</td>
-                        </tr>
-                        <tr>
-                            <th style="padding: 12px; border: 1px solid #dee2e6; font-weight: 600; background-color: #f8f9fa;">Lanzamiento Limitado</th>
-                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(10, 80)</td>
-                            <td style="padding: 12px; border: 1px solid #dee2e6; font-size: 1.1rem;">(40, 40)</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h4 style="margin-top: 2rem;">Ejemplo 3: Simulador de Guerra de Formatos</h4>
+                <p>Revive la batalla histórica entre Blu-ray y HD-DVD. Eres <strong>Sony (Blu-ray)</strong>. ¿Optas por un 'Lanzamiento Agresivo' para intentar dominar el mercado, o un 'Lanzamiento Limitado' para ser más cauto? Tu oponente es Toshiba (HD-DVD).</p>
+
+                <div id="format-sim">
+                    <div class="sim-controls">
+                        <h5>Tu Estrategia (Sony):</h5>
+                        <button id="sony-aggressive" class="sim-btn">Lanzamiento Agresivo</button>
+                        <button id="sony-limited" class="sim-btn">Lanzamiento Limitado</button>
+                    </div>
+
+                    <div class="sim-matrix">
+                        <div class="matrix-header"></div>
+                        <div class="matrix-header"><b>Toshiba:</b> Agresivo</div>
+                        <div class="matrix-header"><b>Toshiba:</b> Limitado</div>
+                        <div class="matrix-header"><b>Tú:</b> Agresivo</div>
+                        <div class="matrix-cell" id="cell-format-0-0">(20, 20)</div>
+                        <div class="matrix-cell" id="cell-format-0-1">(80, 10)</div>
+                        <div class="matrix-header"><b>Tú:</b> Limitado</div>
+                        <div class="matrix-cell" id="cell-format-1-0">(10, 80)</div>
+                        <div class="matrix-cell" id="cell-format-1-1">(40, 40)</div>
+                    </div>
+
+                    <div id="sim-result-format" class="sim-result-display">
+                        <p>Elige tu estrategia de lanzamiento para ver el resultado.</p>
+                    </div>
+                    <button id="sim-reset-format" class="cta-button" style="display: none; margin-top: 1rem;">Jugar de Nuevo</button>
+                </div>
+
                 <p style="margin-top: 1rem;">
                     <ul>
                         <li><strong>(Agresivo, Agresivo)</strong>: Ambas inundan el mercado, fragmentándolo y confundiendo al consumidor. La guerra de precios reduce las ganancias potenciales para ambas (20, 20).</li>
@@ -269,34 +410,34 @@
                     <li>Para cada estrategia de un jugador, identificamos la mejor respuesta del otro jugador.</li>
                     <li>Las celdas donde ambas estrategias son mejores respuestas mutuas son Equilibrios de Nash.</li>
                 </ol>
-                <h4>Ejemplo: Encontrando el Equilibrio de Nash</h4>
-                <p>Volvamos al ejemplo de las empresas A y B:</p>
-                <table border="1" style="width:100%; border-collapse: collapse; margin-top: 1rem;">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th colspan="2">Empresa B</th>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <th>Publicitar</th>
-                            <th>No Publicitar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th rowspan="2">Empresa A</th>
-                            <th>Publicitar</th>
-                            <td>(5, 5)</td>
-                            <td>(10, 0)</td>
-                        </tr>
-                        <tr>
-                            <th>No Publicitar</th>
-                            <td>(0, 10)</td>
-                            <td>(2, 2)</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h4>Ejemplo: Encontrando el Equilibrio de Nash (Simulador)</h4>
+                <p>Este es un ejercicio para encontrar el Equilibrio de Nash. Eres la <strong>Empresa A</strong>. ¿Decides 'Publicitar' para atraer clientes o 'No Publicitar' para ahorrar costos? Tu competidor es la Empresa B.</p>
+
+                <div id="ad-sim">
+                    <div class="sim-controls">
+                        <h5>Tu Estrategia (Empresa A):</h5>
+                        <button id="ad-yes" class="sim-btn">Publicitar</button>
+                        <button id="ad-no" class="sim-btn">No Publicitar</button>
+                    </div>
+
+                    <div class="sim-matrix">
+                        <div class="matrix-header"></div>
+                        <div class="matrix-header"><b>Empresa B:</b> Publicitar</div>
+                        <div class="matrix-header"><b>Empresa B:</b> No Publicitar</div>
+                        <div class="matrix-header"><b>Tú:</b> Publicitar</div>
+                        <div class="matrix-cell" id="cell-ad-0-0">(5, 5)</div>
+                        <div class="matrix-cell" id="cell-ad-0-1">(10, 0)</div>
+                        <div class="matrix-header"><b>Tú:</b> No Publicitar</div>
+                        <div class="matrix-cell" id="cell-ad-1-0">(0, 10)</div>
+                        <div class="matrix-cell" id="cell-ad-1-1">(2, 2)</div>
+                    </div>
+
+                    <div id="sim-result-ad" class="sim-result-display">
+                        <p>Elige tu estrategia de publicidad para ver el resultado.</p>
+                    </div>
+                    <button id="sim-reset-ad" class="cta-button" style="display: none; margin-top: 1rem;">Jugar de Nuevo</button>
+                </div>
+
                 <p style="margin-top: 1rem;">Analicemos las mejores respuestas:</p>
                 <ul>
                     <li><strong>Para la Empresa A:</strong>
@@ -312,7 +453,7 @@
                         </ul>
                     </li>
                 </ul>
-                <p>En este caso, la estrategia "Publicitar" es una estrategia dominante para ambas empresas. El único Equilibrio de Nash en estrategias puras es <strong>(Publicitar, Publicitar)</strong>, con pagos (5, 5).</p>
+                <p>En este caso, la estrategia "Publicitar" es una <strong>estrategia dominante</strong> para ambas empresas. El único Equilibrio de Nash en estrategias puras es <strong>(Publicitar, Publicitar)</strong>, con pagos (5, 5). ¿Llegaste a esa conclusión jugando?</p>
             </div>
 
             <hr style="margin: 2.5rem 0;">
@@ -326,89 +467,35 @@
                 <h4>Estrategia Dominada</h4>
                 <p>Una estrategia es <strong>estrictamente dominada</strong> para un jugador si existe otra estrategia que le proporciona un pago estrictamente mayor, <em>independientemente de lo que hagan los demás jugadores</em>.</p>
                 <p>Los jugadores racionales nunca elegirán una estrategia estrictamente dominada. Esto nos permite eliminar estas estrategias de la matriz de pagos, simplificando el juego. Este proceso se conoce como <strong>Eliminación Iterada de Estrategias Estrictamente Dominadas (EIED)</strong>. Si este proceso conduce a una única combinación de estrategias, esa combinación será el único Equilibrio de Nash del juego.</p>
-                <h4>Ejemplo de EIED</h4>
-                <p>Consideremos el siguiente juego:</p>
-                <table border="1" style="width:100%; border-collapse: collapse; margin-top: 1rem;">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th colspan="3">Jugador 2</th>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <th>Izquierda</th>
-                            <th>Centro</th>
-                            <th>Derecha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th rowspan="2">Jugador 1</th>
-                            <th>Arriba</th>
-                            <td>(3, 1)</td>
-                            <td>(1, 2)</td>
-                            <td>(0, 0)</td>
-                        </tr>
-                        <tr>
-                            <th>Abajo</th>
-                            <td>(2, 0)</td>
-                            <td>(0, 1)</td>
-                            <td>(1, 3)</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p style="margin-top: 1rem;"><strong>Paso 1: Jugador 1</strong></p>
-                <ul>
-                    <li>Si Jugador 2 elige Izquierda: Arriba (3) > Abajo (2)</li>
-                    <li>Si Jugador 2 elige Centro: Arriba (1) > Abajo (0)</li>
-                    <li>Si Jugador 2 elige Derecha: Abajo (1) > Arriba (0)</li>
-                </ul>
-                <p>Ninguna estrategia es estrictamente dominante o dominada para el Jugador 1.</p>
-                <p><strong>Paso 2: Jugador 2</strong></p>
-                <ul>
-                    <li>Si Jugador 1 elige Arriba: Centro (2) > Izquierda (1) y Derecha (0).</li>
-                    <li>Si Jugador 1 elige Abajo: Derecha (3) > Centro (1) y Izquierda (0).</li>
-                </ul>
-                <p>La estrategia "Izquierda" del Jugador 2 es dominada por "Centro" (1 < 2, 0 < 1). Eliminamos la columna "Izquierda".</p>
-                <table border="1" style="width:100%; border-collapse: collapse; margin-top: 1rem;">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th colspan="2">Jugador 2</th>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <th>Centro</th>
-                            <th>Derecha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th rowspan="2">Jugador 1</th>
-                            <th>Arriba</th>
-                            <td>(1, 2)</td>
-                            <td>(0, 0)</td>
-                        </tr>
-                        <tr>
-                            <th>Abajo</th>
-                            <td>(0, 1)</td>
-                            <td>(1, 3)</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p style="margin-top: 1rem;"><strong>Paso 3: Jugador 1 (después de la eliminación)</strong></p>
-                <ul>
-                    <li>Si Jugador 2 elige Centro: Arriba (1) > Abajo (0)</li>
-                    <li>Si Jugador 2 elige Derecha: Abajo (1) > Arriba (0)</li>
-                </ul>
-                <p>Ninguna estrategia es estrictamente dominante o dominada para el Jugador 1 en la matriz reducida.</p>
-                <p><strong>Paso 4: Jugador 2 (después de la eliminación)</strong></p>
-                <ul>
-                    <li>Si Jugador 1 elige Arriba: Centro (2) > Derecha (0)</li>
-                    <li>Si Jugador 1 elige Abajo: Derecha (3) > Centro (1)</li>
-                </ul>
-                <p>Ninguna estrategia es estrictamente dominante o dominada para el Jugador 2 en la matriz reducida.</p>
-                <p>En este caso, la EIED no nos lleva a un único resultado, lo que significa que debemos buscar Equilibrios de Nash en la matriz reducida.</p>
+                <h4>Ejemplo de EIED (Eliminación Iterada)</h4>
+                <p>En lugar de solo leer los pasos, realízalos tú mismo. Haz clic en el encabezado de una fila o columna para analizar si es una estrategia dominada. El objetivo es simplificar el juego.</p>
+
+                <div id="eied-sim">
+                    <div class="eied-matrix">
+                        <!-- Headers for Player 2 -->
+                        <div class="matrix-header-eied empty"></div>
+                        <div class="matrix-header-eied clickable" data-player="2" data-strategy="0">Izquierda</div>
+                        <div class="matrix-header-eied clickable" data-player="2" data-strategy="1">Centro</div>
+                        <div class="matrix-header-eied clickable" data-player="2" data-strategy="2">Derecha</div>
+
+                        <!-- Row 1 (Player 1, Arriba) -->
+                        <div class="matrix-header-eied clickable" data-player="1" data-strategy="0">Arriba</div>
+                        <div class="matrix-cell-eied" data-p1-payoff="3" data-p2-payoff="1">(3, 1)</div>
+                        <div class="matrix-cell-eied" data-p1-payoff="1" data-p2-payoff="2">(1, 2)</div>
+                        <div class="matrix-cell-eied" data-p1-payoff="0" data-p2-payoff="0">(0, 0)</div>
+
+                        <!-- Row 2 (Player 1, Abajo) -->
+                        <div class="matrix-header-eied clickable" data-player="1" data-strategy="1">Abajo</div>
+                        <div class="matrix-cell-eied" data-p1-payoff="2" data-p2-payoff="0">(2, 0)</div>
+                        <div class="matrix-cell-eied" data-p1-payoff="0" data-p2-payoff="1">(0, 1)</div>
+                        <div class="matrix-cell-eied" data-p1-payoff="1" data-p2-payoff="3">(1, 3)</div>
+                    </div>
+
+                    <div id="eied-result" class="sim-result-display" style="margin-top: 1rem;">
+                        <p>Haz clic en una estrategia (fila o columna) para analizarla.</p>
+                    </div>
+                    <button id="eied-reset" class="cta-button" style="margin-top: 1rem;">Reiniciar Análisis</button>
+                </div>
             </div>
 
             <hr style="margin: 2.5rem 0;">
@@ -425,34 +512,48 @@
                 </ul>
                 <h4>Cálculo de un Equilibrio de Nash en Estrategias Mixtas</h4>
                 <p>Para calcular un Equilibrio de Nash en estrategias mixtas, cada jugador debe estar indiferente entre sus estrategias puras que se juegan con probabilidad positiva, dado que el otro jugador está jugando su estrategia mixta de equilibrio. Esto significa que el pago esperado de cada estrategia pura utilizada en la mezcla debe ser el mismo.</p>
-                <h4>Ejemplo: Juego de "Pares o Nones"</h4>
-                <p>Dos jugadores muestran uno o dos dedos. Si la suma es par, el Jugador 1 gana. Si la suma es impar, el Jugador 2 gana.</p>
-                <table border="1" style="width:100%; border-collapse: collapse; margin-top: 1rem;">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th colspan="2">Jugador 2</th>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <th>1 Dedo</th>
-                            <th>2 Dedos</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th rowspan="2">Jugador 1</th>
-                            <th>1 Dedo</th>
-                            <td>(1, -1)</td>
-                            <td>(-1, 1)</td>
-                        </tr>
-                        <tr>
-                            <th>2 Dedos</th>
-                            <td>(-1, 1)</td>
-                            <td>(1, -1)</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h4 style="margin-top: 2rem;">Ejemplo: Simulador de "Pares o Nones"</h4>
+                <p>Este juego no tiene un Equilibrio de Nash en estrategias puras. Juega contra la IA para descubrir por qué. El objetivo es jugar varias rondas. Tú ganas si la suma de los dedos es PAR, la IA gana si es IMPAR.</p>
+
+                <div id="mixed-sim">
+                    <div class="mixed-stats">
+                        <span>Rondas Jugadas: <b id="mixed-rounds">0</b></span>
+                        <span>Tu Puntuación Total: <b id="mixed-score">0</b></span>
+                    </div>
+
+                    <div class="sim-controls">
+                        <h5>Tu Jugada (Jugador 1):</h5>
+                        <button id="mixed-one" class="sim-btn">1 Dedo</button>
+                        <button id="mixed-two" class="sim-btn">2 Dedos</button>
+                    </div>
+
+                    <div id="mixed-round-result" class="sim-result-display" style="min-height: 60px; margin-bottom: 1rem;">
+                        <p>Elige tu jugada para empezar la primera ronda.</p>
+                    </div>
+
+                    <p><b>Matriz de Pagos de Referencia:</b></p>
+                    <table style="width:60%; margin: auto; border-collapse: collapse; text-align: center; border: 2px solid #dee2e6;">
+                        <thead style="background-color: #e9ecef;">
+                            <tr><th></th><th>J2: 1 Dedo</th><th>J2: 2 Dedos</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th style="background-color: #f8f9fa; padding: 10px; border: 1px solid #dee2e6;">J1: 1 Dedo</th>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">(1, -1)</td>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">(-1, 1)</td>
+                            </tr>
+                            <tr>
+                                <th style="background-color: #f8f9fa; padding: 10px; border: 1px solid #dee2e6;">J1: 2 Dedos</th>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">(-1, 1)</td>
+                                <td style="padding: 10px; border: 1px solid #dee2e6;">(1, -1)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="text-center">
+                        <button id="mixed-reset" class="cta-button" style="margin-top: 1.5rem;">Reiniciar Juego</button>
+                    </div>
+                </div>
                 <p style="margin-top: 1rem;">No hay Equilibrio de Nash en estrategias puras. Si el Jugador 1 elige 1 Dedo, el Jugador 2 querrá elegir 2 Dedos. Pero si el Jugador 2 elige 2 Dedos, el Jugador 1 querrá elegir 2 Dedos, y así sucesivamente.</p>
                 <p>En este juego, el Equilibrio de Nash en estrategias mixtas es que ambos jugadores elijan cada estrategia pura (1 Dedo o 2 Dedos) con una probabilidad de 0.5. Esto hace que el oponente sea indiferente entre sus propias estrategias, ya que el pago esperado es cero para ambas.</p>
             </div>
@@ -471,35 +572,66 @@
                 </ul>
                 <p>El modelo predice que, bajo ciertas condiciones (votantes que eligen al partido más cercano a su ideología, distribución uniforme de votantes), ambos partidos convergerán hacia el <strong>centro del espectro ideológico</strong>. Esto se conoce como el <strong>Teorema del Votante Mediano</strong>. El Equilibrio de Nash es que ambos partidos se posicionen en la mediana de la distribución de votantes, ya que cualquier desviación permitiría al oponente capturar más votos.</p>
                 <p>Este modelo ayuda a explicar por qué los partidos políticos en sistemas bipartidistas a menudo adoptan plataformas moderadas y similares durante las elecciones generales.</p>
-                <h4>Dilemas de Financiación de Campañas</h4>
-                <p>Consideremos dos candidatos que deben decidir si gastar mucho o poco en publicidad de campaña. Los pagos pueden reflejar la probabilidad de ganar y el costo de la campaña.</p>
-                <table border="1" style="width:100%; border-collapse: collapse; margin-top: 1rem;">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th colspan="2">Candidato B</th>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <th>Gastar Mucho</th>
-                            <th>Gastar Poco</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th rowspan="2">Candidato A</th>
-                            <th>Gastar Mucho</th>
-                            <td>(0, 0)</td>
-                            <td>(1, -1)</td>
-                        </tr>
-                        <tr>
-                            <th>Gastar Poco</th>
-                            <td>(-1, 1)</td>
-                            <td>(0, 0)</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p style="margin-top: 1rem;">En este juego, si ambos gastan mucho, se anulan y ambos obtienen 0. Si uno gasta mucho y el otro poco, el que gasta mucho gana (1) y el otro pierde (-1). Si ambos gastan poco, ambos obtienen 0. Este es un juego de tipo "Guerra de Desgaste" o "Dilema del Prisionero" modificado, donde el Equilibrio de Nash puede ser que ambos gasten mucho, resultando en un derroche de recursos sin un beneficio claro para ninguno.</p>
+<h4 style="margin-top: 2rem;">Ejemplo: Simulador del Modelo de Hotelling</h4>
+<p>Eres el <strong>Vendedor A</strong> en una playa. ¿Dónde te conviene más ubicarte para capturar la mayor cantidad de clientes? Juega contra el Vendedor B (IA) y descúbrelo.</p>
+
+<div id="hotelling-sim">
+    <div class="sim-controls">
+        <h5>Tu Ubicación (Vendedor A):</h5>
+        <button id="hotelling-center" class="sim-btn">Ubicarse en el Centro</button>
+        <button id="hotelling-end" class="sim-btn">Ubicarse en un Extremo</button>
+    </div>
+
+    <div class="sim-matrix">
+        <div class="matrix-header"></div>
+        <div class="matrix-header"><b>Vend. B:</b> Centro</div>
+        <div class="matrix-header"><b>Vend. B:</b> Extremo</div>
+        <div class="matrix-header"><b>Tú:</b> Centro</div>
+        <div class="matrix-cell" id="cell-hotelling-0-0">(50%, 50%)</div>
+        <div class="matrix-cell" id="cell-hotelling-0-1">(75%, 25%)</div>
+        <div class="matrix-header"><b>Tú:</b> Extremo</div>
+        <div class="matrix-cell" id="cell-hotelling-1-0">(25%, 75%)</div>
+        <div class="matrix-cell" id="cell-hotelling-1-1">(50%, 50%)</div>
+    </div>
+
+    <div id="sim-result-hotelling" class="sim-result-display">
+        <p>Elige tu ubicación para ver qué porcentaje del mercado capturas.</p>
+    </div>
+    <button id="sim-reset-hotelling" class="cta-button" style="display: none; margin-top: 1rem;">Jugar de Nuevo</button>
+</div>
+
+<p style="margin-top: 1rem; background-color: #e9f7ff; border-left: 4px solid #007bff; padding: 10px;">
+    <strong>Análisis del Juego:</strong> La estrategia dominante es ubicarse en el centro. Si juegas varias veces, notarás que la única situación estable (Equilibrio de Nash) es cuando ambos competidores eligen el centro. Esto explica por qué los partidos políticos tienden a moderar sus discursos para parecerse y capturar al "votante mediano".
+</p>
+                <h4>Dilemas de Financiación de Campañas (Simulador)</h4>
+                <p>Eres el <strong>Candidato A</strong>. ¿Decides 'Gastar Mucho' en tu campaña para asegurar la victoria, o 'Gastar Poco' para ahorrar recursos? Juega contra el Candidato B (IA).</p>
+
+                <div id="funding-sim">
+                    <div class="sim-controls">
+                        <h5>Tu Estrategia (Candidato A):</h5>
+                        <button id="funding-high" class="sim-btn">Gastar Mucho</button>
+                        <button id="funding-low" class="sim-btn">Gastar Poco</button>
+                    </div>
+
+                    <div class="sim-matrix">
+                        <div class="matrix-header"></div>
+                        <div class="matrix-header"><b>Cand. B:</b> Mucho</div>
+                        <div class="matrix-header"><b>Cand. B:</b> Poco</div>
+                        <div class="matrix-header"><b>Tú:</b> Mucho</div>
+                        <div class="matrix-cell" id="cell-funding-0-0">(0, 0)</div>
+                        <div class="matrix-cell" id="cell-funding-0-1">(1, -1)</div>
+                        <div class="matrix-header"><b>Tú:</b> Poco</div>
+                        <div class="matrix-cell" id="cell-funding-1-0">(-1, 1)</div>
+                        <div class="matrix-cell" id="cell-funding-1-1">(0, 0)</div>
+                    </div>
+
+                    <div id="sim-result-funding" class="sim-result-display">
+                        <p>Elige tu estrategia de financiación para ver el resultado.</p>
+                    </div>
+                    <button id="sim-reset-funding" class="cta-button" style="display: none; margin-top: 1rem;">Jugar de Nuevo</button>
+                </div>
+
+                <p style="margin-top: 1rem;">Este es un juego de "Guerra de Desgaste". El incentivo de ganar si eres el único que gasta mucho empuja a ambos candidatos a un equilibrio donde ambos gastan mucho, anulando sus esfuerzos y derrochando recursos.</p>
             </div>
 
             <hr style="margin: 2.5rem 0;">
@@ -509,52 +641,38 @@
                 <p>La provisión de bienes públicos es un área clásica de aplicación de la teoría de juegos, especialmente los juegos estáticos. Un <strong>bien público</strong> se caracteriza por ser no-rival (el consumo de uno no impide el consumo de otro) y no-excluyente (es difícil o imposible impedir que alguien lo consuma una vez que ha sido provisto).</p>
                 <h4>El Problema del Free-Rider (Gorrón)</h4>
                 <p>El problema central en la provisión de bienes públicos es el <strong>problema del free-rider</strong>. Cada individuo tiene un incentivo para no contribuir a la provisión del bien, esperando que otros lo hagan, y así disfrutar del beneficio sin incurrir en el costo. Esto a menudo lleva a una subprovisión del bien público.</p>
-                <h4>Ejemplo: Contribución a un Parque Público</h4>
-                <p>Imagina dos vecinos que deben decidir si contribuir (C) o no contribuir (NC) a la creación de un parque público. El parque tiene un valor de 10 para cada vecino, y el costo total es de 12. Si solo uno contribuye, paga 12 y el otro 0. Si ambos contribuyen, cada uno paga 6.</p>
-                <table border="1" style="width:100%; border-collapse: collapse; margin-top: 1rem;">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th colspan="2">Vecino 2</th>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <th>Contribuir</th>
-                            <th>No Contribuir</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th rowspan="2">Vecino 1</th>
-                            <th>Contribuir</th>
-                            <td>(4, 4)</td>
-                            <td>(-2, 10)</td>
-                        </tr>
-                        <tr>
-                            <th>No Contribuir</th>
-                            <td>(10, -2)</td>
-                            <td>(0, 0)</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p style="margin-top: 1rem;">Analicemos las mejores respuestas:</p>
-                <ul>
-                    <li><strong>Para Vecino 1:</strong>
-                        <ul>
-                            <li>Si Vecino 2 contribuye: No Contribuir (10 > 4).</li>
-                            <li>Si Vecino 2 no contribuye: No Contribuir (0 > -2).</li>
-                        </ul>
-                    </li>
-                    <li><strong>Para Vecino 2:</strong>
-                        <ul>
-                            <li>Si Vecino 1 contribuye: No Contribuir (10 > 4).</li>
-                            <li>Si Vecino 1 no contribuye: No Contribuir (0 > -2).</li>
-                        </ul>
-                    </li>
-                </ul>
-                <p>La estrategia "No Contribuir" es estrictamente dominante para ambos vecinos. El único Equilibrio de Nash es <strong>(No Contribuir, No Contribuir)</strong>, con pagos (0, 0). Este resultado es subóptimo, ya que si ambos hubieran contribuido, ambos habrían obtenido un pago de 4.</p>
-                <p>Este ejemplo ilustra por qué los gobiernos a menudo tienen que intervenir (a través de impuestos o regulaciones) para asegurar la provisión de bienes públicos, ya que el mercado por sí solo no puede resolver el problema del free-rider.</p>
+                <h4>Ejemplo: Simulador de Contribución a un Bien Público</h4>
+                <p>Este es el famoso problema del "free-rider" (gorrón). Eres el <strong>Vecino 1</strong>. ¿Decides 'Contribuir' para crear un parque para ambos, o 'No Contribuir' y esperar que el Vecino 2 pague por todo? Juega y observa la tragedia de los bienes comunes.</p>
+
+                <div id="public-sim">
+                    <div class="sim-controls">
+                        <h5>Tu Decisión (Vecino 1):</h5>
+                        <button id="public-yes" class="sim-btn">Contribuir</button>
+                        <button id="public-no" class="sim-btn">No Contribuir</button>
+                    </div>
+
+                    <div class="sim-matrix">
+                        <div class="matrix-header"></div>
+                        <div class="matrix-header"><b>Vecino 2:</b> Contribuye</div>
+                        <div class="matrix-header"><b>Vecino 2:</b> No Contribuye</div>
+                        <div class="matrix-header"><b>Tú:</b> Contribuyes</div>
+                        <div class="matrix-cell" id="cell-public-0-0">(4, 4)</div>
+                        <div class="matrix-cell" id="cell-public-0-1">(-2, 10)</div>
+                        <div class="matrix-header"><b>Tú:</b> No Contribuyes</div>
+                        <div class="matrix-cell" id="cell-public-1-0">(10, -2)</div>
+                        <div class="matrix-cell" id="cell-public-1-1">(0, 0)</div>
+                    </div>
+
+                    <div id="sim-result-public" class="sim-result-display">
+                        <p>Elige tu decisión para ver el resultado para la comunidad.</p>
+                    </div>
+                    <button id="sim-reset-public" class="cta-button" style="display: none; margin-top: 1rem;">Jugar de Nuevo</button>
+                </div>
+
+                <p style="margin-top: 1rem;">La estrategia racional individual es "No Contribuir", ya que siempre te da un mejor pago sin importar lo que haga el otro. Esto lleva al Equilibrio de Nash donde nadie contribuye y el parque no se construye (pago 0,0), un resultado peor para todos que si ambos hubieran cooperado (pago 4,4).</p>
             </div>
+
+            
 
             <hr style="margin: 2.5rem 0;">
 
@@ -590,6 +708,650 @@
                     }
                 });
             });
+
+            // --- Duopoly Simulator Logic ---
+            const cokeLowBtn = document.getElementById('coke-low');
+            const cokeHighBtn = document.getElementById('coke-high');
+            const simResult = document.getElementById('sim-result');
+            const simResetBtn = document.getElementById('sim-reset');
+            const cells = {
+                '0-0': document.getElementById('cell-0-0'),
+                '0-1': document.getElementById('cell-0-1'),
+                '1-0': document.getElementById('cell-1-0'),
+                '1-1': document.getElementById('cell-1-1')
+            };
+
+            if (cokeLowBtn) { // Ensure the script doesn't break other pages
+                const outcomes = {
+                    '0-0': "Ambos eligieron <strong>Precio Bajo</strong>. Se desata una guerra de precios, reduciendo las ganancias de ambos. Es un resultado estable (Equilibrio de Nash), pero no el mejor para ustedes.",
+                    '0-1': "Tú elegiste <strong>Precio Bajo</strong> y Pepsi <strong>Precio Alto</strong>. ¡Gran jugada! Capturas gran parte de su mercado. Tu ganancia es máxima.",
+                    '1-0': "Tú elegiste <strong>Precio Alto</strong> y Pepsi <strong>Precio Bajo</strong>. ¡Mala suerte! Pepsi te roba clientes con su precio agresivo. Tu ganancia es mínima.",
+                    '1-1': "Ambos eligieron <strong>Precio Alto</strong>. Mantienen altos márgenes y se reparten el mercado. Un buen resultado, pero vulnerable a que uno de los dos traicione para ganar más."
+                };
+
+                function resetSimulator() {
+                    cokeLowBtn.disabled = false;
+                    cokeHighBtn.disabled = false;
+                    simResetBtn.style.display = 'none';
+                    simResult.innerHTML = '<p>Elige tu estrategia para ver el resultado.</p>';
+                    Object.values(cells).forEach(cell => {
+                        cell.classList.remove('highlight-player', 'highlight-ai', 'final-outcome');
+                    });
+                }
+
+                function runSimulation(playerChoice) { // playerChoice: 0 for low, 1 for high
+                    cokeLowBtn.disabled = true;
+                    cokeHighBtn.disabled = true;
+
+                    // AI Logic: Simple but effective. It has a higher chance of choosing 'low'
+                    // as it's the dominant strategy.
+                    const aiChoice = Math.random() < 0.6 ? 0 : 1; // 0 for low, 1 for high
+
+                    // Highlight player's row
+                    if (playerChoice === 0) {
+                        cells['0-0'].classList.add('highlight-player');
+                        cells['0-1'].classList.add('highlight-player');
+                    } else {
+                        cells['1-0'].classList.add('highlight-player');
+                        cells['1-1'].classList.add('highlight-player');
+                    }
+
+                    setTimeout(() => {
+                        // Highlight AI's column
+                        if (aiChoice === 0) {
+                            cells['0-0'].classList.add('highlight-ai');
+                            cells['1-0'].classList.add('highlight-ai');
+                        } else {
+                            cells['0-1'].classList.add('highlight-ai');
+                            cells['1-1'].classList.add('highlight-ai');
+                        }
+                    }, 700);
+
+                    setTimeout(() => {
+                        const finalCell = cells[`${playerChoice}-${aiChoice}`];
+                        finalCell.classList.add('final-outcome');
+                        
+                        const playerPayoff = finalCell.textContent.match(/\((\d+)/)[1];
+                        const aiPayoff = finalCell.textContent.match(/, *(-?\d+)\)/)[1];
+
+                        simResult.innerHTML = `<p>${outcomes[`${playerChoice}-${aiChoice}`]}<br><strong>Tu pago: ${playerPayoff} | Pago de Pepsi: ${aiPayoff}</strong></p>`;
+                        simResetBtn.style.display = 'inline-block';
+                    }, 1400);
+                }
+
+                cokeLowBtn.addEventListener('click', () => runSimulation(0));
+                cokeHighBtn.addEventListener('click', () => runSimulation(1));
+                simResetBtn.addEventListener('click', resetSimulator);
+            }
+
+            // --- Campaign Simulator Logic ---
+            const blueHighBtn = document.getElementById('blue-high');
+            const blueLowBtn = document.getElementById('blue-low');
+            const simResultCampaign = document.getElementById('sim-result-campaign');
+            const simResetCampaignBtn = document.getElementById('sim-reset-campaign');
+            const cellsCampaign = {
+                '0-0': document.getElementById('cell-camp-0-0'),
+                '0-1': document.getElementById('cell-camp-0-1'),
+                '1-0': document.getElementById('cell-camp-1-0'),
+                '1-1': document.getElementById('cell-camp-1-1')
+            };
+
+            if (blueHighBtn) { // Check if this simulator exists on the page
+                const outcomesCampaign = {
+                    '0-0': "Ambos partidos eligieron <strong>Alto Gasto</strong>. Los esfuerzos se anulan y ambos pierden recursos. Este es el resultado del Dilema del Prisionero.",
+                    '0-1': "Tú elegiste <strong>Alto Gasto</strong> y el Partido Rojo <strong>Bajo Gasto</strong>. ¡Dominas la contienda! Ganas la elección de forma decisiva.",
+                    '1-0': "Tú elegiste <strong>Bajo Gasto</strong> y el Partido Rojo <strong>Alto Gasto</strong>. ¡Te han superado! Tu oponente gana visibilidad y la elección.",
+                    '1-1': "Ambos partidos eligieron <strong>Bajo Gasto</strong>. Compiten en igualdad de condiciones y conservan sus recursos. Es el mejor resultado colectivo (óptimo de Pareto)."
+                };
+
+                function resetSimulatorCampaign() {
+                    blueHighBtn.disabled = false;
+                    blueLowBtn.disabled = false;
+                    simResetCampaignBtn.style.display = 'none';
+                    simResultCampaign.innerHTML = '<p>Elige tu estrategia de campaña para ver el resultado.</p>';
+                    Object.values(cellsCampaign).forEach(cell => {
+                        cell.classList.remove('highlight-player', 'highlight-ai', 'final-outcome');
+                    });
+                }
+
+                function runSimulationCampaign(playerChoice) { // 0 for high, 1 for low
+                    blueHighBtn.disabled = true;
+                    blueLowBtn.disabled = true;
+
+                    // AI Logic: In a prisoner's dilemma, the rational choice is to defect (Alto Gasto).
+                    const aiChoice = Math.random() < 0.7 ? 0 : 1; // AI is biased towards 'Alto Gasto'
+
+                    // Highlight player's row
+                    if (playerChoice === 0) {
+                        cellsCampaign['0-0'].classList.add('highlight-player');
+                        cellsCampaign['0-1'].classList.add('highlight-player');
+                    } else {
+                        cellsCampaign['1-0'].classList.add('highlight-player');
+                        cellsCampaign['1-1'].classList.add('highlight-player');
+                    }
+
+                    setTimeout(() => {
+                        // Highlight AI's column
+                        if (aiChoice === 0) {
+                            cellsCampaign['0-0'].classList.add('highlight-ai');
+                            cellsCampaign['1-0'].classList.add('highlight-ai');
+                        } else {
+                            cellsCampaign['0-1'].classList.add('highlight-ai');
+                            cellsCampaign['1-1'].classList.add('highlight-ai');
+                        }
+                    }, 700);
+
+                    setTimeout(() => {
+                        const finalCell = cellsCampaign[`${playerChoice}-${aiChoice}`];
+                        finalCell.classList.add('final-outcome');
+                        
+                        const playerPayoff = finalCell.textContent.match(/\((-?\d+)/)[1];
+                        const aiPayoff = finalCell.textContent.match(/, *(-?\d+)\)/)[1];
+
+                        simResultCampaign.innerHTML = `<p>${outcomesCampaign[`${playerChoice}-${aiChoice}`]}<br><strong>Tu pago: ${playerPayoff} | Pago del P. Rojo: ${aiPayoff}</strong></p>`;
+                        simResetCampaignBtn.style.display = 'inline-block';
+                    }, 1400);
+                }
+
+                blueHighBtn.addEventListener('click', () => runSimulationCampaign(0));
+                blueLowBtn.addEventListener('click', () => runSimulationCampaign(1));
+                simResetCampaignBtn.addEventListener('click', resetSimulatorCampaign);
+            }
+
+            // --- Format War Simulator Logic ---
+            const sonyAggressiveBtn = document.getElementById('sony-aggressive');
+            const sonyLimitedBtn = document.getElementById('sony-limited');
+            const simResultFormat = document.getElementById('sim-result-format');
+            const simResetFormatBtn = document.getElementById('sim-reset-format');
+            const cellsFormat = {
+                '0-0': document.getElementById('cell-format-0-0'),
+                '0-1': document.getElementById('cell-format-0-1'),
+                '1-0': document.getElementById('cell-format-1-0'),
+                '1-1': document.getElementById('cell-format-1-1')
+            };
+
+            if (sonyAggressiveBtn) { // Check if this simulator exists
+                const outcomesFormat = {
+                    '0-0': "Ambos fueron <strong>Agresivos</strong>. El mercado se fragmenta y las ganancias se desploman para ambos en una costosa guerra.",
+                    '0-1': "Tú fuiste <strong>Agresivo</strong> y Toshiba <strong>Limitado</strong>. ¡Victoria! Dominas el mercado y te conviertes en el estándar, maximizando tus ganancias.",
+                    '1-0': "Tú fuiste <strong>Limitado</strong> y Toshiba <strong>Agresivo</strong>. ¡Derrota! Toshiba se adueña del mercado y tu formato se vuelve obsoleto.",
+                    '1-1': "Ambos fueron <strong>Limitados</strong>. Coexisten en el mercado con ganancias moderadas. Un resultado seguro, pero sin un claro ganador."
+                };
+
+                function resetSimulatorFormat() {
+                    sonyAggressiveBtn.disabled = false;
+                    sonyLimitedBtn.disabled = false;
+                    simResetFormatBtn.style.display = 'none';
+                    simResultFormat.innerHTML = '<p>Elige tu estrategia de lanzamiento para ver el resultado.</p>';
+                    Object.values(cellsFormat).forEach(cell => {
+                        cell.classList.remove('highlight-player', 'highlight-ai', 'final-outcome');
+                    });
+                }
+
+                function runSimulationFormat(playerChoice) { // 0 for aggressive, 1 for limited
+                    sonyAggressiveBtn.disabled = true;
+                    sonyLimitedBtn.disabled = true;
+
+                    // AI Logic: Let's make Toshiba slightly less aggressive than the political party
+                    const aiChoice = Math.random() < 0.5 ? 0 : 1; 
+
+                    // Highlight player's row
+                    if (playerChoice === 0) {
+                        cellsFormat['0-0'].classList.add('highlight-player');
+                        cellsFormat['0-1'].classList.add('highlight-player');
+                    } else {
+                        cellsFormat['1-0'].classList.add('highlight-player');
+                        cellsFormat['1-1'].classList.add('highlight-player');
+                    }
+
+                    setTimeout(() => {
+                        // Highlight AI's column
+                        if (aiChoice === 0) {
+                            cellsFormat['0-0'].classList.add('highlight-ai');
+                            cellsFormat['1-0'].classList.add('highlight-ai');
+                        } else {
+                            cellsFormat['0-1'].classList.add('highlight-ai');
+                            cellsFormat['1-1'].classList.add('highlight-ai');
+                        }
+                    }, 700);
+
+                    setTimeout(() => {
+                        const finalCell = cellsFormat[`${playerChoice}-${aiChoice}`];
+                        finalCell.classList.add('final-outcome');
+                        
+                        const playerPayoff = finalCell.textContent.match(/\((-?\d+)/)[1];
+                        const aiPayoff = finalCell.textContent.match(/, *(-?\d+)\)/)[1];
+
+                        simResultFormat.innerHTML = `<p>${outcomesFormat[`${playerChoice}-${aiChoice}`]}<br><strong>Tu pago: ${playerPayoff} | Pago de Toshiba: ${aiPayoff}</strong></p>`;
+                        simResetFormatBtn.style.display = 'inline-block';
+                    }, 1400);
+                }
+
+                sonyAggressiveBtn.addEventListener('click', () => runSimulationFormat(0));
+                sonyLimitedBtn.addEventListener('click', () => runSimulationFormat(1));
+                simResetFormatBtn.addEventListener('click', resetSimulatorFormat);
+            }
+
+            // --- Advertising Simulator Logic ---
+            const adYesBtn = document.getElementById('ad-yes');
+            const adNoBtn = document.getElementById('ad-no');
+            const simResultAd = document.getElementById('sim-result-ad');
+            const simResetAdBtn = document.getElementById('sim-reset-ad');
+            const cellsAd = {
+                '0-0': document.getElementById('cell-ad-0-0'),
+                '0-1': document.getElementById('cell-ad-0-1'),
+                '1-0': document.getElementById('cell-ad-1-0'),
+                '1-1': document.getElementById('cell-ad-1-1')
+            };
+
+            if (adYesBtn) {
+                const outcomesAd = {
+                    '0-0': "Ambos eligieron <strong>Publicitar</strong>. Ambos ganan clientes pero los costos de publicidad reducen las ganancias. Este es el Equilibrio de Nash.",
+                    '0-1': "Tú elegiste <strong>Publicitar</strong> y la Empresa B no. ¡Excelente! Ganas una gran cuota de mercado a costa de tu competidor.",
+                    '1-0': "Tú elegiste <strong>No Publicitar</strong> y la Empresa B sí. ¡Cuidado! Tu competidor te está quitando todo el mercado.",
+                    '1-1': "Ambos eligieron <strong>No Publicitar</strong>. Ahorran costos, pero sus ganancias son modestas. Es un resultado inestable, ya que cualquiera podría publicitar para ganar mucho más."
+                };
+
+                function resetSimulatorAd() {
+                    adYesBtn.disabled = false;
+                    adNoBtn.disabled = false;
+                    simResetAdBtn.style.display = 'none';
+                    simResultAd.innerHTML = '<p>Elige tu estrategia de publicidad para ver el resultado.</p>';
+                    Object.values(cellsAd).forEach(cell => {
+                        cell.classList.remove('highlight-player', 'highlight-ai', 'final-outcome');
+                    });
+                }
+
+                function runSimulationAd(playerChoice) { // 0 for yes, 1 for no
+                    adYesBtn.disabled = true;
+                    adNoBtn.disabled = true;
+
+                    // AI Logic: The AI knows that advertising is a dominant strategy.
+                    const aiChoice = Math.random() < 0.85 ? 0 : 1; // Heavily biased to advertise
+
+                    // Highlight player's row
+                    if (playerChoice === 0) {
+                        cellsAd['0-0'].classList.add('highlight-player');
+                        cellsAd['0-1'].classList.add('highlight-player');
+                    } else {
+                        cellsAd['1-0'].classList.add('highlight-player');
+                        cellsAd['1-1'].classList.add('highlight-player');
+                    }
+
+                    setTimeout(() => {
+                        // Highlight AI's column
+                        if (aiChoice === 0) {
+                            cellsAd['0-0'].classList.add('highlight-ai');
+                            cellsAd['1-0'].classList.add('highlight-ai');
+                        } else {
+                            cellsAd['0-1'].classList.add('highlight-ai');
+                            cellsAd['1-1'].classList.add('highlight-ai');
+                        }
+                    }, 700);
+
+                    setTimeout(() => {
+                        const finalCell = cellsAd[`${playerChoice}-${aiChoice}`];
+                        finalCell.classList.add('final-outcome');
+                        
+                        const playerPayoff = finalCell.textContent.match(/\((-?\d+)/)[1];
+                        const aiPayoff = finalCell.textContent.match(/, *(-?\d+)\)/)[1];
+
+                        simResultAd.innerHTML = `<p>${outcomesAd[`${playerChoice}-${aiChoice}`]}<br><strong>Tu pago: ${playerPayoff} | Pago de Empresa B: ${aiPayoff}</strong></p>`;
+                        simResetAdBtn.style.display = 'inline-block';
+                    }, 1400);
+                }
+
+                adYesBtn.addEventListener('click', () => runSimulationAd(0));
+                adNoBtn.addEventListener('click', () => runSimulationAd(1));
+                simResetAdBtn.addEventListener('click', resetSimulatorAd);
+            }
+
+            // --- EIED Analyzer Logic ---
+            const eiedSim = document.getElementById('eied-sim');
+            const eiedResult = document.getElementById('eied-result');
+            const eiedResetBtn = document.getElementById('eied-reset');
+
+            if (eiedSim) {
+                let eliminatedStrategies = { p1: [], p2: [] };
+
+                const feedback = {
+                    p2_s0_dominated: "¡Correcto! La estrategia 'Izquierda' del Jugador 2 es estrictamente dominada por 'Centro'. Para el J2, el pago es mayor con 'Centro' sin importar lo que haga el J1 (1 es menor que 2, y 0 es menor que 1). La estrategia ha sido eliminada.",
+                    p1_s0_not_dominated: "No del todo. 'Arriba' no está dominada por 'Abajo' para el Jugador 1. Aunque 'Abajo' es mejor si J2 elige 'Derecha' (1 > 0), 'Arriba' es la mejor opción si J2 elige 'Izquierda' o 'Centro'.",
+                    p1_s1_not_dominated: "Intenta de nuevo. 'Abajo' no está dominada por 'Arriba' para el Jugador 1. 'Abajo' es la mejor opción si J2 elige 'Derecha' (1 > 0).",
+                    p2_s1_not_dominated: "No exactamente. 'Centro' no está dominada (en la matriz original). Si J1 elige 'Arriba', 'Centro' es la mejor opción para J2 (pago de 2).",
+                    p2_s2_not_dominated: "Casi, pero no. 'Derecha' no está dominada (en la matriz original). Si J1 elige 'Abajo', 'Derecha' es la mejor opción para J2 (pago de 3).",
+                    p2_s1_not_dominated_reduced: "Analiza de nuevo. En la matriz reducida, 'Centro' no está dominada por 'Derecha'. Si J1 elige 'Arriba', 'Centro' (pago 2) es mejor que 'Derecha' (pago 0).",
+                    p2_s2_not_dominated_reduced: "Intenta otra vez. En la matriz reducida, 'Derecha' no está dominada por 'Centro'. Si J1 elige 'Abajo', 'Derecha' (pago 3) es mejor que 'Centro' (pago 1).",
+                    already_eliminated: "Esa estrategia ya ha sido eliminada. Busca otra en la matriz restante.",
+                    no_more_dominated: "¡Análisis completo! En la matriz restante, no hay más estrategias estrictamente dominadas. Ahora tendrías que buscar un Equilibrio de Nash en este juego reducido.",
+                    initial: "Haz clic en una estrategia (fila o columna) para analizarla."
+                };
+
+                function updateView() {
+                    eiedSim.querySelectorAll('.clickable, .matrix-cell-eied').forEach(el => el.classList.remove('strategy-eliminated'));
+                    
+                    const allElements = eiedSim.querySelectorAll('[data-player]');
+                    allElements.forEach(el => {
+                        const p = el.dataset.player;
+                        const s = parseInt(el.dataset.strategy);
+                        if ((p === '1' && eliminatedStrategies.p1.includes(s)) || (p === '2' && eliminatedStrategies.p2.includes(s))) {
+                            el.classList.add('strategy-eliminated');
+                        }
+                    });
+
+                    const allCells = eiedSim.querySelectorAll('.matrix-cell-eied');
+                    allCells.forEach((cell, index) => {
+                        const col = index % 3;
+                        const row = Math.floor(index / 3);
+                        if (eliminatedStrategies.p1.includes(row) || eliminatedStrategies.p2.includes(col)) {
+                            cell.classList.add('strategy-eliminated');
+                        }
+                    });
+                }
+
+                function checkDominance(e) {
+                    if (!e.target.classList.contains('clickable')) return;
+                    
+                    const player = e.target.dataset.player;
+                    const strategyIndex = parseInt(e.target.dataset.strategy);
+
+                    if (e.target.classList.contains('strategy-eliminated')) {
+                        eiedResult.innerHTML = `<p>${feedback.already_eliminated}</p>`;
+                        return;
+                    }
+
+                    // Step 1: Check if P2's 'Izquierda' (strategy 0) is dominated
+                    if (player === '2' && strategyIndex === 0) {
+                        eiedResult.innerHTML = `<p>${feedback.p2_s0_dominated}</p>`;
+                        eliminatedStrategies.p2.push(0);
+                        updateView();
+                        return;
+                    }
+                    
+                    // If 'Izquierda' is already eliminated, any other click means no more dominated strategies
+                    if (eliminatedStrategies.p2.includes(0)) {
+                        if (player === '2' && strategyIndex === 1) eiedResult.innerHTML = `<p>${feedback.p2_s1_not_dominated_reduced}</p>`;
+                        else if (player === '2' && strategyIndex === 2) eiedResult.innerHTML = `<p>${feedback.p2_s2_not_dominated_reduced}</p>`;
+                        else eiedResult.innerHTML = `<p>${feedback.no_more_dominated}</p>`;
+                        return;
+                    }
+
+                    // Default feedback for non-dominated strategies in the initial matrix
+                    if (player === '1' && strategyIndex === 0) eiedResult.innerHTML = `<p>${feedback.p1_s0_not_dominated}</p>`;
+                    if (player === '1' && strategyIndex === 1) eiedResult.innerHTML = `<p>${feedback.p1_s1_not_dominated}</p>`;
+                    if (player === '2' && strategyIndex === 1) eiedResult.innerHTML = `<p>${feedback.p2_s1_not_dominated}</p>`;
+                    if (player === '2' && strategyIndex === 2) eiedResult.innerHTML = `<p>${feedback.p2_s2_not_dominated}</p>`;
+                }
+                
+                function resetEIED() {
+                    eliminatedStrategies = { p1: [], p2: [] };
+                    eiedResult.innerHTML = `<p>${feedback.initial}</p>`;
+                    updateView();
+                }
+
+                eiedSim.addEventListener('click', checkDominance);
+                eiedResetBtn.addEventListener('click', resetEIED);
+            }
+
+            // --- Mixed Strategy (Pares o Nones) Simulator Logic ---
+            const mixedOneBtn = document.getElementById('mixed-one');
+            const mixedTwoBtn = document.getElementById('mixed-two');
+            const mixedResetBtn = document.getElementById('mixed-reset');
+            const mixedRoundsEl = document.getElementById('mixed-rounds');
+            const mixedScoreEl = document.getElementById('mixed-score');
+            const mixedRoundResultEl = document.getElementById('mixed-round-result');
+
+            if (mixedOneBtn) {
+                let roundsPlayed = 0;
+                let totalScore = 0;
+
+                const playRound = (playerChoice) => {
+                    // AI plays a 50/50 mixed strategy
+                    const aiChoice = Math.random() < 0.5 ? 1 : 2;
+                    const sum = playerChoice + aiChoice;
+                    const playerWins = sum % 2 === 0;
+                    const roundResult = playerWins ? 1 : -1;
+
+                    roundsPlayed++;
+                    totalScore += roundResult;
+
+                    // Update UI
+                    mixedRoundsEl.textContent = roundsPlayed;
+                    mixedScoreEl.textContent = totalScore;
+
+                    let resultHTML = `Tú elegiste <strong>${playerChoice}</strong>, la IA eligió <strong>${aiChoice}</strong>. La suma es <strong>${sum}</strong> (${playerWins ? 'PAR' : 'IMPAR'}). `;
+                    resultHTML += playerWins ? '<strong>¡Ganas esta ronda! (+1)</strong>' : '<strong>La IA gana esta ronda. (-1)</strong>';
+                    
+                    if (roundsPlayed >= 10 && roundsPlayed % 5 === 0) {
+                        resultHTML += `<br><br><b>Análisis tras ${roundsPlayed} rondas:</b> Tu puntuación es ${totalScore}. Nota cómo, a largo plazo, es difícil obtener una ventaja. La IA está usando una estrategia mixta impredecible, el equilibrio de este juego.`;
+                    }
+                    
+                    mixedRoundResultEl.innerHTML = `<p>${resultHTML}</p>`;
+                };
+
+                const resetMixedGame = () => {
+                    roundsPlayed = 0;
+                    totalScore = 0;
+                    mixedRoundsEl.textContent = '0';
+                    mixedScoreEl.textContent = '0';
+                    mixedRoundResultEl.innerHTML = '<p>Elige tu jugada para empezar la primera ronda.</p>';
+                };
+
+                mixedOneBtn.addEventListener('click', () => playRound(1));
+                mixedTwoBtn.addEventListener('click', () => playRound(2));
+                mixedResetBtn.addEventListener('click', resetMixedGame);
+            }
+
+            // --- Hotelling Model Simulator Logic ---
+            const hotellingCenterBtn = document.getElementById('hotelling-center');
+            const hotellingEndBtn = document.getElementById('hotelling-end');
+            const simResultHotelling = document.getElementById('sim-result-hotelling');
+            const simResetHotellingBtn = document.getElementById('sim-reset-hotelling');
+            const cellsHotelling = {
+                '0-0': document.getElementById('cell-hotelling-0-0'),
+                '0-1': document.getElementById('cell-hotelling-0-1'),
+                '1-0': document.getElementById('cell-hotelling-1-0'),
+                '1-1': document.getElementById('cell-hotelling-1-1')
+            };
+
+            if (hotellingCenterBtn) {
+                const outcomesHotelling = {
+                    '0-0': "Ambos eligieron el <strong>Centro</strong>. Se reparten el mercado por igual. Este es el Equilibrio de Nash.",
+                    '0-1': "Tú elegiste el <strong>Centro</strong> y el Vendedor B un <strong>Extremo</strong>. ¡Jugada inteligente! Capturas la mayor parte del mercado.",
+                    '1-0': "Tú elegiste un <strong>Extremo</strong> y el Vendedor B el <strong>Centro</strong>. ¡Mala decisión! El Vendedor B se queda con la mayoría de los clientes.",
+                    '1-1': "Ambos eligieron un <strong>Extremo</strong>. Se reparten el mercado, pero es una situación inestable. ¿Qué pasaría si uno se mueve al centro?"
+                };
+
+                function resetSimulatorHotelling() {
+                    hotellingCenterBtn.disabled = false;
+                    hotellingEndBtn.disabled = false;
+                    simResetHotellingBtn.style.display = 'none';
+                    simResultHotelling.innerHTML = '<p>Elige tu ubicación para ver qué porcentaje del mercado capturas.</p>';
+                    Object.values(cellsHotelling).forEach(cell => cell.classList.remove('highlight-player', 'highlight-ai', 'final-outcome'));
+                }
+
+                function runSimulationHotelling(playerChoice) { // 0 for center, 1 for end
+                    hotellingCenterBtn.disabled = true;
+                    hotellingEndBtn.disabled = true;
+
+                    // AI Logic: The AI knows that 'Center' is the dominant strategy.
+                    const aiChoice = Math.random() < 0.8 ? 0 : 1; // Biased towards 'Center'
+
+                    // Highlight player's row
+                    if (playerChoice === 0) {
+                        cellsHotelling['0-0'].classList.add('highlight-player');
+                        cellsHotelling['0-1'].classList.add('highlight-player');
+                    } else {
+                        cellsHotelling['1-0'].classList.add('highlight-player');
+                        cellsHotelling['1-1'].classList.add('highlight-player');
+                    }
+
+                    setTimeout(() => {
+                        // Highlight AI's column
+                        if (aiChoice === 0) {
+                            cellsHotelling['0-0'].classList.add('highlight-ai');
+                            cellsHotelling['1-0'].classList.add('highlight-ai');
+                        } else {
+                            cellsHotelling['0-1'].classList.add('highlight-ai');
+                            cellsHotelling['1-1'].classList.add('highlight-ai');
+                        }
+                    }, 700);
+
+                    setTimeout(() => {
+                        const finalCell = cellsHotelling[`${playerChoice}-${aiChoice}`];
+                        finalCell.classList.add('final-outcome');
+                        
+                        const playerPayoff = finalCell.textContent.match(/\(([^,]+)/)[1];
+                        const aiPayoff = finalCell.textContent.match(/, *([^)]+)\)/)[1];
+
+                        simResultHotelling.innerHTML = `<p>${outcomesHotelling[`${playerChoice}-${aiChoice}`]}<br><strong>Tu cuota: ${playerPayoff} | Cuota de Vend. B: ${aiPayoff}</strong></p>`;
+                        simResetHotellingBtn.style.display = 'inline-block';
+                    }, 1400);
+                }
+
+                hotellingCenterBtn.addEventListener('click', () => runSimulationHotelling(0));
+                hotellingEndBtn.addEventListener('click', () => runSimulationHotelling(1));
+                simResetHotellingBtn.addEventListener('click', resetSimulatorHotelling);
+            }
+
+            // --- Funding Simulator Logic ---
+            const fundingHighBtn = document.getElementById('funding-high');
+            const fundingLowBtn = document.getElementById('funding-low');
+            const simResultFunding = document.getElementById('sim-result-funding');
+            const simResetFundingBtn = document.getElementById('sim-reset-funding');
+            const cellsFunding = {
+                '0-0': document.getElementById('cell-funding-0-0'),
+                '0-1': document.getElementById('cell-funding-0-1'),
+                '1-0': document.getElementById('cell-funding-1-0'),
+                '1-1': document.getElementById('cell-funding-1-1')
+            };
+
+            if (fundingHighBtn) {
+                const outcomesFunding = {
+                    '0-0': "Ambos eligieron <strong>Gastar Mucho</strong>. Los esfuerzos se anulan y ambos derrochan recursos para quedar en el mismo lugar.",
+                    '0-1': "Tú elegiste <strong>Gastar Mucho</strong> y tu oponente <strong>Poco</strong>. ¡Victoria! Tu inversión te da una ventaja decisiva.",
+                    '1-0': "Tú elegiste <strong>Gastar Poco</strong> y tu oponente <strong>Mucho</strong>. ¡Derrota! Tu oponente te supera en visibilidad y gana.",
+                    '1-1': "Ambos eligieron <strong>Gastar Poco</strong>. Un resultado eficiente, pero inestable. Cualquiera podría 'traicionar' y gastar mucho para ganar."
+                };
+
+                function resetSimulatorFunding() {
+                    fundingHighBtn.disabled = false;
+                    fundingLowBtn.disabled = false;
+                    simResetFundingBtn.style.display = 'none';
+                    simResultFunding.innerHTML = '<p>Elige tu estrategia de financiación para ver el resultado.</p>';
+                    Object.values(cellsFunding).forEach(cell => cell.classList.remove('highlight-player', 'highlight-ai', 'final-outcome'));
+                }
+
+                function runSimulationFunding(playerChoice) { // 0 for high, 1 for low
+                    fundingHighBtn.disabled = true;
+                    fundingLowBtn.disabled = true;
+
+                    const aiChoice = Math.random() < 0.6 ? 0 : 1; // Biased towards high spending
+
+                    if (playerChoice === 0) {
+                        cellsFunding['0-0'].classList.add('highlight-player');
+                        cellsFunding['0-1'].classList.add('highlight-player');
+                    } else {
+                        cellsFunding['1-0'].classList.add('highlight-player');
+                        cellsFunding['1-1'].classList.add('highlight-player');
+                    }
+
+                    setTimeout(() => {
+                        if (aiChoice === 0) {
+                            cellsFunding['0-0'].classList.add('highlight-ai');
+                            cellsFunding['1-0'].classList.add('highlight-ai');
+                        } else {
+                            cellsFunding['0-1'].classList.add('highlight-ai');
+                            cellsFunding['1-1'].classList.add('highlight-ai');
+                        }
+                    }, 700);
+
+                    setTimeout(() => {
+                        const finalCell = cellsFunding[`${playerChoice}-${aiChoice}`];
+                        finalCell.classList.add('final-outcome');
+                        
+                        const playerPayoff = finalCell.textContent.match(/\((-?\d+)/)[1];
+                        const aiPayoff = finalCell.textContent.match(/, *(-?\d+)\)/)[1];
+
+                        simResultFunding.innerHTML = `<p>${outcomesFunding[`${playerChoice}-${aiChoice}`]}<br><strong>Tu pago: ${playerPayoff} | Pago de Cand. B: ${aiPayoff}</strong></p>`;
+                        simResetFundingBtn.style.display = 'inline-block';
+                    }, 1400);
+                }
+
+                fundingHighBtn.addEventListener('click', () => runSimulationFunding(0));
+                fundingLowBtn.addEventListener('click', () => runSimulationFunding(1));
+                simResetFundingBtn.addEventListener('click', resetSimulatorFunding);
+            }
+
+            // --- Public Goods Simulator Logic ---
+            const publicYesBtn = document.getElementById('public-yes');
+            const publicNoBtn = document.getElementById('public-no');
+            const simResultPublic = document.getElementById('sim-result-public');
+            const simResetPublicBtn = document.getElementById('sim-reset-public');
+            const cellsPublic = {
+                '0-0': document.getElementById('cell-public-0-0'),
+                '0-1': document.getElementById('cell-public-0-1'),
+                '1-0': document.getElementById('cell-public-1-0'),
+                '1-1': document.getElementById('cell-public-1-1')
+            };
+
+            if (publicYesBtn) {
+                const outcomesPublic = {
+                    '0-0': "Ambos <strong>Contribuyeron</strong>. El parque se construye y ambos disfrutan de un buen beneficio. ¡El óptimo social!",
+                    '0-1': "Tú <strong>Contribuiste</strong> y tu vecino no. Pagaste todo el costo y tu vecino disfruta del parque gratis (es un 'free-rider').",
+                    '1-0': "Tú <strong>No Contribuiste</strong> y tu vecino sí. ¡Te salió perfecto! Disfrutas del parque sin pagar nada, a costa de tu vecino.",
+                    '1-1': "Ambos <strong>No Contribuyeron</strong>. Nadie paga, pero el parque no se construye y nadie obtiene ningún beneficio. Es el Equilibrio de Nash, un resultado subóptimo."
+                };
+
+                function resetSimulatorPublic() {
+                    publicYesBtn.disabled = false;
+                    publicNoBtn.disabled = false;
+                    simResetPublicBtn.style.display = 'none';
+                    simResultPublic.innerHTML = '<p>Elige tu decisión para ver el resultado para la comunidad.</p>';
+                    Object.values(cellsPublic).forEach(cell => cell.classList.remove('highlight-player', 'highlight-ai', 'final-outcome'));
+                }
+
+                function runSimulationPublic(playerChoice) { // 0 for yes, 1 for no
+                    publicYesBtn.disabled = true;
+                    publicNoBtn.disabled = true;
+
+                    // AI Logic: The rational choice is to be a free-rider.
+                    const aiChoice = Math.random() < 0.85 ? 1 : 0; // Heavily biased to NOT contribute
+
+                    if (playerChoice === 0) {
+                        cellsPublic['0-0'].classList.add('highlight-player');
+                        cellsPublic['0-1'].classList.add('highlight-player');
+                    } else {
+                        cellsPublic['1-0'].classList.add('highlight-player');
+                        cellsPublic['1-1'].classList.add('highlight-player');
+                    }
+
+                    setTimeout(() => {
+                        if (aiChoice === 0) {
+                            cellsPublic['0-0'].classList.add('highlight-ai');
+                            cellsPublic['1-0'].classList.add('highlight-ai');
+                        } else {
+                            cellsPublic['0-1'].classList.add('highlight-ai');
+                            cellsPublic['1-1'].classList.add('highlight-ai');
+                        }
+                    }, 700);
+
+                    setTimeout(() => {
+                        const finalCell = cellsPublic[`${playerChoice}-${aiChoice}`];
+                        finalCell.classList.add('final-outcome');
+                        
+                        const playerPayoff = finalCell.textContent.match(/\((-?\d+)/)[1];
+                        const aiPayoff = finalCell.textContent.match(/, *(-?\d+)\)/)[1];
+
+                        simResultPublic.innerHTML = `<p>${outcomesPublic[`${playerChoice}-${aiChoice}`]}<br><strong>Tu pago: ${playerPayoff} | Pago de Vecino 2: ${aiPayoff}</strong></p>`;
+                        simResetPublicBtn.style.display = 'inline-block';
+                    }, 1400);
+                }
+
+                publicYesBtn.addEventListener('click', () => runSimulationPublic(0));
+                publicNoBtn.addEventListener('click', () => runSimulationPublic(1));
+                simResetPublicBtn.addEventListener('click', resetSimulatorPublic);
+            }
         });
     </script>
 </body>

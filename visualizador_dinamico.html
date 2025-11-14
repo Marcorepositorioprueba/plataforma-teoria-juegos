@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador de Juegos Dinámicos</title>
+    <link rel="stylesheet" href="visualizador_dinamico.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Visualizador de Juegos Dinámicos</h1>
+        <nav>
+            <a href="index.html">Volver al Temario</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="configuracion">
+            <h2>1. Selecciona un Juego Dinámico</h2>
+            <select id="juego-selector">
+                <!-- Opciones generadas por JS -->
+            </select>
+            <button id="analizar-btn">2. Analizar con Inducción hacia Atrás</button>
+        </section>
+
+        <section id="visualizador">
+            <h2>Árbol de Juego</h2>
+            <div id="arbol-container">
+                <!-- El árbol se generará aquí -->
+            </div>
+        </section>
+
+        <section id="analisis-resultado">
+            <h2>3. Análisis Paso a Paso</h2>
+            <div id="explicacion-container">
+                <p>Presiona el botón "Analizar" para ver la explicación del proceso de Inducción hacia Atrás.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="visualizador_dinamico.js"></script>
+</body>
+</html>

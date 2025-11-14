@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica S3 | Teoría de Juegos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8f9fa; color: #343a40; }
+        .top-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2.5rem; background-color: #fff; border-bottom: 1px solid #dee2e6; position: sticky; top: 0; z-index: 1000; }
+        .top-header .logo img { max-height: 75px; }
+        .main-nav a { margin: 0 1rem; text-decoration: none; color: #495057; font-weight: 600; transition: color 0.3s; }
+        .main-nav a:hover, .main-nav a.active { color: #007bff; font-weight: 700; }
+        .content-area { padding: 2rem 2.5rem 4rem 2.5rem; }
+        .card { background-color: #fff; border-radius: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); padding: 2.5rem; margin-bottom: 2.5rem; }
+        .card h2 { font-size: 2rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; border-bottom: 2px solid #007bff; padding-bottom: 0.8rem; display: flex; align-items: center; }
+        .card h2 .fa { margin-right: 1rem; color: #007bff; }
+        footer { text-align: center; padding: 3rem 0; background-color: #343a40; color: #fff; }
+        .cta-button { background-color: #007bff; color: #fff; padding: 0.8rem 1.5rem; border-radius: 5px; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 1rem; }
+        .cta-button:hover { background-color: #0056b3; }
+        .sim-result-display { text-align: center; padding: 1rem; background-color: #e9f7ff; border-left: 5px solid #007bff; border-radius: 5px; min-height: 50px; margin-top: 1.5rem;}
+        .sim-result-display p { margin: 0; font-size: 1.1rem; }
+        .sim-result-display strong { color: #0056b3; }
+
+        /* --- Game Tree Styles --- */
+        .game-tree { display: flex; flex-direction: column; align-items: center; padding: 2rem 0; }
+        .node { background-color: #007bff; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 600; margin-bottom: 40px; }
+        .branches { display: flex; justify-content: center; width: 100%; position: relative; }
+        .branch { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+        .branch-line { background-color: #adb5bd; height: 2px; width: 100%; position: absolute; top: 25px; left: 0; z-index: -1; }
+        .branch .branch-line-down { background-color: #adb5bd; height: 40px; width: 2px; }
+        .action { background-color: #e9ecef; padding: 5px 10px; border-radius: 5px; margin-bottom: 40px; border: 1px solid #adb5bd; }
+        .sub-branches { display: flex; justify-content: center; width: 100%; }
+        .sub-branch { flex: 1; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s; }
+        .sub-branch:hover { transform: scale(1.05); }
+        .payoff { background-color: #28a745; color: white; padding: 15px; border-radius: 8px; font-weight: 700; border: 2px solid transparent; }
+        .payoff.highlight { border-color: #ffc107; box-shadow: 0 0 15px #ffc107; }
+        .payoff.eliminated { opacity: 0.4; background-color: #6c757d; }
+        .payoff-label { font-size: 0.8rem; color: #6c757d; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="logo">
+            <a href="index.html"><img src="recursos/logo.png" alt="Logo del Curso"></a>
+        </div>
+        <nav class="main-nav">
+            <a href="index.html">Temario</a>
+            <a href="clase1.html">Sesión 1</a>
+            <a href="clase2.html">Sesión 2</a>
+            <a href="clase2_practica.html" style="color: #28a745;">Práctica S2</a>
+            <a href="clase3.html">Sesión 3</a>
+            <a href="clase3_practica.html" class="active" style="color: #28a745;">Práctica S3</a>
+            <a href="clase4.html">Sesión 4</a>
+        </nav>
+    </header>
+
+    <main class="content-area">
+        <div class="card">
+            <h2><i class="fas fa-plane-departure"></i> Práctica: El Juego del Aeropuerto (AIFA vs AICM)</h2>
+            <p>Este es un análisis interactivo de un caso real de la política mexicana, usando las herramientas de los <strong>Juegos Dinámicos</strong>. El objetivo es encontrar el resultado más probable aplicando la **inducción hacia atrás**.</p>
+            
+            <h4>El Escenario</h4>
+            <p>El Gobierno (Jugador 1) quiere que las aerolíneas usen el nuevo aeropuerto (AIFA). Las Aerolíneas (Jugador 2) prefieren operar desde el aeropuerto tradicional (AICM) por ser más rentable. El Gobierno mueve primero.</p>
+
+            <div id="tree-feedback" class="sim-result-display">
+                <p><strong>Instrucción:</strong> Empieza por el final del juego. Para cada decisión de las Aerolíneas, haz clic en el resultado (el recuadro verde) que crees que elegirían.</p>
+            </div>
+
+            <div class="game-tree">
+                <!-- Nivel 1: Gobierno -->
+                <div class="node">1. Gobierno Decide</div>
+                <div class="branches">
+                    <div class="branch-line"></div>
+                    <!-- Branch 1.1: Incentivar -->
+                    <div class="branch">
+                        <div class="branch-line-down"></div>
+                        <div class="action">Incentivar</div>
+                        <div class="node" style="background-color: #17a2b8;">2. Aerolíneas Deciden</div>
+                        <div class="sub-branches">
+                            <div class="branch-line"></div>
+                            <div class="sub-branch" data-branch="incentive" data-choice="minimal">
+                                <div class="branch-line-down"></div>
+                                <div class="action">Mover Mínimo</div>
+                                <div class="payoff" id="payoff-1">(Gob: 3, Aer: 10)</div>
+                                <div class="payoff-label">Aerolíneas maximizan ganancia y evitan conflicto.</div>
+                            </div>
+                            <div class="sub-branch" data-branch="incentive" data-choice="ignore">
+                                <div class="branch-line-down"></div>
+                                <div class="action">Ignorar</div>
+                                <div class="payoff" id="payoff-2">(Gob: 0, Aer: 8)</div>
+                                <div class="payoff-label">Aerolíneas arriesgan la relación con el gobierno.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Branch 1.2: Forzar -->
+                    <div class="branch">
+                        <div class="branch-line-down"></div>
+                        <div class="action">Forzar (Decreto)</div>
+                        <div class="node" style="background-color: #17a2b8;">2. Aerolíneas Deciden</div>
+                        <div class="sub-branches">
+                            <div class="branch-line"></div>
+                            <div class="sub-branch" data-branch="force" data-choice="comply">
+                                <div class="branch-line-down"></div>
+                                <div class="action">Acatar</div>
+                                <div class="payoff" id="payoff-3">(Gob: 10, Aer: 2)</div>
+                                <div class="payoff-label">Aerolíneas evitan represalias mayores.</div>
+                            </div>
+                            <div class="sub-branch" data-branch="force" data-choice="challenge">
+                                <div class="branch-line-down"></div>
+                                <div class="action">Desafiar</div>
+                                <div class="payoff" id="payoff-4">(Gob: 4, Aer: -10)</div>
+                                <div class="payoff-label">Guerra legal y mediática muy riesgosa.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="text-center">
+                <button id="reset-tree" class="cta-button" style="background-color: #6c757d;">Reiniciar Análisis</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Dr. Marco Antonio Leon Zaragoza</p>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const feedbackEl = document.getElementById('tree-feedback');
+        const payoffs = {
+            p1: document.getElementById('payoff-1'),
+            p2: document.getElementById('payoff-2'),
+            p3: document.getElementById('payoff-3'),
+            p4: document.getElementById('payoff-4')
+        };
+        const branches = {
+            incentive: document.querySelector('[data-branch="incentive"]'),
+            force: document.querySelector('[data-branch="force"]')
+        };
+        const resetBtn = document.getElementById('reset-tree');
+
+        let step = 1; // 1 for airline choice, 2 for gov choice
+
+        function resetState() {
+            step = 1;
+            feedbackEl.innerHTML = "<p><strong>Instrucción:</strong> Empieza por el final del juego. Para cada decisión de las Aerolíneas, haz clic en el resultado (el recuadro verde) que crees que elegirían.</p>";
+            Object.values(payoffs).forEach(p => p.classList.remove('highlight', 'eliminated'));
+            branches.incentive.style.pointerEvents = 'auto';
+            branches.force.style.pointerEvents = 'auto';
+        }
+
+        function handleAirlineChoice(e) {
+            if (step !== 1) return;
+            const choice = e.currentTarget;
+            const branch = choice.dataset.branch;
+            const decision = choice.dataset.choice;
+
+            if (branch === 'incentive') {
+                if (decision === 'minimal') {
+                    feedbackEl.innerHTML = "<p><strong>¡Correcto!</strong> Dado que 10 > 8, las aerolíneas eligen 'Mover lo Mínimo'. La otra opción queda eliminada.</p>";
+                    payoffs.p2.classList.add('eliminated');
+                    payoffs.p1.classList.add('highlight');
+                    branches.incentive.style.pointerEvents = 'none';
+                } else {
+                    feedbackEl.innerHTML = "<p><strong>Intenta de nuevo.</strong> Un actor racional siempre elige el pago más alto. ¿Es 8 mayor que 10?</p>";
+                    return;
+                }
+            }
+
+            if (branch === 'force') {
+                if (decision === 'comply') {
+                    feedbackEl.innerHTML = "<p><strong>¡Correcto!</strong> Dado que 2 > -10, las aerolíneas eligen 'Acatar' para evitar un resultado catastrófico. La otra opción queda eliminada.</p>";
+                    payoffs.p4.classList.add('eliminated');
+                    payoffs.p3.classList.add('highlight');
+                    branches.force.style.pointerEvents = 'none';
+                } else {
+                    feedbackEl.innerHTML = "<p><strong>Intenta de nuevo.</strong> Un actor racional siempre elige el pago más alto. ¿Es -10 mayor que 2?</p>";
+                    return;
+                }
+            }
+
+            // Check if both airline decisions are made
+            if (payoffs.p1.classList.contains('highlight') && payoffs.p3.classList.contains('highlight')) {
+                step = 2;
+                feedbackEl.innerHTML = "<p><strong>Paso 2: Decisión del Gobierno.</strong> Anticipando las respuestas de las aerolíneas, ¿qué rama elige el Gobierno para maximizar su propio pago? Haz clic en el resultado final que el Gobierno escogería.</p>";
+            }
+        }
+
+        function handleGovChoice(e) {
+            if (step !== 2) return;
+            const choice = e.currentTarget;
+
+            if (choice.id === 'payoff-3') {
+                feedbackEl.innerHTML = "<p><strong>¡Análisis Completo!</strong> El Gobierno, anticipando que obtendrá un pago de 10 si 'Fuerza' y solo 3 si 'Incentiva', elige 'Forzar'. El resultado final del juego es <strong>(Forzar -> Acatar)</strong>, que es el Equilibrio Perfecto en Subjuegos.</p>";
+                payoffs.p1.classList.add('eliminated');
+                payoffs.p3.style.borderColor = '#dc3545'; // Final choice highlight
+            } else {
+                 feedbackEl.innerHTML = "<p><strong>Casi.</strong> El Gobierno ve que la rama 'Incentivar' le da un pago de 3, mientras que la rama 'Forzar' le da un pago de 10. ¿Cuál elegirá?</p>";
+            }
+        }
+
+        payoffs.p1.parentElement.addEventListener('click', handleAirlineChoice);
+        payoffs.p2.parentElement.addEventListener('click', handleAirlineChoice);
+        payoffs.p3.parentElement.addEventListener('click', handleAirlineChoice);
+        payoffs.p4.parentElement.addEventListener('click', handleAirlineChoice);
+        
+        payoffs.p1.addEventListener('click', handleGovChoice);
+        payoffs.p3.addEventListener('click', handleGovChoice);
+
+        resetBtn.addEventListener('click', resetState);
+    });
+    </script>
+</body>
+</html>

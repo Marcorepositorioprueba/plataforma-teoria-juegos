@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plataforma | Teoría de Juegos</title>
-    <base href="/plataforma-teoria-juegos/">
+    
 
     <!-- Meta etiquetas para vista previa (Open Graph) -->
     <meta property="og:title" content="Curso de Doctorado: Teoría de Juegos y Modelado Formal">
@@ -103,6 +103,105 @@
         }
         .cta-button:hover { background-color: #0056b3; }
 
+        /* --- Session Grid Styles --- */
+        .session-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .session-card {
+            background-color: #fdfdff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .session-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        .session-card h3 {
+            font-size: 1.8rem;
+            margin: 1.5rem 0 0.5rem 0;
+            color: #007bff;
+        }
+        .session-card p {
+            font-size: 1rem;
+            color: #6c757d;
+            flex-grow: 1; /* Pushes buttons to the bottom */
+            margin-bottom: 1.5rem;
+        }
+        .session-status {
+            position: absolute;
+            top: 10px;
+            right: -35px;
+            transform: rotate(45deg);
+            padding: 3px 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .session-status.available { background-color: #28a745; }
+        .session-status.upcoming { background-color: #6c757d; }
+
+        .session-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: auto; /* Pushes buttons to the bottom */
+        }
+        .session-buttons a {
+            flex: 1;
+            text-align: center;
+            padding: 0.75rem;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .btn-theory {
+            background-color: #fff;
+            color: #007bff;
+            border: 1px solid #007bff;
+        }
+        .btn-theory:hover { background-color: #e9ecef; }
+        .btn-practice {
+            background-color: #28a745;
+            color: white;
+            border: 1px solid #28a745;
+        }
+        .btn-practice:hover { background-color: #1e7e34; }
+        .btn-theory.disabled {
+            background-color: #e9ecef;
+            color: #adb5bd;
+            border-color: #dee2e6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .collapsible-header .icon {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+        .collapsible-header.active .icon {
+            transform: rotate(90deg);
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding-top 0.5s ease-out;
+            padding-top: 0;
+        }
+        .collapsible-content.show {
+            padding-top: 1.5rem;
+        }
+
     </style>
 </head>
 <body>
@@ -114,8 +213,9 @@
         <nav class="main-nav">
             <a href="#programa">Programa</a>
             <a href="#evaluacion">Evaluación</a>
-            <a href="https://meet.google.com/ymi-xitz-wjt" target="_blank" class="cta-button" style="background-color: #009688; margin-left: 1rem; margin-top: 0; padding: 0.5rem 1rem; color: #fff;">
-                <i class="fas fa-video" style="margin-right: 8px;"></i>Unirse a Sesión
+            <a href="simulador.html">Simulador</a>
+            <a href="https://meet.google.com/ony-qhdc-qqo" target="_blank" class="cta-button" style="background-color: #009688; margin-left: 1rem; margin-top: 0; padding: 0.5rem 1rem; color: #fff;">
+                <i class="fas fa-video" style="margin-right: 8px;"></i>Unirse a Sesión 14/11/2025 5:15 p.m.
             </a>
         </nav>
     </header>
@@ -128,49 +228,117 @@
 
     <main class="content-area">
         <div id="descripcion" class="card">
-            <h2><i class="fas fa-info-circle"></i> Descripción del Curso</h2>
-            <p>Este curso intensivo de nivel doctoral está diseñado para proporcionar a los estudiantes una comprensión profunda de la teoría de juegos y sus aplicaciones en la ciencia política y la administración pública. El curso se enfoca en el desarrollo de habilidades analíticas para modelar situaciones estratégicas complejas, predecir resultados y diseñar mecanismos e instituciones. Se espera que los estudiantes desarrollen un proyecto de investigación original que aplique la teoría de juegos a un problema relevante en su campo de estudio.</p>
+            <h2 class="collapsible-header"><i class="fas fa-info-circle"></i> Descripción del Curso<i class="fas fa-chevron-right icon"></i></h2>
+            <div class="collapsible-content">
+                <p>Este curso intensivo de nivel doctoral está diseñado para proporcionar a los estudiantes una comprensión profunda de la teoría de juegos y sus aplicaciones en la ciencia política y la administración pública. El curso se enfoca en el desarrollo de habilidades analíticas para modelar situaciones estratégicas complejas, predecir resultados y diseñar mecanismos e instituciones. Se espera que los estudiantes desarrollen un proyecto de investigación original que aplique la teoría de juegos a un problema relevante en su campo de estudio.</p>
+            </div>
         </div>
 
         <div id="video-bienvenida" class="card">
-            <h2><i class="fas fa-video"></i> Video de Bienvenida</h2>
-            <div class="video-placeholder">
-                <p>Próximamente: Video de introducción al curso.</p>
+            <h2 class="collapsible-header"><i class="fas fa-video"></i> Video de Bienvenida<i class="fas fa-chevron-right icon"></i></h2>
+            <div class="collapsible-content">
+                <div class="video-placeholder" style="padding-top: 1.5rem;">
+                    <p>Próximamente: Video de introducción al curso.</p>
+                </div>
             </div>
         </div>
 
         <div id="programa" class="card">
             <h2><i class="fas fa-book-open"></i> Temario Detallado</h2>
-            
-            <h3>Fin de Semana 1</h3>
-            <ul>
-                <li><strong><a href="clase1.html" style="color: inherit; text-decoration: none;">Sesión 1: Introducción al Pensamiento Estratégico.</a></strong> ¿Qué es la teoría de juegos? Historia y fundamentos. Formas de representación de juegos. Conceptos de estrategia, pago y equilibrio. <a href="clase1.html" class="cta-button" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; margin-left: 15px;">Ver Material</a></li>
-                <li><strong><a href="clase2.html" style="color: inherit; text-decoration: none;">Sesión 2: Juegos Estáticos con Información Completa.</a></strong> Equilibrio de Nash en estrategias puras y mixtas. Dominancia. Aplicaciones en competencia política y bienes públicos. <a href="clase2.html" class="cta-button" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; margin-left: 15px;">Ver Material</a></li>
-            </ul>
-
-            <h3>Fin de Semana 2</h3>
-            <ul>
-                <li><strong><a href="clase3.html" style="color: inherit; text-decoration: none;">Sesión 3: Juegos Dinámicos con Información Completa.</a></strong> Inducción hacia atrás y perfección en subjuegos. Credibilidad, amenazas y compromisos. Aplicaciones en disuasión y negociación. <a href="clase3.html" class="cta-button" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; margin-left: 15px;">Ver Material</a></li>
-                <li><strong><a href="clase4.html" style="color: inherit; text-decoration: none;">Sesión 4: Juegos Estáticos con Información Incompleta (Juegos Bayesianos).</a></strong> Equilibrio de Nash Bayesiano. Tipos, creencias y señalización. Aplicaciones en subastas y modelos de votante. <a href="clase4.html" class="cta-button" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; margin-left: 15px;">Ver Material</a></li>
-            </ul>
-
-            <h3>Fin de Semana 3</h3>
-            <ul>
-                <li><strong>Sesión 5: Juegos Dinámicos con Información Incompleta.</strong> Equilibrio Bayesiano Perfecto. Juegos de señalización y escrutinio.</li>
-                <li><strong>Sesión 6: Diseño de Mecanismos y Contratos.</strong> El principio de revelación. Diseño de subastas óptimas. Modelos de principal-agente en el sector público.</li>
-            </ul>
-
-            <h3>Fin de Semana 4</h3>
-            <ul>
-                <li><strong>Sesión 7: Teoría de Juegos Cooperativa.</strong> El núcleo (core), el valor de Shapley. Juegos de negociación. Aplicaciones en formación de gobiernos de coalición.</li>
-                <li><strong>Sesión 8: Juegos Evolutivos y Aprendizaje.</strong> Estrategias evolutivamente estables (EES). Dinámicas de replicador. Modelos de aprendizaje en sistemas políticos.</li>
-            </ul>
-
-            <h3>Fin de Semana 5</h3>
-            <ul>
-                <li><strong>Sesión 9: Fronteras y Aplicaciones Avanzadas.</strong> Teoría de juegos algorítmica. Modelado de redes y comportamiento social.</li>
-                <li><strong>Sesión 10: Presentación de Proyectos Finales.</strong> Exposición y discusión de los trabajos de investigación de los estudiantes.</li>
-            </ul>
+            <div class="session-grid">
+                <!-- Sesión 1 -->
+                <div class="session-card">
+                    <div class="session-status available">Disponible</div>
+                    <h3>Sesión 1</h3>
+                    <p>Introducción al Pensamiento Estratégico.</p>
+                    <div class="session-buttons">
+                        <a href="clase1.html" class="btn-theory">Ver Teoría</a>
+                    </div>
+                </div>
+                <!-- Sesión 2 -->
+                <div class="session-card">
+                    <div class="session-status available">Disponible</div>
+                    <h3>Sesión 2</h3>
+                    <p>Juegos Estáticos con Información Completa.</p>
+                    <div class="session-buttons">
+                        <a href="clase2.html" class="btn-theory">Ver Teoría</a>
+                        <a href="clase2_practica.html" class="btn-practice">Hacer Práctica</a>
+                    </div>
+                </div>
+                <!-- Sesión 3 -->
+                <div class="session-card">
+                    <div class="session-status available">Disponible</div>
+                    <h3>Sesión 3</h3>
+                    <p>Juegos Dinámicos con Información Completa.</p>
+                    <div class="session-buttons">
+                        <a href="clase3.html" class="btn-theory">Ver Teoría</a>
+                        <a href="clase3_practica.html" class="btn-practice">Hacer Práctica</a>
+                    </div>
+                </div>
+                <!-- Sesión 4 -->
+                <div class="session-card">
+                    <div class="session-status available">Disponible</div>
+                    <h3>Sesión 4</h3>
+                    <p>Juegos Estáticos con Información Incompleta.</p>
+                    <div class="session-buttons">
+                        <a href="clase4.html" class="btn-theory">Ver Teoría</a>
+                    </div>
+                </div>
+                <!-- Sesión 5 -->
+                <div class="session-card">
+                    <div class="session-status upcoming">Próximamente</div>
+                    <h3>Sesión 5</h3>
+                    <p>Juegos Dinámicos con Información Incompleta.</p>
+                    <div class="session-buttons">
+                        <a href="#" class="btn-theory disabled">Ver Teoría</a>
+                    </div>
+                </div>
+                <!-- Sesión 6 -->
+                <div class="session-card">
+                    <div class="session-status upcoming">Próximamente</div>
+                    <h3>Sesión 6</h3>
+                    <p>Diseño de Mecanismos y Contratos.</p>
+                    <div class="session-buttons">
+                        <a href="#" class="btn-theory disabled">Ver Teoría</a>
+                    </div>
+                </div>
+                <!-- Sesión 7 -->
+                <div class="session-card">
+                    <div class="session-status upcoming">Próximamente</div>
+                    <h3>Sesión 7</h3>
+                    <p>Teoría de Juegos Cooperativa.</p>
+                    <div class="session-buttons">
+                        <a href="#" class="btn-theory disabled">Ver Teoría</a>
+                    </div>
+                </div>
+                <!-- Sesión 8 -->
+                <div class="session-card">
+                    <div class="session-status upcoming">Próximamente</div>
+                    <h3>Sesión 8</h3>
+                    <p>Juegos Evolutivos y Aprendizaje.</p>
+                    <div class="session-buttons">
+                        <a href="#" class="btn-theory disabled">Ver Teoría</a>
+                    </div>
+                </div>
+                 <!-- Sesión 9 -->
+                <div class="session-card">
+                    <div class="session-status upcoming">Próximamente</div>
+                    <h3>Sesión 9</h3>
+                    <p>Fronteras y Aplicaciones Avanzadas.</p>
+                    <div class="session-buttons">
+                        <a href="#" class="btn-theory disabled">Ver Teoría</a>
+                    </div>
+                </div>
+                 <!-- Sesión 10 -->
+                <div class="session-card">
+                    <div class="session-status upcoming">Próximamente</div>
+                    <h3>Sesión 10</h3>
+                    <p>Presentación de Proyectos Finales.</p>
+                    <div class="session-buttons">
+                        <a href="#" class="btn-theory disabled">Ver Teoría</a>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="bibliografia" class="card">
@@ -204,5 +372,27 @@
         <p>&copy; 2025 Dr. Marco Antonio Leon Zaragoza</p>
     </footer>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const headers = document.querySelectorAll('.collapsible-header');
+            headers.forEach(header => {
+                header.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling;
+                    
+                    if (content && content.classList.contains('collapsible-content')) {
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                            content.classList.remove('show');
+                        } else {
+                            // Set max-height to scrollHeight for smooth transition
+                            content.style.maxHeight = content.scrollHeight + "px";
+                            content.classList.add('show');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

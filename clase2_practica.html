@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica S2 | Teoría de Juegos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8f9fa; color: #343a40; }
+        .top-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2.5rem; background-color: #fff; border-bottom: 1px solid #dee2e6; position: sticky; top: 0; z-index: 1000; }
+        .top-header .logo img { max-height: 75px; }
+        .main-nav a { margin: 0 1rem; text-decoration: none; color: #495057; font-weight: 600; transition: color 0.3s; }
+        .main-nav a:hover, .main-nav a.active { color: #007bff; font-weight: 700; }
+        .content-area { padding: 2rem 2.5rem 4rem 2.5rem; }
+        .card { background-color: #fff; border-radius: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); padding: 2.5rem; margin-bottom: 2.5rem; }
+        .card h2 { font-size: 2rem; font-weight: 700; margin-top: 0; margin-bottom: 1rem; border-bottom: 2px solid #007bff; padding-bottom: 0.8rem; display: flex; align-items: center; }
+        .card h2 .fa { margin-right: 1rem; color: #007bff; }
+        footer { text-align: center; padding: 3rem 0; background-color: #343a40; color: #fff; }
+        .cta-button { background-color: #007bff; color: #fff; padding: 0.8rem 1.5rem; border-radius: 5px; text-decoration: none; font-weight: 600; transition: background-color 0.3s; display: inline-block; margin-top: 1rem; }
+        .cta-button:hover { background-color: #0056b3; }
+
+        /* --- Simulator Styles (reused) --- */
+        .sim-controls { text-align: center; margin-bottom: 1.5rem; }
+        .sim-controls h5 { margin-bottom: 0.5rem; font-size: 1.2rem; }
+        .sim-btn { background-color: #007bff; color: white; border: none; padding: 10px 20px; font-size: 1rem; font-weight: 600; border-radius: 5px; cursor: pointer; transition: background-color 0.3s, transform 0.2s; margin: 0 10px; }
+        .sim-btn:hover { background-color: #0056b3; transform: translateY(-2px); }
+        .sim-btn:disabled { background-color: #6c757d; cursor: not-allowed; transform: none; }
+        .sim-matrix { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; text-align: center; margin-bottom: 1.5rem; }
+        .matrix-header { background-color: #e9ecef; padding: 10px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+        .matrix-cell { background-color: #fff; border: 1px solid #dee2e6; padding: 20px; font-size: 1.2rem; font-weight: 700; transition: background-color 0.5s, transform 0.3s; }
+        .matrix-cell.highlight-player { background-color: #cce5ff; }
+        .matrix-cell.highlight-ai { background-color: #fff3cd; }
+        .matrix-cell.final-outcome { background-color: #28a745; color: white; transform: scale(1.05); border-color: #1e7e34; }
+        .sim-result-display { text-align: center; padding: 1rem; background-color: #e9f7ff; border-left: 5px solid #007bff; border-radius: 5px; min-height: 50px; }
+        .sim-result-display p { margin: 0; font-size: 1.1rem; }
+        .sim-result-display strong { color: #0056b3; }
+    </style>
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="logo">
+            <a href="index.html"><img src="recursos/logo.png" alt="Logo del Curso"></a>
+        </div>
+        <nav class="main-nav">
+            <a href="index.html">Temario</a>
+            <a href="clase1.html">Sesión 1</a>
+            <a href="clase2.html">Sesión 2</a>
+            <a href="clase2_practica.html" class="active" style="color: #28a745;">Práctica S2</a>
+            <a href="clase3.html">Sesión 3</a>
+            <a href="clase3_practica.html" style="color: #28a745;">Práctica S3</a>
+            <a href="clase4.html">Sesión 4</a>
+        </nav>
+    </header>
+
+    <main class="content-area">
+        <div id="clase2-practica" class="card">
+            <h2><i class="fas fa-gamepad"></i> Sesión 2: Práctica - El Dilema del Desastre</h2>
+            <p>Este es un ejercicio práctico para aplicar los conceptos de la Sesión 2. Aquí modelamos un escenario de competencia política frente a un desastre natural inminente.</p>
+            
+            <h4>El Escenario</h4>
+            <p>Dos facciones políticas, <strong>Facción A</strong> (tú) y <strong>Facción B</strong> (la IA), operan en una región con alto riesgo de inundaciones. Deben decidir cómo asignar sus recursos y atención mediática. Los pagos representan la ganancia o pérdida de capital político.</p>
+            
+            <h4>Tus Opciones</h4>
+            <ul>
+                <li><strong>Anticiparse:</strong> Invertir recursos antes del desastre para prevención y preparación. Es costoso, pero puede dar grandes beneficios políticos si el desastre ocurre.</li>
+                <li><strong>Reaccionar:</strong> Ahorrar recursos y actuar solo después de que ocurra el desastre, enfocándose en la ayuda y la gestión de la crisis.</li>
+            </ul>
+
+            <hr style="margin: 2rem 0;">
+
+            <h4>Simulador del Juego</h4>
+            <div id="disaster-sim">
+                <div class="sim-controls">
+                    <h5>Tu Estrategia (Facción A):</h5>
+                    <button id="disaster-anticipate" class="sim-btn">Anticiparse</button>
+                    <button id="disaster-react" class="sim-btn">Reaccionar</button>
+                </div>
+
+                <div class="sim-matrix">
+                    <div class="matrix-header"></div>
+                    <div class="matrix-header"><b>Facción B:</b> Anticiparse</div>
+                    <div class="matrix-header"><b>Facción B:</b> Reaccionar</div>
+                    <div class="matrix-header"><b>Tú:</b> Anticiparse</div>
+                    <div class="matrix-cell" id="cell-disaster-0-0">(5, 5)</div>
+                    <div class="matrix-cell" id="cell-disaster-0-1">(10, -5)</div>
+                    <div class="matrix-header"><b>Tú:</b> Reaccionar</div>
+                    <div class="matrix-cell" id="cell-disaster-1-0">(-5, 10)</div>
+                    <div class="matrix-cell" id="cell-disaster-1-1">(0, 0)</div>
+                </div>
+
+                <div id="sim-result-disaster" class="sim-result-display">
+                    <p>Elige tu estrategia para enfrentar la posible inundación.</p>
+                </div>
+                <button id="sim-reset-disaster" class="cta-button" style="display: none; margin-top: 1rem;">Jugar de Nuevo</button>
+            </div>
+        </div>
+        <div id="ejercicios-modelado" class="card">
+            <h2><i class="fas fa-brain"></i> Ejercicios de Modelado Estratégico</h2>
+            <p>Los siguientes son casos de estudio basados en la política y economía reciente de México. El objetivo es que, en equipos, discutan y estructuren estos escenarios como un juego formal. Definan los jugadores, sus posibles estrategias y la lógica de los pagos. Esta será la base para nuestra próxima sesión.</p>
+
+            <hr style="margin: 2rem 0;">
+
+            <h4>Ejercicio 1: La Megafarmacia del Bienestar</h4>
+            <p><strong>Contexto:</strong> Ante los persistentes problemas de desabasto de medicamentos en el sector salud, el Gobierno Federal impulsa la creación de una "Megafarmacia" centralizada. El objetivo declarado es tener un inventario de "todas las medicinas del mundo" para surtir cualquier receta no disponible en hospitales públicos en menos de 48 horas. Este modelo compite directamente con la red de distribuidores y farmacias privadas que han dominado la logística y venta de medicamentos durante décadas. El éxito del proyecto gubernamental depende de su eficiencia logística y su capacidad de compra, mientras que las empresas privadas deben decidir si colaboran con la nueva entidad, la ven como un competidor a neutralizar, o si su impacto será tan marginal que pueden ignorarla.</p>
+            <ul><li><strong>Actores a considerar:</strong> Gobierno Federal, Empresas Distribuidoras de Medicamentos, Cadenas de Farmacias Privadas.</li></ul>
+
+            <hr style="margin: 2rem 0;">
+
+            <h4>Ejercicio 2: La Reforma al Poder Judicial</h4>
+            <p><strong>Contexto:</strong> El partido gobernante ha propuesto una reforma constitucional para que los jueces, magistrados y ministros de la Suprema Corte de Justicia sean elegidos por voto popular. El argumento a favor es que esto democratizará la justicia y la hará más responsable ante el pueblo. La oposición y miembros del poder judicial actual argumentan que esto politizaría las decisiones legales, premiando la popularidad sobre el mérito técnico y erosionando la independencia judicial. Para que la reforma sea aprobada, se necesita una mayoría calificada en el Congreso, lo que podría requerir negociaciones, alianzas o una fuerte presión política sobre los legisladores indecisos.</p>
+            <ul><li><strong>Actores a considerar:</strong> Partido Gobernante, Partidos de Oposición, Poder Judicial (Jueces y Ministros).</li></ul>
+
+            <hr style="margin: 2rem 0;">
+
+            <h4>Ejercicio 3: La Negociación de la Gigafábrica de Tesla</h4>
+            <p><strong>Contexto:</strong> Tras el anuncio de que Tesla construiría una Gigafábrica en México, se desató una competencia entre estados por atraer la inversión. Finalmente, se eligió Nuevo León. Sin embargo, la negociación involucró a tres actores principales: Tesla, el Gobierno de Nuevo León y el Gobierno Federal. El estado ofrecía incentivos locales y la construcción de infraestructura. El Gobierno Federal presionaba para que parte de la inversión se dirigiera a otras regiones y para asegurar el cumplimiento de normativas federales (ej. uso de agua). Tesla, por su parte, buscaba maximizar los incentivos y la velocidad de construcción. Cada actor podía "presionar" o "ceder" en distintos puntos de la negociación para asegurar sus propios intereses.</p>
+            <ul><li><strong>Actores a considerar:</strong> Tesla (Empresa Transnacional), Gobierno Estatal de Nuevo León, Gobierno Federal.</li></ul>
+
+            <hr style="margin: 2rem 0;">
+
+            <h4>Ejercicio 4: La Política de Salarios Máximos</h4>
+            <p><strong>Contexto:</strong> Se impulsa una ley para reforzar el principio de que ningún funcionario público puede ganar más que el Presidente de la República. Esto afecta directamente los ingresos de altos funcionarios en órganos autónomos (como el Banco de México, INE, COFECE) y en el poder judicial, quienes argumentan que sus salarios se basan en la alta especialización y responsabilidad de su trabajo, y que reducirlos podría fomentar la corrupción o la fuga de talento al sector privado. El Gobierno argumenta que es una medida de austeridad y justicia social. Los funcionarios afectados deben decidir si se amparan legalmente, renuncian, o aceptan la reducción.</p>
+            <ul><li><strong>Actores a considerar:</strong> Poder Ejecutivo/Legislativo (Impulsores de la ley), Altos Funcionarios de Órganos Autónomos, Jueces y Magistrados del Poder Judicial.</li></ul>
+        </div>
+
+        <div class="text-center">
+             <a href="index.html" class="cta-button">Volver al Temario</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Dr. Marco Antonio Leon Zaragoza</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Disaster Simulator Logic ---
+            const disasterAnticipateBtn = document.getElementById('disaster-anticipate');
+            const disasterReactBtn = document.getElementById('disaster-react');
+            const simResultDisaster = document.getElementById('sim-result-disaster');
+            const simResetDisasterBtn = document.getElementById('sim-reset-disaster');
+            const cellsDisaster = {
+                '0-0': document.getElementById('cell-disaster-0-0'),
+                '0-1': document.getElementById('cell-disaster-0-1'),
+                '1-0': document.getElementById('cell-disaster-1-0'),
+                '1-1': document.getElementById('cell-disaster-1-1')
+            };
+
+            if (disasterAnticipateBtn) {
+                const outcomesDisaster = {
+                    '0-0': "Ambos se <strong>Anticiparon</strong>. Se comparte el crédito por la gestión responsable, resultando en una ganancia política moderada para ambos.",
+                    '0-1': "Tú te <strong>Anticipaste</strong> y la Facción B <strong>Reaccionó</strong>. Eres visto como el único líder previsor. ¡Máxima ganancia política!",
+                    '1-0': "Tú <strong>Reaccionaste</strong> y la Facción B se <strong>Anticipó</strong>. Quedas como un líder incompetente y reactivo. ¡Pérdida severa de capital político!",
+                    '1-1': "Ambos <strong>Reaccionaron</strong>. Ninguno obtiene una ventaja, pero ambos son criticados por no haber prevenido el desastre. El resultado es neutro."
+                };
+
+                function resetSimulatorDisaster() {
+                    disasterAnticipateBtn.disabled = false;
+                    disasterReactBtn.disabled = false;
+                    simResetDisasterBtn.style.display = 'none';
+                    simResultDisaster.innerHTML = '<p>Elige tu estrategia para enfrentar la posible inundación.</p>';
+                    Object.values(cellsDisaster).forEach(cell => cell.classList.remove('highlight-player', 'highlight-ai', 'final-outcome'));
+                }
+
+                function runSimulationDisaster(playerChoice) { // 0 for anticipate, 1 for react
+                    disasterAnticipateBtn.disabled = true;
+                    disasterReactBtn.disabled = true;
+
+                    // AI Logic: The AI knows anticipating is the dominant strategy.
+                    const aiChoice = Math.random() < 0.8 ? 0 : 1; // Biased towards anticipating
+
+                    if (playerChoice === 0) {
+                        cellsDisaster['0-0'].classList.add('highlight-player');
+                        cellsDisaster['0-1'].classList.add('highlight-player');
+                    } else {
+                        cellsDisaster['1-0'].classList.add('highlight-player');
+                        cellsDisaster['1-1'].classList.add('highlight-player');
+                    }
+
+                    setTimeout(() => {
+                        if (aiChoice === 0) {
+                            cellsDisaster['0-0'].classList.add('highlight-ai');
+                            cellsDisaster['1-0'].classList.add('highlight-ai');
+                        } else {
+                            cellsDisaster['0-1'].classList.add('highlight-ai');
+                            cellsDisaster['1-1'].classList.add('highlight-ai');
+                        }
+                    }, 700);
+
+                    setTimeout(() => {
+                        const finalCell = cellsDisaster[`${playerChoice}-${aiChoice}`];
+                        finalCell.classList.add('final-outcome');
+                        
+                        const playerPayoff = finalCell.textContent.match(/\((-?\d+)/)[1];
+                        const aiPayoff = finalCell.textContent.match(/, *(-?\d+)\)/)[1];
+
+                        simResultDisaster.innerHTML = `<p>${outcomesDisaster[`${playerChoice}-${aiChoice}`]}<br><strong>Tu Ganancia Política: ${playerPayoff} | Ganancia de Facción B: ${aiPayoff}</strong></p>`;
+                        simResetDisasterBtn.style.display = 'inline-block';
+                    }, 1400);
+                }
+
+                disasterAnticipateBtn.addEventListener('click', () => runSimulationDisaster(0));
+                disasterReactBtn.addEventListener('click', () => runSimulationDisaster(1));
+                simResetDisasterBtn.addEventListener('click', resetSimulatorDisaster);
+            }
+        });
+    </script>
+</body>
+</html>

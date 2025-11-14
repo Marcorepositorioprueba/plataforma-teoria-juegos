@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clase 1 | Teoría de Juegos</title>
-    <base href="/plataforma-teoria-juegos/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -33,6 +32,10 @@
         .top-header .logo img { max-height: 75px; }
         .main-nav a { margin: 0 1.5rem; text-decoration: none; color: #495057; font-weight: 600; transition: color 0.3s; }
         .main-nav a:hover { color: #007bff; }
+        .main-nav a.active {
+            color: #007bff;
+            font-weight: 700;
+        }
 
         .content-area { padding: 2rem 2.5rem 4rem 2.5rem; }
         .card {
@@ -179,11 +182,16 @@
 
     <header class="top-header">
         <div class="logo">
-            <a href="index.html"><img src="recursos/logo.png" alt="Logo del Curso"></a>
+            <a href="index.html"><img src="recursos/logoclh.jpg" alt="Logo del Curso"></a>
         </div>
         <nav class="main-nav">
             <a href="index.html">Temario</a>
-            <a href="clase2.html">Sesión Siguiente</a>
+            <a href="clase1.html" class="active">Sesión 1</a>
+            <a href="clase2.html">Sesión 2</a>
+            <a href="clase2_practica.html" style="color: #28a745;">Práctica S2</a>
+            <a href="clase3.html">Sesión 3</a>
+            <a href="clase3_practica.html" style="color: #28a745;">Práctica S3</a>
+            <a href="clase4.html">Sesión 4</a>
         </nav>
     </header>
 

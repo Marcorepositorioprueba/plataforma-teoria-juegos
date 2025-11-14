@@ -4,104 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clase 3 | Teoría de Juegos</title>
-    <base href="/plataforma-teoria-juegos/">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            background-color: #f8f9fa;
-            color: #343a40;
-        }
-        .top-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2.5rem;
-            background-color: #fff;
-            border-bottom: 1px solid #dee2e6;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8f9fa; color: #343a40; }
+        .top-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2.5rem; background-color: #fff; border-bottom: 1px solid #dee2e6; position: sticky; top: 0; z-index: 1000; }
         .top-header .logo img { max-height: 75px; }
         .main-nav a { margin: 0 1.5rem; text-decoration: none; color: #495057; font-weight: 600; transition: color 0.3s; }
         .main-nav a:hover { color: #007bff; }
-
-        .content-area { padding: 2rem 2.5rem 4rem 2.5rem; }
-        .card {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            padding: 2.5rem;
-            margin-bottom: 2.5rem;
-        }
-        .card h2 {
-            font-size: 2rem; font-weight: 700; margin-top: 0; margin-bottom: 2rem;
-            border-bottom: 2px solid #007bff; padding-bottom: 0.8rem; display: flex; align-items: center;
-        }
-        .card h2 .fa { margin-right: 1rem; color: #007bff; }
-        
-        footer {
-            text-align: center; padding: 3rem 0;
-            background-color: #343a40;
-            color: #fff;
-        }
-        .cta-button {
-            background-color: #007bff;
-            color: #fff;
-            padding: 0.8rem 1.5rem;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: background-color 0.3s;
-            display: inline-block;
-            margin-top: 1rem;
-        }
-        .cta-button:hover { background-color: #0056b3; }
-        .collapsible-header {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 1rem;
-            font-size: 1.8rem; /* Adjust as needed */
-            font-weight: 700;
+        .main-nav a.active {
             color: #007bff;
-            transition: color 0.3s ease;
+            font-weight: 700;
         }
-        .collapsible-header:hover {
-            color: #0056b3;
-        }
-        .collapsible-header .icon {
-            margin-left: 1rem;
-            transition: transform 0.3s ease;
-        }
-        .collapsible-header.active .icon {
-            transform: rotate(90deg);
-        }
-        .collapsible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
-            padding-left: 1rem; /* Indent content slightly */
-            border-left: 3px solid #007bff;
-            margin-bottom: 1.5rem;
-        }
-        .collapsible-content.show {
-            max-height: 2000px; /* Arbitrary large value, adjust if content is longer */
-            padding-top: 1rem; /* Add some padding when shown */
-            padding-bottom: 1rem; /* Add some padding when shown */
-            transition: max-height 0.7s ease-in, padding 0.7s ease-in;
-        }
+        .content-area { padding: 2rem 2.5rem 4rem 2.5rem; }
+        .card { background-color: #fff; border-radius: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); padding: 2.5rem; margin-bottom: 2.5rem; }
+        .card h2 { font-size: 2rem; font-weight: 700; margin-top: 0; margin-bottom: 2rem; border-bottom: 2px solid #007bff; padding-bottom: 0.8rem; display: flex; align-items: center; }
+        .card h2 .fa { margin-right: 1rem; color: #007bff; }
+        footer { text-align: center; padding: 3rem 0; background-color: #343a40; color: #fff; }
+        .cta-button { background-color: #007bff; color: #fff; padding: 0.8rem 1.5rem; border-radius: 5px; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 1rem; }
+        .cta-button:hover { background-color: #0056b3; }
+        .collapsible-header { cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #eee; margin-bottom: 1rem; font-size: 1.8rem; font-weight: 700; color: #007bff; }
+        .collapsible-header:hover { color: #0056b3; }
+        .collapsible-header .icon { margin-left: 1rem; transition: transform 0.3s ease; }
+        .collapsible-header.active .icon { transform: rotate(90deg); }
+        .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; padding-left: 1rem; border-left: 3px solid #007bff; margin-bottom: 1.5rem; }
+        .collapsible-content.show { max-height: 2000px; padding-top: 1rem; padding-bottom: 1rem; transition: max-height 0.7s ease-in; }
     </style>
 </head>
 <body>
@@ -111,150 +39,60 @@
             <a href="index.html"><img src="recursos/logo.png" alt="Logo del Curso"></a>
         </div>
         <nav class="main-nav">
-            <a href="clase2.html">Sesión Anterior</a>
             <a href="index.html">Temario</a>
-            <a href="clase4.html">Sesión Siguiente</a>
+            <a href="clase1.html">Sesión 1</a>
+            <a href="clase2.html">Sesión 2</a>
+            <a href="clase2_practica.html" style="color: #28a745;">Práctica S2</a>
+            <a href="clase3.html" class="active">Sesión 3</a>
+            <a href="clase3_practica.html" style="color: #28a745;">Práctica S3</a>
+            <a href="clase4.html">Sesión 4</a>
         </nav>
     </header>
 
     <main class="content-area">
         <div id="clase3-contenido" class="card">
-            <h2><i class="fas fa-chalkboard-teacher"></i> Sesión 3: Juegos Dinámicos con Información Completa</h2>
+            <h2><i class="fas fa-sitemap"></i> Sesión 3: Juegos Dinámicos con Información Completa</h2>
             
-            <h3 class="collapsible-header">Introducción a los Juegos Dinámicos <i class="fas fa-chevron-right icon"></i></h3>
+            <h3 class="collapsible-header">De la Matriz al Árbol: Introducción a los Juegos Dinámicos <i class="fas fa-chevron-right icon"></i></h3>
             <div class="collapsible-content">
-                <p>En las sesiones anteriores, nos centramos en los juegos estáticos, donde los jugadores toman sus decisiones de forma simultánea o sin conocer las acciones de los demás. Ahora, nos adentraremos en el fascinante mundo de los <strong>Juegos Dinámicos con Información Completa</strong>. En estos juegos, las decisiones se toman de forma secuencial, lo que significa que algunos jugadores actúan después de observar las acciones de otros. Esta secuencia de movimientos introduce elementos cruciales como la capacidad de anticipar las respuestas del oponente y la importancia de la credibilidad de las amenazas y promesas.</p>
-                <p>La información completa, al igual que en los juegos estáticos, implica que todos los jugadores conocen la estructura del juego: las identidades de los jugadores, las estrategias disponibles para cada uno, y los pagos asociados a cada resultado. La diferencia clave radica en el orden de las jugadas, lo que nos obliga a utilizar nuevas herramientas de análisis.</p>
-                <h4>Representación de Juegos Dinámicos: La Forma Extensiva</h4>
-                <p>Para representar los juegos dinámicos, utilizamos la <strong>forma extensiva</strong>, que se visualiza mediante un <strong>árbol de decisión</strong>. Este árbol muestra:</p>
-                <ul>
-                    <li><strong>Nodos de decisión:</strong> Puntos donde un jugador debe elegir una acción.</li>
-                    <li><strong>Ramas:</strong> Las acciones posibles que un jugador puede tomar en un nodo de decisión.</li>
-                    <li><strong>Nodos terminales:</strong> Puntos donde el juego finaliza, y se especifican los pagos para todos los jugadores.</li>
-                    <li><strong>Información:</strong> En juegos con información completa, cada jugador sabe exactamente dónde se encuentra en el árbol y qué acciones se han tomado antes de su turno.</li>
-                </ul>
-                <p>La forma extensiva nos permite visualizar la secuencia de las decisiones y cómo las elecciones de un jugador afectan las opciones y los pagos de los jugadores posteriores.</p>
+                <p>A diferencia de los juegos estáticos donde las decisiones son simultáneas, los <strong>juegos dinámicos</strong> se caracterizan por una secuencia de movimientos. Un jugador actúa, y el siguiente observa esa acción antes de tomar su propia decisión. Esta naturaleza secuencial cambia fundamentalmente el análisis estratégico.</p>
+                <p>La herramienta para representar estos juegos ya no es la matriz, sino el <strong>árbol de juego</strong> (o forma extensiva), que visualiza los nodos de decisión, las ramas (acciones) y los pagos finales.</p>
             </div>
 
             <hr style="margin: 2.5rem 0;">
 
-            <h3 class="collapsible-header">Inducción hacia Atrás <i class="fas fa-chevron-right icon"></i></h3>
+            <h3 class="collapsible-header">Inducción hacia Atrás: El Poder de Pensar al Revés <i class="fas fa-chevron-right icon"></i></h3>
             <div class="collapsible-content">
-                <p>La <strong>inducción hacia atrás</strong> es la principal herramienta para resolver juegos dinámicos con información completa y un número finito de movimientos. La lógica es simple pero poderosa: se resuelve el juego comenzando desde el final y trabajando hacia atrás hasta el principio.</p>
-                <h4>El Proceso de Inducción hacia Atrás</h4>
+                <p>La <strong>inducción hacia atrás</strong> es el método de solución fundamental para los juegos dinámicos con información completa. Consiste en analizar el juego desde el final hacia el principio:</p>
                 <ol>
-                    <li><strong>Identificar los últimos nodos de decisión:</strong> Comienza por los nodos de decisión más cercanos a los nodos terminales del árbol.</li>
-                    <li><strong>Determinar la acción óptima en esos nodos:</strong> Para cada uno de estos nodos, identifica la acción que el jugador que tiene el turno elegiría para maximizar su propio pago, asumiendo que el juego termina inmediatamente después de esa decisión.</li>
-                    <li><strong>Reemplazar el subárbol:</strong> Una vez que se ha determinado la acción óptima en un nodo, se puede "podar" el resto de las ramas de ese subárbol y reemplazar el nodo de decisión y sus ramas con el pago resultante de la acción óptima. Esto simplifica el juego.</li>
-                    <li><strong>Repetir el proceso:</strong> Continúa trabajando hacia atrás en el árbol, tratando los nodos "podados" como si fueran nodos terminales con pagos definidos. Repite los pasos 1-3 hasta llegar al nodo inicial del juego.</li>
+                    <li>Se identifica la decisión óptima del último jugador en moverse para cada posible situación en la que se pueda encontrar.</li>
+                    <li>Anticipando esa decisión, se analiza la acción óptima del penúltimo jugador.</li>
+                    <li>Este proceso se repite, retrocediendo por el árbol hasta llegar al primer nodo de decisión.</li>
                 </ol>
-                <p>El resultado de la inducción hacia atrás es una secuencia de estrategias que especifica la acción óptima de cada jugador en cada nodo de decisión, lo que constituye un <strong>Equilibrio Perfecto en Subjuegos</strong> (que veremos a continuación).</p>
-                <h4>Ejemplo Simple: El Juego de la Entrada al Mercado</h4>
-                <p>Imagina una empresa establecida (Empresa A) y una nueva empresa potencial (Empresa B) que considera entrar al mercado. El juego se desarrolla así:</p>
-                <ol>
-                    <li>Empresa B decide si <strong>Entrar (E)</strong> o <strong>No Entrar (NE)</strong>.</li>
-                    <li>Si Empresa B decide Entrar, Empresa A decide si <strong>Luchar (L)</strong> (ej. bajar precios agresivamente) o <strong>Acomodar (A)</strong> (ej. mantener precios).</li>
-                </ol>
-                <p><strong>Pagos (Empresa B, Empresa A):</strong></p>
-                <ul>
-                    <li>Si B No Entra: (0, 10)</li>
-                    <li>Si B Entra y A Lucha: (-5, -5)</li>
-                    <li>Si B Entra y A Acomoda: (5, 5)</li>
-                </ul>
-                <p><strong>Resolución por Inducción hacia Atrás:</strong></p>
-                <ol>
-                    <li><strong>Último nodo de decisión (Empresa A):</strong> Si Empresa B Entra, Empresa A debe elegir entre Luchar (-5) y Acomodar (5). La mejor opción para A es Acomodar (5 > -5).</li>
-                    <li><strong>Primer nodo de decisión (Empresa B):</strong> Sabiendo que si Entra, Empresa A Acomodará (resultando en pagos (5, 5)), Empresa B compara: No Entrar (0) vs. Entrar (5). La mejor opción para B es Entrar (5 > 0).</li>
-                </ol>
-                <p>El resultado del juego por inducción hacia atrás es que la Empresa B Entra y la Empresa A Acomoda. Los pagos son (5, 5).</p>
-            </div>
-
-            <hr style="margin: 2.5rem 0;">
-
-            <h3 class="collapsible-header">Perfección en Subjuegos <i class="fas fa-chevron-right icon"></i></h3>
-            <div class="collapsible-content">
-                <p>El concepto de <strong>Equilibrio Perfecto en Subjuegos (EPS)</strong>, introducido por Reinhard Selten (Premio Nobel 1994), es un refinamiento del Equilibrio de Nash para juegos dinámicos. Un EPS es una combinación de estrategias que constituye un Equilibrio de Nash en cada subjuego del juego original.</p>
-                <h4>¿Qué es un Subjuego?</h4>
-                <p>Un <strong>subjuego</strong> es una parte del juego original que comienza en un nodo de decisión y contiene todos los nodos y ramas que le siguen, formando un juego por sí mismo. En un juego con información completa, cada nodo de decisión inicia un subjuego.</p>
-                <h4>La Importancia del EPS: Eliminando Amenazas No Creíbles</h4>
-                <p>La inducción hacia atrás siempre nos lleva a un Equilibrio Perfecto en Subjuegos. La razón es que el EPS elimina los Equilibrios de Nash que se basan en <strong>amenazas no creíbles</strong>.</p>
-                <p>Volvamos al ejemplo de la Entrada al Mercado. Supongamos que la Empresa A amenaza con Luchar si la Empresa B Entra. Si la Empresa B cree esta amenaza, podría decidir No Entrar, lo que resultaría en pagos (0, 10). Esta combinación (B No Entra, A Lucha si B Entra) es un Equilibrio de Nash, porque si B no entra, A no tiene la oportunidad de luchar, y si B cree que A luchará, no tiene incentivo para entrar.</p>
-                <p>Sin embargo, la amenaza de A de Luchar es <strong>no creíble</strong>. Si B realmente Entra, A se enfrenta a la decisión de Luchar (-5) o Acomodar (5). En ese punto, la mejor respuesta de A es Acomodar. Por lo tanto, la amenaza de Luchar no es racional para A una vez que B ha entrado.</p>
-                <p>El Equilibrio Perfecto en Subjuegos nos asegura que las estrategias elegidas por los jugadores son óptimas no solo al inicio del juego, sino en cada etapa posible del juego, eliminando así las amenazas y promesas que no serían racionales cumplir.</p>
+                <p>El resultado de este proceso nos da el <strong>Equilibrio Perfecto en Subjuegos (EPS)</strong>, un concepto de equilibrio más refinado que el de Nash, ya que elimina las "amenazas no creíbles".</p>
             </div>
 
             <hr style="margin: 2.5rem 0;">
 
             <h3 class="collapsible-header">Credibilidad, Amenazas y Compromisos <i class="fas fa-chevron-right icon"></i></h3>
             <div class="collapsible-content">
-                <p>En los juegos dinámicos, la <strong>credibilidad</strong> de las acciones es fundamental. Una amenaza o una promesa solo es efectiva si el oponente cree que el jugador que la emite tiene un incentivo para cumplirla cuando llegue el momento.</p>
-                <h4>Amenazas Creíbles vs. No Creíbles</h4>
+                <p>Los juegos dinámicos son el campo perfecto para estudiar la <strong>credibilidad</strong>.</p>
                 <ul>
-                    <li>Una <strong>amenaza creíble</strong> es aquella que el jugador tiene un incentivo para llevar a cabo si la situación que la desencadena ocurre.</li>
-                    <li>Una <strong>amenaza no creíble</strong> es aquella que el jugador no tendría un incentivo para llevar a cabo si la situación que la desencadena ocurre. Los Equilibrios de Nash basados en amenazas no creíbles son eliminados por el concepto de Equilibrio Perfecto en Subjuegos.</li>
+                    <li><strong>Amenaza No Creíble:</strong> Una amenaza que un jugador racional no tendría incentivos a cumplir si llegara el momento de hacerlo. La inducción hacia atrás nos ayuda a identificar y descartar estas amenazas. Por ejemplo, una empresa establecida que amenaza con una guerra de precios ruinosa para ella misma si un competidor entra al mercado.</li>
+                    <li><strong>Compromiso (Commitment):</strong> Una acción que un jugador puede tomar para hacer creíble una amenaza o promesa. Esto implica cambiar la estructura del juego, a menudo limitando las propias opciones futuras para convencer a los demás de la seriedad de una intención.</li>
                 </ul>
-                <h4>Compromisos</h4>
-                <p>Un <strong>compromiso</strong> es una acción que un jugador toma para limitar sus propias opciones futuras, haciendo que una amenaza o promesa sea creíble. Al comprometerse, un jugador cambia su estructura de pagos o sus opciones de tal manera que le resulta racional cumplir con su amenaza o promesa.</p>
-                <p><strong>Ejemplos de Compromisos:</strong></p>
-                <ul>
-                    <li><strong>Quemar los puentes:</strong> Un ejército que destruye los puentes detrás de sí, eliminando la opción de retirada, hace creíble su determinación de luchar hasta el final.</li>
-                    <li><strong>Cláusulas contractuales:</strong> En un contrato, las penalizaciones por incumplimiento hacen que la promesa de cumplir sea creíble.</li>
-                    <li><strong>Inversiones específicas:</strong> Una empresa que realiza una gran inversión en una tecnología específica para un mercado hace creíble su compromiso con ese mercado, disuadiendo a posibles entrantes.</li>
-                </ul>
-                <p>Los compromisos son herramientas estratégicas poderosas que permiten a los jugadores influir en el comportamiento de sus oponentes al alterar la percepción de sus incentivos futuros.</p>
             </div>
 
-            <hr style="margin: 2.5rem 0;">
+             <hr style="margin: 2.5rem 0;">
 
-            <h3 class="collapsible-header">Aplicaciones en Disuasión <i class="fas fa-chevron-right icon"></i></h3>
+            <h3 class="collapsible-header">Aplicaciones: Disuasión y Negociación <i class="fas fa-chevron-right icon"></i></h3>
             <div class="collapsible-content">
-                <p>La disuasión es un concepto central en las relaciones internacionales y la seguridad, y la teoría de juegos dinámicos proporciona un marco robusto para su análisis. La disuasión busca evitar que un adversario realice una acción indeseable (ej. atacar) mediante la amenaza de una respuesta costosa.</p>
-                <h4>Disuasión Nuclear (Guerra Fría)</h4>
-                <p>El modelo de disuasión nuclear durante la Guerra Fría es un ejemplo clásico. Dos superpotencias (EE.UU. y la URSS) se enfrentaban a la decisión de atacar primero o no. La amenaza de una "destrucción mutua asegurada" (MAD) era la base de la disuasión.</p>
-                <ul>
-                    <li><strong>Juego:</strong> Un país considera atacar a otro. El segundo país amenaza con una represalia masiva.</li>
-                    <li><strong>Credibilidad:</strong> La clave de la disuasión MAD era que la represalia sería tan devastadora que haría que un primer ataque fuera irracional. La capacidad de lanzar un segundo ataque (incluso después de recibir un primer ataque) hacía la amenaza creíble.</li>
-                </ul>
-                <p>La teoría de juegos ayuda a entender cómo la posesión de armas nucleares y la capacidad de respuesta creíble crearon un equilibrio de no-ataque, a pesar de la profunda desconfianza entre las partes.</p>
-                <h4>Disuasión de Entrada al Mercado</h4>
-                <p>Similar al ejemplo de la Empresa A y B, las empresas establecidas a menudo buscan disuadir la entrada de nuevos competidores. Esto puede hacerse a través de:</p>
-                <ul>
-                    <li><strong>Exceso de capacidad:</strong> Mantener una capacidad de producción superior a la demanda actual, lo que permite una rápida expansión y una guerra de precios si un nuevo competidor entra.</li>
-                    <li><strong>Reputación de dureza:</strong> Responder agresivamente a los primeros entrantes para construir una reputación de "luchador", disuadiendo a futuros entrantes.</li>
-                    <li><strong>Patentes y barreras legales:</strong> Compromisos legales que dificultan la entrada de nuevos actores.</li>
-                </ul>
-                <p>La efectividad de estas estrategias depende de su credibilidad, es decir, de si el entrante potencial cree que la empresa establecida realmente llevaría a cabo la acción amenazada.</p>
+                <p>Próximamente se añadirán aquí ejemplos concretos y el enlace al nuevo <strong>Visualizador de Juegos Dinámicos</strong> para explorar estos conceptos de forma interactiva.</p>
             </div>
 
-            <hr style="margin: 2.5rem 0;">
-
-            <h3 class="collapsible-header">Aplicaciones en Negociación <i class="fas fa-chevron-right icon"></i></h3>
-            <div class="collapsible-content">
-                <p>La negociación es inherentemente un juego dinámico, donde las ofertas y contraofertas se suceden en el tiempo. La teoría de juegos proporciona herramientas para analizar cómo los jugadores pueden alcanzar acuerdos y cómo la estructura de la negociación afecta los resultados.</p>
-                <h4>Modelos de Negociación de Rubinstein</h4>
-                <p>Uno de los modelos más influyentes es el de Ariel Rubinstein, que analiza la negociación como un juego dinámico con un número infinito de rondas. En este modelo, dos jugadores se turnan para hacer ofertas sobre cómo dividir un "pastel" (ej. un recurso, un beneficio).</p>
-                <ul>
-                    <li><strong>Descuento:</strong> Los jugadores valoran más los pagos recibidos antes que después (tienen una tasa de descuento).</li>
-                    <li><strong>Equilibrio:</strong> El modelo predice un equilibrio único donde el jugador que hace la primera oferta obtiene una porción ligeramente mayor del pastel, debido a la ventaja de ser el primero en proponer.</li>
-                </ul>
-                <p>Este modelo destaca la importancia del tiempo y la paciencia en las negociaciones, y cómo la capacidad de esperar puede fortalecer la posición negociadora de un jugador.</p>
-                <h4>Negociaciones Políticas y Acuerdos de Coalición</h4>
-                <p>En la formación de gobiernos de coalición, los partidos políticos negocian sobre la distribución de carteras ministeriales o la agenda legislativa. Este es un juego dinámico donde las ofertas y las alianzas se forman secuencialmente.</p>
-                <ul>
-                    <li><strong>Amenazas de ruptura:</strong> Un partido puede amenazar con abandonar la negociación si sus demandas no son satisfechas. La credibilidad de esta amenaza depende de las alternativas que tenga el partido.</li>
-                    <li><strong>Compromisos:</strong> Los partidos pueden hacer compromisos públicos o firmar acuerdos preliminares para señalar su seriedad y limitar sus opciones futuras, haciendo que sus demandas sean más creíbles.</li>
-                </ul>
-                <p>La teoría de juegos ayuda a entender por qué ciertas coaliciones son más estables que otras y cómo los partidos utilizan estrategias dinámicas para maximizar su influencia y sus pagos en el proceso de negociación.</p>
-            </div>
-
-            <hr style="margin: 2.5rem 0;">
-
-            <h3 class="collapsible-header">Conclusiones de la Sesión 3 <i class="fas fa-chevron-right icon"></i></h3>
-            <div class="collapsible-content">
-                <p>En esta sesión, hemos dado un paso crucial al pasar de los juegos estáticos a los <strong>Juegos Dinámicos con Información Completa</strong>. Hemos aprendido a representarlos mediante la forma extensiva (árboles de decisión) y a resolverlos utilizando la poderosa herramienta de la <strong>inducción hacia atrás</strong>, que nos lleva al concepto de <strong>Equilibrio Perfecto en Subjuegos</strong>.</p>
-                <p>La comprensión de la <strong>credibilidad</strong> de las amenazas y los <strong>compromisos</strong> es fundamental para entender cómo los actores estratégicos pueden influir en el comportamiento de los demás. Las aplicaciones en disuasión (militar, entrada al mercado) y negociación (política, económica) demuestran la profunda relevancia de estos conceptos para analizar situaciones del mundo real donde la secuencia de las decisiones es clave.</p>
-                <p>La próxima sesión nos introducirá a la complejidad de la información incompleta, donde los jugadores no conocen todos los aspectos del juego, añadiendo un nuevo nivel de realismo a nuestro análisis.</p>
-            </div>
+        </div>
+        <div class="text-center">
+             <a href="index.html" class="cta-button">Volver al Temario</a>
         </div>
     </main>
 
@@ -268,7 +106,7 @@
             headers.forEach(header => {
                 header.addEventListener('click', function() {
                     this.classList.toggle('active');
-                    const content = this.nextElementSibling; // Assuming content is immediately after header
+                    const content = this.nextElementSibling;
                     if (content.style.maxHeight) {
                         content.style.maxHeight = null;
                         content.classList.remove('show');

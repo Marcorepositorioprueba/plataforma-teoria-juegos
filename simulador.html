@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Teoría de Juegos</title>
+    <link rel="stylesheet" href="simulador.css">
+</head>
+<body>
+    <header>
+        <h1>Simulador de Teoría de Juegos</h1>
+        <nav>
+            <a href="index.html">Volver al Inicio</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="configuracion">
+            <h2>1. Selecciona un Juego</h2>
+            <select id="juego-selector">
+                <!-- Las opciones se generarán dinámicamente con JavaScript -->
+            </select>
+        </section>
+
+        <section id="matriz-pagos">
+            <h2>2. Matriz de Pagos</h2>
+            <div id="matriz-container">
+                <!-- La matriz se generará aquí con JavaScript -->
+            </div>
+            <button id="analizar-btn">3. Analizar Juego</button>
+        </section>
+
+        <section id="analisis-resultado">
+            <h2>4. Análisis del Juego</h2>
+            <div id="explicacion-container">
+                <p>Presiona el botón "Analizar Juego" para ver la explicación aquí.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="simulador.js"></script>
+</body>
+</html>

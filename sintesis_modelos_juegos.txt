@@ -1,0 +1,58 @@
+**Título: Síntesis de Modelos de Teoría de Juegos Aplicados a Relaciones Internacionales y Conflictos**
+
+**Fuentes:**
+*   Correa, H. (2001). *Game Theory as an Instrument for the Analysis of International Relations*.
+*   O'Neill, B. (1990). *A Survey of Game Theory Models on Peace and War*.
+*   Wajzer, M. & Cukier-Syguła, M. (2020). *Studying Political Violence Using Game Theory Models*.
+
+---
+
+### **Categoría 1: El Dilema de la Cooperación vs. el Interés Propio**
+
+**Escenario Típico:** Dos o más países se enfrentan a una situación en la que la cooperación mutua ofrece un buen resultado para todos, pero el interés individual y la desconfianza los empujan a tomar decisiones que terminan perjudicándolos.
+
+**Modelo Principal: Dilema del Prisionero (Prisoner's Dilemma)**
+*   **Descripción:** La policía arresta a dos sospechosos y les ofrece un trato por separado. Si ambos callan (cooperan entre sí), reciben una pena menor. Si uno delata al otro (deserta), el delator sale libre y al otro le cae la pena máxima. Si ambos se delatan, reciben una pena intermedia-alta.
+*   **Lógica:** Aunque para el grupo lo mejor es cooperar (callar), para cada individuo, la estrategia racional es siempre delatar, sin importar lo que haga el otro.
+*   **Ejemplos de Aplicación en RI:**
+    *   **Carreras Armamentistas:** "Cooperar" es no armarse, "desertar" es armarse. Por miedo a que el otro se arme y obtenga una ventaja, ambos países eligen armarse, resultando en un gasto enorme y una seguridad disminuida para ambos.
+    *   **Guerras Comerciales:** "Cooperar" es el libre comercio, "desertar" es imponer aranceles. Por miedo a que el otro imponga aranceles y dañe la economía propia, ambos países terminan imponiendo aranceles, perjudicando el comercio global.
+    *   **Lucha Antiterrorista:** Dos países amenazados por un mismo grupo terrorista. "Cooperar" es invertir en contraterrorismo, "desertar" es no hacerlo y esperar que el otro asuma el costo. La lógica del dilema puede llevar a que ninguno de los dos invierta lo suficiente.
+
+---
+
+### **Categoría 2: Crisis, Disuasión y "Guerra de Nervios"**
+
+**Escenario Típico:** Una confrontación directa y de alta tensión donde el objetivo es hacer que el adversario ceda bajo la amenaza de una catástrofe mutua si nadie lo hace.
+
+**Modelo Principal: Juego del Gallina (Chicken Game)**
+*   **Descripción:** Dos conductores avanzan en línea recta uno contra el otro. El que se desvía primero es el "gallina" y pierde. Si ninguno se desvía, ambos mueren en el choque.
+*   **Lógica:** A diferencia del Dilema del Prisionero, aquí no hay una estrategia dominante. Lo mejor es hacer lo contrario de lo que haga el oponente. El peor resultado posible es que ambos elijan la misma estrategia agresiva (no desviarse).
+*   **Ejemplos de Aplicación en RI:**
+    *   **Crisis de los Misiles en Cuba (1962):** El ejemplo por excelencia. La URSS (instalando misiles) y EE. UU. (imponiendo un bloqueo) estaban en curso de colisión. Ceder era una humillación política, pero no ceder significaba la guerra nuclear. El resultado fue una negociación de último minuto donde ambos "se desviaron" parcialmente.
+    *   **Conflictos de "Pulso":** Se usa para modelar cualquier situación donde dos potencias se miden en una crisis, esperando que la otra ceda primero para evitar el desastre.
+
+---
+
+### **Categoría 3: El Dilema de la Seguridad y la Confianza**
+
+**Escenario Típico:** Un país toma medidas puramente defensivas, pero sus vecinos no pueden estar seguros de sus intenciones y perciben esas medidas como una amenaza, lo que los lleva a armarse también.
+
+**Modelo Principal: La Caza del Ciervo (Stag Hunt)**
+*   **Descripción:** Dos cazadores pueden elegir entre cooperar para cazar un ciervo (un gran festín para ambos) o actuar solos para cazar una liebre (una comida mediocre pero segura). Si uno intenta cazar el ciervo solo, falla.
+*   **Lógica:** El juego ilustra el conflicto entre seguridad y cooperación social. La cooperación ofrece el mejor resultado, pero requiere confianza. Si no confías en que el otro cooperará, tu mejor opción es ir a lo seguro (cazar la liebre).
+*   **Ejemplos de Aplicación en RI:**
+    *   **Alianzas y Desarme:** Representa la decisión de unirse a un tratado de seguridad colectiva (cazar el ciervo) versus confiar en las propias capacidades militares (cazar la liebre). Si no confías en que tus aliados te defenderán, preferirás armarte por tu cuenta.
+
+---
+
+### **Categoría 4: La Dinámica de la Escalada**
+
+**Escenario Típico:** Un conflicto donde los actores se ven atrapados en una espiral de inversión de recursos (dinero, tropas, capital político) mucho más allá de lo que el objetivo original valía.
+
+**Modelo Principal: La Subasta del Dólar (Dollar Auction)**
+*   **Descripción:** Se subasta un dólar. La regla es que tanto el ganador (que se lleva el dólar) como el segundo mejor postor deben pagar sus ofertas.
+*   **Lógica:** Una vez que hay dos postores, ambos se ven incentivados a seguir subiendo la puja para evitar ser el perdedor que paga sin recibir nada. Esto puede llevar a que se paguen sumas muy superiores a un dólar por un premio de un dólar.
+*   **Ejemplos de Aplicación en RI:**
+    *   **Guerras de Desgaste (Attrition):** Explica por qué algunos conflictos se prolongan irracionalmente, ya que cada bando sigue luchando para "justificar" las pérdidas ya sufridas.
+    *   **Escalada en Carreras Armamentistas:** Similar a la guerra de desgaste, los países siguen invirtiendo en armas para no "perder" la ventaja o justificar el gasto ya realizado.
