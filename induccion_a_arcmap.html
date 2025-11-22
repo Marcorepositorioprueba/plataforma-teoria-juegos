@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inducción a ArcMap - Teoría de Juegos</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            margin: 0;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+        .main-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        .logo {
+            max-height: 90px;
+            margin-bottom: 1rem;
+        }
+        .subject-title {
+            font-size: 2.2rem;
+            color: #005a9c;
+            margin: 0;
+        }
+        .professor-name {
+            font-size: 1.2rem;
+            color: #555;
+            margin: 0.5rem 0 0 0;
+        }
+        .section-title {
+            text-align: center;
+            color: #005a9c;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 3px solid #007ac1;
+            padding-bottom: 0.5rem;
+        }
+        .intro-text {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 3rem;
+        }
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+        .card-content {
+            padding: 1.5rem;
+        }
+        .card-title {
+            font-size: 1.4rem;
+            color: #007ac1;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+        }
+        .card-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        /* --- ESTILOS PARA LA NUEVA GUÍA --- */
+        .step-card {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .step-card h3 {
+            color: #005a9c;
+            font-size: 1.8rem;
+            margin-top: 0;
+        }
+        .step-image {
+            width: 100%;
+            max-width: 800px;
+            display: block;
+            margin: 1.5rem auto;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .step-list, .step-list-ordered {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 1rem;
+        }
+        .step-list li, .step-list-ordered li {
+            display: flex;
+            align-items: flex-start;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        .step-list li span {
+            display: inline-block;
+            background-color: #007ac1;
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            text-align: center;
+            line-height: 28px;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .step-list-ordered > li {
+            counter-increment: step-counter;
+        }
+        .step-list-ordered > li::before {
+            content: counter(step-counter);
+            display: inline-block;
+            background-color: #007ac1;
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            text-align: center;
+            line-height: 28px;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .step-list-ordered ul {
+            list-style-type: disc;
+            padding-left: 45px;
+            margin-top: 0.5rem;
+        }
+        .success-box {
+            background-color: #e8f5e9;
+            border-left: 5px solid #4CAF50;
+            padding: 1rem 1.5rem;
+            margin-top: 1.5rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .success-box strong {
+            color: #2e7d32;
+        }
+        .info-box {
+            background-color: #e3f2fd;
+            border-left: 5px solid #2196F3;
+            padding: 1rem 1.5rem;
+            margin-top: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            color: #1976D2;
+        }
+        .info-box strong {
+            color: #1565C0;
+        }
+        .step-list li img {
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="main-header">
+            <img src="recursos/logoclh.jpg" alt="Logo de la Materia" class="logo">
+            <h1 class="subject-title">Teoría de Juegos</h1>
+            <p class="professor-name">Dr. Marco Antonio León Zaragoza</p>
+        </header>
+
+        <h2 class="section-title">Alcances y Aplicaciones de un SIG como ArcMap</h2>
+        <p class="intro-text">
+            Más que un simple creador de mapas, un Sistema de Información Geográfica (SIG) es una potente herramienta para analizar el mundo que nos rodea. Permite visualizar, gestionar, analizar e interpretar datos geográficos para comprender relaciones, patrones y tendencias.
+        </p>
+
+        <div class="capabilities-grid">
+            <!-- Capacidad 1: Elaboración de Mapas -->
+            <div class="card">
+                <img src="recursos/img_induccion/mapa_tematico.jpeg" alt="Elaboración de Mapas Temáticos" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-title">1. Creación de Mapas Profesionales</h3>
+                    <p class="card-text">
+                        Es la función más conocida. Permite diseñar mapas temáticos de alta calidad que representan visualmente datos de población, uso de suelo, redes de transporte, resultados electorales y cualquier variable que tenga una ubicación.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Capacidad 2: Asociación de Información -->
+            <div class="card">
+                <img src="recursos/img_induccion/tabla_atributos.png" alt="Asociación de Información" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-title">2. Asociación de Datos (Tablas)</h3>
+                    <p class="card-text">
+                        Cada elemento en el mapa (un punto, una línea, un polígono) está conectado a una base de datos. Un punto puede ser un poste de luz con datos de su altura y fecha de instalación; un polígono puede ser un municipio con su población y área.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Capacidad 3: Análisis de Agrupaciones -->
+            <div class="card">
+                <img src="recursos/img_induccion/analisis_espacial.png" alt="Análisis de Agrupaciones y Proximidad" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-title">3. Análisis Espacial y Patrones</h3>
+                    <p class="card-text">
+                        Permite realizar análisis complejos como:
+                        <ul>
+                            <li><strong>Proximidad:</strong> ¿Qué parcelas están a menos de 500m de un río? (Buffers)</li>
+                            <li><strong>Densidad:</strong> ¿Dónde se concentran los reportes de crimen? (Mapas de calor)</li>
+                            <li><strong>Superposición:</strong> ¿Qué tipo de vegetación se encuentra en zonas con pendientes mayores a 30°?</li>
+                        </ul>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Capacidad 4: Georreferenciación -->
+            <div class="card">
+                <img src="recursos/img_induccion/georreferenciacion.png" alt="Cálculo de Coordenadas y Georreferenciación" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-title">4. Georreferenciación y Coordenadas</h3>
+                    <p class="card-text">
+                        Permite asignar coordenadas del mundo real a imágenes o mapas antiguos que no las tienen. También gestiona y transforma datos entre diferentes sistemas de coordenadas (ej. de UTM a Geográficas) para asegurar la compatibilidad y precisión.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================================================== -->
+        <!-- ========= NUEVA SECCIÓN: GUÍA PASO A PASO ========= -->
+        <!-- ================================================== -->
+        <div style="margin-top: 4rem;">
+            <h2 class="section-title">Guía Completa: Tus Primeros Pasos en ArcMap</h2>
+            <p class="intro-text">
+                Esta guía detallada te llevará de la mano desde la apertura de ArcMap hasta la carga y exploración básica de tus datos geográficos.
+            </p>
+
+            <!-- Paso 1: Abrir ArcMap y Crear un Proyecto Vacío -->
+            <div class="step-card">
+                <h3>Paso 1: Abrir ArcMap y Crear un Nuevo Proyecto Vacío</h3>
+                <p>ArcMap es el software principal de ArcGIS Desktop para la creación, edición, análisis y visualización de mapas. Sigue estos pasos para iniciar:</p>
+                <ol class="step-list-ordered">
+                    <li>
+                        <strong>Iniciar ArcMap:</strong>
+                        <ul>
+                            <li>Busca el ícono de ArcMap en tu escritorio o en el menú de inicio de Windows (usualmente bajo "ArcGIS" > "ArcMap").</li>
+                            <li>Haz clic para abrir la aplicación.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Ventana "Getting Started" (Iniciar):</strong>
+                        <ul>
+                            <li>Al abrir ArcMap, aparecerá una ventana llamada "Getting Started".</li>
+                            <li>Selecciona la opción <strong>"A new empty map"</strong> (Un nuevo mapa vacío).</li>
+                            <li>Haz clic en <strong>"OK"</strong>.</li>
+                        </ul>
+                        <div class="info-box">
+                            <strong>Nota:</strong> Si ya tienes un proyecto (.mxd) en el que quieres trabajar, puedes seleccionarlo desde esta ventana o abrirlo más tarde desde el menú "File > Open".
+                        </div>
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Paso 2: Explorando la Interfaz de ArcMap -->
+            <div class="step-card">
+                <h3>Paso 2: Explorando la Interfaz de ArcMap (Componentes Clave)</h3>
+                <p>Una vez abierto el mapa vacío, te encontrarás con la interfaz principal de ArcMap. Es fundamental familiarizarse con sus componentes:</p>
+                <img src="recursos/img_induccion/interfaz_arcmap_detallada.png" alt="Interfaz Detallada de ArcMap" class="step-image">
+                <ul class="step-list">
+                    <li><span>1</span> <strong>Tabla de Contenidos (Table of Contents):</strong> Ubicada a la izquierda. Es el panel donde se listan todas las capas de datos que has cargado en tu mapa.
+                        <ul>
+                            <li><strong>Pestañas:</strong> Puedes organizar las capas por orden de dibujo (Layers), por fuente de datos (Source), por selección o por visibilidad.</li>
+                            <li><strong>Control de Visibilidad:</strong> Puedes activar o desactivar la visualización de una capa haciendo clic en la casilla de verificación junto a su nombre.</li>
+                            <li><strong>Orden de Dibujo:</strong> Las capas se dibujan de abajo hacia arriba. Las capas de polígonos (ej. países) suelen ir abajo, luego las líneas (ej. ríos) y finalmente los puntos (ej. ciudades). Puedes arrastrar las capas para cambiar su orden.</li>
+                            <li><strong>Propiedades de Capa:</strong> Haz clic derecho sobre una capa y selecciona "Properties" para acceder a opciones de simbología, etiquetas, campos, definición de consulta, etc.</li>
+                        </ul>
+                    </li>
+                    <li><span>2</span> <strong>Ventana de Mapa (Data View / Layout View):</strong> El área central donde se visualizan tus datos geográficos.
+                        <ul>
+                            <li><strong>Data View (Vista de Datos):</strong> Es la vista predeterminada para trabajar con los datos, realizar análisis y ediciones.</li>
+                            <li><strong>Layout View (Vista de Diseño):</strong> Se utiliza para preparar el mapa para impresión o exportación, añadiendo elementos como título, leyenda, escala, flecha de norte, etc. Puedes alternar entre ambas vistas con los botones en la parte inferior izquierda de la ventana de mapa.</li>
+                        </ul>
+                    </li>
+                    <li><span>3</span> <strong>Barras de Herramientas Esenciales:</strong> Ubicadas en la parte superior. Puedes activarlas o desactivarlas desde el menú "Customize > Toolbars".
+                        <ul>
+                            <li><strong>Standard:</strong> Contiene botones para guardar, abrir, imprimir, añadir datos (Add Data), acceder a ArcCatalog, ArcToolbox y la ventana de búsqueda.</li>
+                            <li><strong>Tools:</strong> Incluye herramientas de navegación como Pan (mover el mapa), Zoom In/Out (acercar/alejar), Full Extent (ver todo el mapa), Fixed Zoom In/Out, Identify (consultar información de un objeto), Measure (medir distancias y áreas), y Select Features (seleccionar objetos).</li>
+                            <li><strong>Draw:</strong> Para añadir texto, flechas, rectángulos y otros elementos gráficos directamente sobre el mapa.</li>
+                            <li><strong>Editor:</strong> Fundamental para crear nuevos datos geográficos o modificar los existentes.</li>
+                        </ul>
+                    </li>
+                    <li><span>4</span> <strong>Ventana de Catálogo (Catalog Window):</strong> Usualmente a la derecha. Es un explorador de archivos GIS que te permite gestionar tus datos.
+                        <ul>
+                            <li><strong>Conectar a Carpetas:</strong> Desde aquí puedes establecer conexiones a las carpetas de tu disco duro donde guardas tus datos GIS.</li>
+                            <li><strong>Previsualizar Datos:</strong> Puedes ver la geometría y la tabla de atributos de tus datos antes de cargarlos al mapa.</li>
+                            <li><strong>Crear Datos:</strong> Permite crear nuevas geodatabases, shapefiles, feature classes, etc.</li>
+                        </ul>
+                    </li>
+                    <li><span>5</span> <strong>Ventana de Búsqueda (Search Window):</strong> Puedes abrirla desde el botón de la barra Standard. Te permite buscar herramientas de geoprocesamiento, datos, mapas y otros elementos dentro de ArcMap.</li>
+                    <li><span>6</span> <strong>ArcToolbox:</strong> Un conjunto de herramientas de geoprocesamiento para realizar análisis espaciales complejos, conversiones de datos, gestión de datos, etc. Se abre desde el botón de la barra Standard.</li>
+                </ul>
+            </div>
+
+            <!-- Paso 3: Conectando a tus Datos (El Paso Crucial) -->
+            <div class="step-card">
+                <h3>Paso 3: Conectando a tus Datos (El Paso Crucial)</h3>
+                <p>ArcMap no "ve" automáticamente todas las carpetas de tu computadora. Para acceder a tus datos GIS, primero debes establecer una "conexión a carpeta". Esto es una buena práctica para organizar tus proyectos.</p>
+                <ol class="step-list-ordered">
+                    <li>
+                        <strong>Abrir la Ventana "Add Data":</strong>
+                        <ul>
+                            <li>Haz clic en el botón <strong>"Add Data"</strong> <img src="recursos/img_induccion/add_data_icon.png" alt="Add Data Icon" style="height: 20px; vertical-align: middle;"> en la barra de herramientas Standard.</li>
+                            <li>Se abrirá la ventana "Add Data".</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Conectar a una Carpeta:</strong>
+                        <ul>
+                            <li>Dentro de la ventana "Add Data", busca y haz clic en el ícono <strong>"Connect to Folder"</strong> <img src="recursos/img_induccion/connect_folder_icon.png" alt="Connect to Folder Icon" style="height: 20px; vertical-align: middle;"> (parece una carpeta con un signo de más).</li>
+                            <li>Se abrirá una ventana de exploración de archivos. Navega hasta la carpeta principal donde tienes guardados tus datos GIS para este proyecto (ej. <code>C:\MisProyectosGIS\DatosCurso</code>).</li>
+                            <li>Selecciona la carpeta y haz clic en <strong>"OK"</strong>.</li>
+                        </ul>
+                        <div class="info-box">
+                            <strong>Importante:</strong> Una vez conectada, esta carpeta aparecerá como un acceso directo en la ventana "Add Data" y en la ventana de Catálogo, facilitando el acceso futuro a tus datos.
+                        </div>
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Paso 4: Cargando Datos a tu Mapa -->
+            <div class="step-card">
+                <h3>Paso 4: Cargando Datos a tu Mapa</h3>
+                <p>Ahora que ArcMap sabe dónde buscar, puedes añadir tus capas de información al mapa.</p>
+                <ol class="step-list-ordered">
+                    <li>
+                        <strong>Usando el botón "Add Data":</strong>
+                        <ul>
+                            <li>Si no la tienes abierta, haz clic en el botón <strong>"Add Data"</strong>.</li>
+                            <li>En la ventana "Add Data", navega por las carpetas conectadas hasta encontrar el archivo de datos que deseas cargar.</li>
+                            <li><strong>Tipos de Datos Comunes:</strong>
+                                <ul>
+                                    <li><strong>Shapefiles (.shp):</strong> Son los más comunes para datos vectoriales (puntos, líneas, polígonos).</li>
+                                    <li><strong>Rasters (ej. .tif, .jpg, .img):</strong> Imágenes georreferenciadas o modelos de elevación.</li>
+                                    <li><strong>Tablas (.dbf, .csv, .xls):</strong> Tablas de datos que puedes unir a tus capas geográficas.</li>
+                                    <li><strong>Feature Classes:</strong> Datos vectoriales almacenados dentro de una Geodatabase (.gdb).</li>
+                                </ul>
+                            </li>
+                            <li>Selecciona el archivo (o archivos, manteniendo Ctrl presionado) y haz clic en <strong>"Add"</strong>.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Arrastrar y Soltar desde la Ventana de Catálogo:</strong>
+                        <ul>
+                            <li>Abre la Ventana de Catálogo (si no está visible, haz clic en el botón de la barra Standard).</li>
+                            <li>Navega por las carpetas conectadas hasta encontrar el archivo de datos.</li>
+                            <li>Haz clic y arrastra el archivo directamente desde la Ventana de Catálogo a la Ventana de Mapa o a la Tabla de Contenidos.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <div class="success-box">
+                    <strong>¡Éxito!</strong> Tus datos ahora están cargados en el mapa. Los verás dibujados en la Ventana de Mapa y listados en la Tabla de Contenidos.
+                </div>
+            </div>
+
+            <!-- Paso 5: Navegación Básica del Mapa -->
+            <div class="step-card">
+                <h3>Paso 5: Navegación Básica del Mapa</h3>
+                <p>Una vez que tienes datos en tu mapa, estas herramientas te ayudarán a explorarlos:</p>
+                <ul class="step-list">
+                    <li><span><img src="recursos/img_induccion/pan_icon.png" alt="Pan Icon" style="height: 20px;"></span> <strong>Pan (Mano):</strong> Haz clic y arrastra para mover el mapa por la pantalla.</li>
+                    <li><span><img src="recursos/img_induccion/zoom_in_icon.png" alt="Zoom In Icon" style="height: 20px;"></span> <strong>Zoom In / Zoom Out:</strong> Haz clic para acercar o alejar el mapa. También puedes dibujar un recuadro para hacer zoom a un área específica.</li>
+                    <li><span><img src="recursos/img_induccion/full_extent_icon.png" alt="Full Extent Icon" style="height: 20px;"></span> <strong>Full Extent:</strong> Te lleva a la extensión completa de todos los datos cargados en tu mapa.</li>
+                    <li><span><img src="recursos/img_induccion/previous_extent_icon.png" alt="Previous Extent Icon" style="height: 20px;"></span> <strong>Previous Extent / Next Extent:</strong> Para ir a la vista anterior o siguiente del mapa.</li>
+                    <li><span><img src="recursos/img_induccion/identify_icon.png" alt="Identify Icon" style="height: 20px;"></span> <strong>Identify (Identificar):</strong> Haz clic sobre un objeto en el mapa para ver su información de atributos en una ventana emergente.</li>
+                    <li><span><img src="recursos/img_induccion/measure_icon.png" alt="Measure Icon" style="height: 20px;"></span> <strong>Measure (Medir):</strong> Permite medir distancias, áreas o coordenadas directamente en el mapa.</li>
+                </ul>
+            </div>
+
+            <!-- Paso 6: Guardando tu Trabajo -->
+            <div class="step-card">
+                <h3>Paso 6: Guardando tu Trabajo</h3>
+                <p>Es crucial guardar tu progreso regularmente para no perder tus cambios.</p>
+                <ol class="step-list-ordered">
+                    <li>
+                        <strong>Guardar el Documento de Mapa (.mxd):</strong>
+                        <ul>
+                            <li>Ve a <strong>"File > Save"</strong> o haz clic en el ícono de disquete <img src="recursos/img_induccion/save_icon.png" alt="Save Icon" style="height: 20px; vertical-align: middle;"> en la barra Standard.</li>
+                            <li>Dale un nombre significativo a tu archivo (ej. <code>MiPrimerMapa.mxd</code>) y elige una ubicación.</li>
+                        </ul>
+                        <div class="info-box">
+                            <strong>Recuerda:</strong> El archivo .mxd guarda la configuración de tu mapa (qué capas están cargadas, su simbología, etiquetas, etc.), pero <strong>no guarda los datos geográficos en sí</strong>. Los datos permanecen en sus ubicaciones originales en tu disco duro. Si mueves los datos, el .mxd perderá la conexión.
+                        </div>
+                    </li>
+                    <li>
+                        <strong>Guardar los Datos (Exportar):</strong>
+                        <ul>
+                            <li>Si has realizado cambios en los datos de una capa (ej. editado geometrías, añadido campos con la calculadora), para que esos cambios sean permanentes en un nuevo archivo de datos, debes <strong>exportar la capa</strong>.</li>
+                            <li>Haz clic derecho sobre la capa en la Tabla de Contenidos > <strong>"Data > Export Data..."</strong>.</li>
+                            <li>Elige la ubicación y el nombre para el nuevo archivo de datos (ej. un nuevo shapefile).</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Paso 7: Explorando la Tabla de Atributos -->
+            <div class="step-card">
+                <h3>Paso 7: Explorando la Tabla de Atributos</h3>
+                <p>Cada capa vectorial tiene una tabla de atributos asociada que contiene información descriptiva de cada objeto geográfico.</p>
+                <ol class="step-list-ordered">
+                    <li>
+                        <strong>Abrir la Tabla de Atributos:</strong>
+                        <ul>
+                            <li>Haz clic derecho sobre una capa en la Tabla de Contenidos.</li>
+                            <li>Selecciona <strong>"Open Attribute Table"</strong>.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Interacción Básica:</strong>
+                        <ul>
+                            <li><strong>Seleccionar Registros:</strong> Haz clic en el recuadro gris a la izquierda de una fila para seleccionar un objeto. El objeto correspondiente se resaltará en el mapa.</li>
+                            <li><strong>Ordenar:</strong> Haz clic derecho en el encabezado de una columna y selecciona "Sort Ascending" o "Sort Descending".</li>
+                            <li><strong>Buscar:</strong> Utiliza el botón "Table Options" > "Select by Attributes" para realizar consultas complejas.</li>
+                            <li><strong>Calculadora de Campos:</strong> Como vimos en la sección anterior, puedes añadir y calcular nuevos campos aquí.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <div class="info-box">
+                    <strong>¡Felicidades!</strong> Has completado la inducción básica a ArcMap. Con estos conocimientos, estás listo para empezar a explorar y trabajar con tus propios datos geográficos.
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

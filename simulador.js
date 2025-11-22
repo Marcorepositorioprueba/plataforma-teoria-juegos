@@ -181,5 +181,86 @@ document.addEventListener('DOMContentLoaded', () => {
     juegoSelector.addEventListener('change', (e) => {
         generarMatriz(e.target.value);
         explicacionContainer.innerHTML = defaultExplicacion;
+        // Mostrar/Ocultar el juego interactivo de Pares y Nones
+        const juegoInteractivo = document.getElementById('juego-interactivo-container');
+        if (e.target.value === 'pares-nones') {
+            juegoInteractivo.style.display = 'block';
+        } else {
+            juegoInteractivo.style.display = 'none';
+        }
     });
+
+    // --- LÓGICA DEL JUEGO INTERACTIVO DE PARES Y NONES ---
+    const controlesParesNones = document.getElementById('controles-pares-nones');
+    const resultadoParesNones = document.getElementById('resultado-pares-nones');
+    const notaAlgoritmo = document.getElementById('nota-algoritmo');
+    let prediccionJugador = null;
+
+    controlesParesNones.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'BUTTON') return;
+
+        if (e.target.dataset.prediccion) {
+            prediccionJugador = e.target.dataset.prediccion;
+            // Resaltar selección
+            controlesParesNones.querySelectorAll('[data-prediccion]').forEach(btn => btn.classList.remove('seleccionado'));
+            e.target.classList.add('seleccionado');
+            resultadoParesNones.innerHTML = `<p>Has elegido <strong>${prediccionJugador.toUpperCase()}</strong>. Ahora muestra tus dedos.</p>`;
+            return;
+        }
+
+        if (e.target.dataset.dedos) {
+            if (!prediccionJugador) {
+                resultadoParesNones.innerHTML = `<p style="color: red;">Por favor, primero elige tu predicción (Pares o Nones).</p>`;
+                return;
+            }
+            const dedosJugador = parseInt(e.target.dataset.dedos);
+            jugarParesNones(prediccionJugador, dedosJugador);
+        }
+    });
+
+    function jugarParesNones(prediccion, dedosJ1) {
+        let dedosJ2;
+
+        // --- ALGORITMO ALTERADO ---
+        // Si el jugador 1 elige "Pares", la IA hará trampa el 90% de las veces para que la suma sea par.
+        if (prediccion === 'pares') {
+            const random = Math.random(); // Un número entre 0 y 1
+            if (random < 0.90) { // 90% de probabilidad de forzar la victoria del Jugador 1
+                // La IA elige un número que haga la suma par
+                dedosJ2 = (dedosJ1 % 2 === 1) ? 1 : 2;
+                notaAlgoritmo.innerHTML = "<p>(Nota: El algoritmo del Jugador 2 ha sido alterado para que el Jugador 1 gane el 90% de las veces al elegir 'Pares'.)</p>";
+            } else { // 10% de probabilidad de un resultado "justo" (que en este caso, fuerza la pérdida)
+                // La IA elige un número que haga la suma impar
+                dedosJ2 = (dedosJ1 % 2 === 1) ? 2 : 1;
+                notaAlgoritmo.innerHTML = "<p>(Nota: El algoritmo del Jugador 2 ha sido alterado... pero esta vez tuviste mala suerte.)</p>";
+            }
+        } else {
+            // Si el jugador elige "Nones", la IA juega de forma aleatoria normal.
+            dedosJ2 = Math.random() < 0.5 ? 1 : 2;
+            notaAlgoritmo.innerHTML = ""; // Sin nota si el juego es justo
+        }
+
+        const suma = dedosJ1 + dedosJ2;
+        const esPar = suma % 2 === 0;
+        let resultadoTexto = '';
+
+        if ((esPar && prediccion === 'pares') || (!esPar && prediccion === 'nones')) {
+            resultadoTexto = `<strong style="color: green;">¡GANASTE!</strong> Elegiste ${prediccion.toUpperCase()} y la suma fue ${suma}.`;
+        } else {
+            resultadoTexto = `<strong style="color: red;">PERDISTE.</strong> Elegiste ${prediccion.toUpperCase()} y la suma fue ${suma}.`;
+        }
+
+        resultadoParesNones.innerHTML = `
+            <p>Tú mostraste <strong>${dedosJ1}</strong> dedo(s). El Jugador 2 mostró <strong>${dedosJ2}</strong> dedo(s).</p>
+            <p>La suma es <strong>${suma}</strong>.</p>
+            <p>${resultadoTexto}</p>
+        `;
+        
+        // Resetear predicción para la siguiente ronda
+        prediccionJugador = null;
+        controlesParesNones.querySelectorAll('[data-prediccion]').forEach(btn => btn.classList.remove('seleccionado'));
+    }
+
+    // Disparar el evento change al inicio para configurar la visibilidad
+    juegoSelector.dispatchEvent(new Event('change'));
 });

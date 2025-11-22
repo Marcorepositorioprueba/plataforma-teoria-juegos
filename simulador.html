@@ -7,10 +7,13 @@
     <link rel="stylesheet" href="simulador.css">
 </head>
 <body>
-    <header>
-        <h1>Simulador de Teoría de Juegos</h1>
-        <nav>
+    <header class="top-header">
+        <div class="logo">
+            <a href="index.html"><img src="recursos/logoclh.jpg" alt="Logo del Curso"></a>
+        </div>
+        <nav class="main-nav">
             <a href="index.html">Volver al Inicio</a>
+            <a href="induccion_a_arcmap.html">Inducción ArcMap</a>
         </nav>
     </header>
 
@@ -34,6 +37,30 @@
             <h2>4. Análisis del Juego</h2>
             <div id="explicacion-container">
                 <p>Presiona el botón "Analizar Juego" para ver la explicación aquí.</p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE JUEGO INTERACTIVO -->
+        <section id="juego-interactivo-container" style="display:none;">
+            <h2>Jugar: Pares o Nones</h2>
+            <div id="controles-pares-nones">
+                <p><strong>Tu objetivo:</strong> Adivina si la suma de los dedos será par o impar.</p>
+                <div class="control-group">
+                    <label>1. Elige tu predicción:</label>
+                    <button class="sim-btn" data-prediccion="pares">Pares</button>
+                    <button class="sim-btn" data-prediccion="nones">Nones</button>
+                </div>
+                <div class="control-group">
+                    <label>2. Elige cuántos dedos mostrar:</label>
+                    <button class="sim-btn" data-dedos="1">1 Dedo</button>
+                    <button class="sim-btn" data-dedos="2">2 Dedos</button>
+                </div>
+            </div>
+            <div id="resultado-pares-nones" class="sim-result-display" style="margin-top: 1.5rem; min-height: 100px;">
+                <p>Esperando tu jugada...</p>
+            </div>
+            <div id="nota-algoritmo" style="text-align:center; margin-top:1rem; font-style:italic; color:#c0392b;">
+                <!-- La nota sobre el algoritmo se insertará aquí -->
             </div>
         </section>
     </main>

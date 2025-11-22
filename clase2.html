@@ -232,7 +232,7 @@
 
     <header class="top-header">
         <div class="logo">
-            <a href="index.html"><img src="recursos/logo.png" alt="Logo del Curso"></a>
+            <a href="index.html"><img src="recursos/logoclh.jpg" alt="Logo del Curso"></a>
         </div>
         <nav class="main-nav">
             <a href="index.html">Temario</a>
@@ -242,6 +242,7 @@
             <a href="clase3.html">Sesión 3</a>
             <a href="clase3_practica.html" style="color: #28a745;">Práctica S3</a>
             <a href="clase4.html">Sesión 4</a>
+            <a href="induccion_a_arcmap.html">Inducción ArcMap</a>
         </nav>
     </header>
 
@@ -1106,8 +1107,25 @@
                 let totalScore = 0;
 
                 const playRound = (playerChoice) => {
-                    // AI plays a 50/50 mixed strategy
-                    const aiChoice = Math.random() < 0.5 ? 1 : 2;
+                    let aiChoice;
+                    const notaAlgoritmoEl = document.createElement('p');
+                    notaAlgoritmoEl.style.fontStyle = 'italic';
+                    notaAlgoritmoEl.style.color = '#c0392b';
+                    notaAlgoritmoEl.style.marginTop = '10px';
+
+                    // --- ALGORITMO ALTERADO ---
+                    // La IA hará trampa el 90% de las veces para que la suma sea PAR (y el jugador gane).
+                    const random = Math.random();
+                    if (random < 0.90) {
+                        // Forzar victoria del Jugador 1 (suma PAR)
+                        aiChoice = (playerChoice % 2 === 1) ? 1 : 2;
+                        notaAlgoritmoEl.textContent = "(Nota: El algoritmo del Jugador 2 ha sido alterado para que el Jugador 1 gane el 90% de las veces.)";
+                    } else {
+                        // Forzar derrota del Jugador 1 (suma IMPAR)
+                        aiChoice = (playerChoice % 2 === 1) ? 2 : 1;
+                        notaAlgoritmoEl.textContent = "(Nota: El algoritmo del Jugador 2 ha sido alterado... pero esta vez tuviste mala suerte.)";
+                    }
+                    
                     const sum = playerChoice + aiChoice;
                     const playerWins = sum % 2 === 0;
                     const roundResult = playerWins ? 1 : -1;
@@ -1122,11 +1140,15 @@
                     let resultHTML = `Tú elegiste <strong>${playerChoice}</strong>, la IA eligió <strong>${aiChoice}</strong>. La suma es <strong>${sum}</strong> (${playerWins ? 'PAR' : 'IMPAR'}). `;
                     resultHTML += playerWins ? '<strong>¡Ganas esta ronda! (+1)</strong>' : '<strong>La IA gana esta ronda. (-1)</strong>';
                     
-                    if (roundsPlayed >= 10 && roundsPlayed % 5 === 0) {
-                        resultHTML += `<br><br><b>Análisis tras ${roundsPlayed} rondas:</b> Tu puntuación es ${totalScore}. Nota cómo, a largo plazo, es difícil obtener una ventaja. La IA está usando una estrategia mixta impredecible, el equilibrio de este juego.`;
-                    }
-                    
                     mixedRoundResultEl.innerHTML = `<p>${resultHTML}</p>`;
+                    
+                    // Añadir la nota del algoritmo
+                    // Limpiar notas anteriores antes de añadir una nueva
+                    const existingNote = mixedRoundResultEl.querySelector('p[style*="italic"]');
+                    if (existingNote) {
+                        existingNote.remove();
+                    }
+                    mixedRoundResultEl.appendChild(notaAlgoritmoEl);
                 };
 
                 const resetMixedGame = () => {

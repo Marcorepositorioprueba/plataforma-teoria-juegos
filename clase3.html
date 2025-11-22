@@ -4,12 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clase 3 | Teoría de Juegos</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8f9fa; color: #343a40; }
-        .top-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2.5rem; background-color: #fff; border-bottom: 1px solid #dee2e6; position: sticky; top: 0; z-index: 1000; }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2.5rem;
+            background-color: #fff;
+            border-bottom: 1px solid #dee2e6;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
         .top-header .logo img { max-height: 75px; }
         .main-nav a { margin: 0 1.5rem; text-decoration: none; color: #495057; font-weight: 600; transition: color 0.3s; }
         .main-nav a:hover { color: #007bff; }
@@ -17,26 +37,111 @@
             color: #007bff;
             font-weight: 700;
         }
+
         .content-area { padding: 2rem 2.5rem 4rem 2.5rem; }
-        .card { background-color: #fff; border-radius: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); padding: 2.5rem; margin-bottom: 2.5rem; }
-        .card h2 { font-size: 2rem; font-weight: 700; margin-top: 0; margin-bottom: 2rem; border-bottom: 2px solid #007bff; padding-bottom: 0.8rem; display: flex; align-items: center; }
-        .card h2 .fa { margin-right: 1rem; color: #007bff; }
-        footer { text-align: center; padding: 3rem 0; background-color: #343a40; color: #fff; }
-        .cta-button { background-color: #007bff; color: #fff; padding: 0.8rem 1.5rem; border-radius: 5px; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 1rem; }
+        
+        .card {
+            border: 1px solid #dee2e6;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .card-header {
+            background-color: #343a40;
+            color: white;
+            font-weight: bold;
+            font-size: 1.8rem;
+            padding: 1.25rem 1.75rem;
+            border-bottom: 5px solid #007bff;
+        }
+        details {
+            background: #ffffff;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e9ecef;
+        }
+        summary {
+            font-size: 1.4rem;
+            font-weight: bold;
+            padding: 1.25rem;
+            cursor: pointer;
+            outline: none;
+            background-color: #f1f3f5;
+            color: #212529;
+            position: relative;
+            transition: background-color 0.2s;
+        }
+        summary:hover {
+            background-color: #e9ecef;
+        }
+        summary::after {
+            content: '▶';
+            position: absolute;
+            right: 1.5rem;
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+        details[open] summary::after {
+            transform: rotate(90deg);
+        }
+        .content {
+            padding: 1.5rem 2rem;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        .exercise {
+            background-color: #e3f2fd;
+            border-left: 5px solid #007bff;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 5px;
+        }
+        .step {
+            font-weight: bold;
+            color: #0056b3;
+            margin-top: 1rem;
+        }
+        .concept {
+            font-weight: bold;
+            color: #d9534f;
+        }
+        blockquote {
+            border-left: 4px solid #6c757d;
+            padding-left: 1rem;
+            font-style: italic;
+            color: #495057;
+        }
+        footer {
+            text-align: center; padding: 3rem 0;
+            background-color: #343a40;
+            color: #fff;
+        }
+        .cta-button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: inline-block;
+            margin-top: 1rem;
+        }
         .cta-button:hover { background-color: #0056b3; }
-        .collapsible-header { cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #eee; margin-bottom: 1rem; font-size: 1.8rem; font-weight: 700; color: #007bff; }
-        .collapsible-header:hover { color: #0056b3; }
-        .collapsible-header .icon { margin-left: 1rem; transition: transform 0.3s ease; }
-        .collapsible-header.active .icon { transform: rotate(90deg); }
-        .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; padding-left: 1rem; border-left: 3px solid #007bff; margin-bottom: 1.5rem; }
-        .collapsible-content.show { max-height: 2000px; padding-top: 1rem; padding-bottom: 1rem; transition: max-height 0.7s ease-in; }
+        .mermaid {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
     </style>
 </head>
 <body>
 
     <header class="top-header">
         <div class="logo">
-            <a href="index.html"><img src="recursos/logo.png" alt="Logo del Curso"></a>
+            <a href="index.html"><img src="recursos/logoclh.jpg" alt="Logo del Curso"></a>
         </div>
         <nav class="main-nav">
             <a href="index.html">Temario</a>
@@ -46,51 +151,199 @@
             <a href="clase3.html" class="active">Sesión 3</a>
             <a href="clase3_practica.html" style="color: #28a745;">Práctica S3</a>
             <a href="clase4.html">Sesión 4</a>
+            <a href="induccion_a_arcmap.html">Inducción ArcMap</a>
         </nav>
     </header>
 
     <main class="content-area">
-        <div id="clase3-contenido" class="card">
-            <h2><i class="fas fa-sitemap"></i> Sesión 3: Juegos Dinámicos con Información Completa</h2>
-            
-            <h3 class="collapsible-header">De la Matriz al Árbol: Introducción a los Juegos Dinámicos <i class="fas fa-chevron-right icon"></i></h3>
-            <div class="collapsible-content">
-                <p>A diferencia de los juegos estáticos donde las decisiones son simultáneas, los <strong>juegos dinámicos</strong> se caracterizan por una secuencia de movimientos. Un jugador actúa, y el siguiente observa esa acción antes de tomar su propia decisión. Esta naturaleza secuencial cambia fundamentalmente el análisis estratégico.</p>
-                <p>La herramienta para representar estos juegos ya no es la matriz, sino el <strong>árbol de juego</strong> (o forma extensiva), que visualiza los nodos de decisión, las ramas (acciones) y los pagos finales.</p>
+        <div class="card">
+            <div class="card-header">
+                Clase 3: Juegos Dinámicos y Estrategia Secuencial
             </div>
-
-            <hr style="margin: 2.5rem 0;">
-
-            <h3 class="collapsible-header">Inducción hacia Atrás: El Poder de Pensar al Revés <i class="fas fa-chevron-right icon"></i></h3>
-            <div class="collapsible-content">
-                <p>La <strong>inducción hacia atrás</strong> es el método de solución fundamental para los juegos dinámicos con información completa. Consiste en analizar el juego desde el final hacia el principio:</p>
-                <ol>
-                    <li>Se identifica la decisión óptima del último jugador en moverse para cada posible situación en la que se pueda encontrar.</li>
-                    <li>Anticipando esa decisión, se analiza la acción óptima del penúltimo jugador.</li>
-                    <li>Este proceso se repite, retrocediendo por el árbol hasta llegar al primer nodo de decisión.</li>
-                </ol>
-                <p>El resultado de este proceso nos da el <strong>Equilibrio Perfecto en Subjuegos (EPS)</strong>, un concepto de equilibrio más refinado que el de Nash, ya que elimina las "amenazas no creíbles".</p>
+            <div class="card-body fs-5 p-4">
+                <p><strong>Expositor:</strong> Buenos días. Hoy daremos un paso fundamental en nuestro estudio de la teoría de juegos. Dejaremos atrás el mundo de las decisiones simultáneas, representadas por matrices, para adentrarnos en el universo de los <strong>juegos dinámicos</strong>, donde el tiempo y el orden de las acciones son los protagonistas. Nuestra herramienta clave será el árbol de juego y nuestro método de solución, la inducción hacia atrás.</p>
             </div>
-
-            <hr style="margin: 2.5rem 0;">
-
-            <h3 class="collapsible-header">Credibilidad, Amenazas y Compromisos <i class="fas fa-chevron-right icon"></i></h3>
-            <div class="collapsible-content">
-                <p>Los juegos dinámicos son el campo perfecto para estudiar la <strong>credibilidad</strong>.</p>
-                <ul>
-                    <li><strong>Amenaza No Creíble:</strong> Una amenaza que un jugador racional no tendría incentivos a cumplir si llegara el momento de hacerlo. La inducción hacia atrás nos ayuda a identificar y descartar estas amenazas. Por ejemplo, una empresa establecida que amenaza con una guerra de precios ruinosa para ella misma si un competidor entra al mercado.</li>
-                    <li><strong>Compromiso (Commitment):</strong> Una acción que un jugador puede tomar para hacer creíble una amenaza o promesa. Esto implica cambiar la estructura del juego, a menudo limitando las propias opciones futuras para convencer a los demás de la seriedad de una intención.</li>
-                </ul>
-            </div>
-
-             <hr style="margin: 2.5rem 0;">
-
-            <h3 class="collapsible-header">Aplicaciones: Disuasión y Negociación <i class="fas fa-chevron-right icon"></i></h3>
-            <div class="collapsible-content">
-                <p>Próximamente se añadirán aquí ejemplos concretos y el enlace al nuevo <strong>Visualizador de Juegos Dinámicos</strong> para explorar estos conceptos de forma interactiva.</p>
-            </div>
-
         </div>
+    
+        <!-- Módulo 1: De la Matriz al Árbol -->
+        <details open>
+            <summary>1. De la Matriz al Árbol: Introducción a los Juegos Dinámicos</summary>
+            <div class="content">
+                <p>A diferencia de los juegos estáticos donde las decisiones son simultáneas, los juegos dinámicos se caracterizan por una <strong>secuencia de movimientos</strong>. Un jugador actúa, y el siguiente observa esa acción antes de tomar su propia decisión. Esta naturaleza secuencial cambia fundamentalmente el análisis estratégico.</p>
+                <p>La herramienta para representar estos juegos ya no es la matriz, sino el <span class="concept">árbol de juego</span> (o forma extensiva), que visualiza:</p>
+                <ul>
+                    <li><strong>Nodos de Decisión:</strong> Puntos donde un jugador debe elegir una acción. Se etiqueta con el nombre del jugador que decide.</li>
+                    <li><strong>Ramas:</strong> Líneas que salen de un nodo y representan las acciones posibles.</li>
+                    <li><strong>Nodos Terminales:</strong> El final del juego, donde se muestran los pagos para cada jugador, usualmente en el formato (Pago Jugador 1, Pago Jugador 2).</li>
+                </ul>
+                <blockquote>"El árbol nos cuenta una historia. Nos muestra quién actúa, cuándo actúa, qué puede hacer y cuáles son las consecuencias de cada posible camino."</blockquote>
+            </div>
+        </details>
+    
+        <!-- Módulo 2: Inducción hacia Atrás -->
+        <details open>
+            <summary>2. Inducción hacia Atrás: El Poder de Pensar al Revés</summary>
+            <div class="content">
+                <p>La inducción hacia atrás es el método de solución para los juegos dinámicos con información completa. Consiste en analizar el juego <span class="concept">desde el final hacia el principio</span>.</p>
+                
+                <div class="exercise">
+                    <h4>Ejercicio Guiado: El Juego de la Entrada al Mercado</h4>
+                    <p><strong>Situación:</strong> Una empresa, el "Retador", considera entrar en un mercado dominado por un "Incumbente".</p>
+                    <ol>
+                        <li>Primero, el <strong>Retador</strong> decide si <strong>Entrar</strong> o <strong>No Entrar</strong>.</li>
+                        <li>Si el Retador decide "No Entrar", el juego termina.</li>
+                        <li>Si el Retador decide "Entrar", el <strong>Incumbente</strong> observa esta acción y debe decidir cómo responder: <strong>Luchar</strong> (iniciando una guerra de precios) o <strong>Acomodarse</strong> (compartiendo el mercado).</li>
+                    </ol>
+                    <p><strong>Pagos (Retador, Incumbente):</strong></p>
+                    <ul>
+                        <li>Si el Retador "No Entra": <strong>(0, 10)</strong>.</li>
+                        <li>Si el Retador "Entra" y el Incumbente "Lucha": <strong>(-5, -5)</strong>.</li>
+                        <li>Si el Retador "Entra" y el Incumbente "Se Acomoda": <strong>(5, 5)</strong>.</li>
+                    </ul>
+                    <div class="mermaid">
+                        graph TD
+                            A[1. Retador] -->|"No Entrar"| B((0, 10))
+                            A -->|"Entrar"| C[2. Incumbente]
+                            C -->|"Luchar"| D["(-5, -5)"]
+                            C -->|"Acomodarse"| E((5, 5))
+
+                            style A fill:#007bff,color:#fff,stroke:#333,stroke-width:2px
+                            style C fill:#28a745,color:#fff,stroke:#333,stroke-width:2px
+                    </div>
+                </div>
+    
+                <h4>Solución Paso a Paso:</h4>
+                <p class="step">Paso 1: Analizar el final del juego.</p>
+                <p>Nos situamos en el último nodo de decisión (etiquetado como "2. Incumbente"). El Retador ya ha entrado. ¿Qué opciones tiene el Incumbente y cuáles son sus pagos?</p>
+                <ul>
+                    <li>Si elige <strong>Luchar</strong>, su pago es <strong class="text-danger">-5</strong>.</li>
+                    <li>Si elige <strong>Acomodarse</strong>, su pago es <strong class="text-success">5</strong>.</li>
+                </ul>
+                <p>Como jugador racional que busca maximizar su pago, el Incumbente <strong>siempre elegirá Acomodarse</strong>. Por lo tanto, podemos "podar" la rama de "Luchar", ya que nunca será elegida por un Incumbente racional.</p>
+                
+                <p class="step">Paso 2: Retroceder al nodo anterior.</p>
+                <p>Ahora nos movemos al primer nodo (etiquetado como "1. Retador"). El Retador es inteligente y realiza el mismo análisis que acabamos de hacer. Sabe que si elige "Entrar", el Incumbente responderá "Acomodándose".</p>
+                <p>Por lo tanto, la decisión del Retador no es entre tres resultados posibles, sino entre dos resultados <strong>reales</strong>:</p>
+                <ul>
+                    <li>Si elige <strong>No Entrar</strong>, su pago es <strong class="text-secondary">0</strong>.</li>
+                    <li>Si elige <strong>Entrar</strong>, anticipa que el Incumbente se acomodará, por lo que su pago será <strong class="text-success">5</strong>.</li>
+                </ul>
+                <p>Entre obtener 0 y obtener 5, el Retador racionalmente elige <strong>Entrar</strong>.</p>
+    
+                <p class="step">Paso 3: Definir el Equilibrio Perfecto en Subjuegos (EPS).</p>
+                <p>El camino que hemos trazado a través del árbol es la solución. El EPS es una estrategia completa que le dice a cada jugador qué hacer en cada nodo de decisión.</p>
+                <p><strong>EPS: (Retador: Entrar; Incumbente: Acomodarse si el Retador entra).</strong></p>
+                <blockquote>Este equilibrio es "perfecto" porque es una estrategia óptima no solo al inicio, sino en cada posible "subjuego" o etapa del juego. Elimina las amenazas que no se sostienen lógicamente.</blockquote>
+            </div>
+        </details>
+    
+        <!-- Módulo 3: Credibilidad, Amenazas y Compromisos -->
+        <details open>
+            <summary>3. Credibilidad, Amenazas y Compromisos</summary>
+            <div class="content">
+                <p>El ejercicio anterior nos introduce directamente al concepto de credibilidad.</p>
+                <p><span class="concept">Amenaza No Creíble:</span> Es una amenaza que un jugador racional no tendría incentivos a cumplir si llegara el momento de hacerlo. En nuestro ejemplo, la amenaza del Incumbente de "Luchar" es <strong>no creíble</strong>. ¿Por qué? Porque una vez que el Retador ha entrado, al Incumbente le conviene más Acomodarse (-5 es peor que 5).</p>
+                <p>Entonces, ¿cómo puede el Incumbente hacer que su amenaza sea creíble y disuadir al Retador de entrar?</p>
+                <p>La respuesta es el <span class="concept">Compromiso (Commitment)</span>: una acción que un jugador toma para hacer creíble una amenaza, a menudo limitando sus propias opciones futuras para demostrar su seriedad.</p>
+    
+                <div class="exercise">
+                    <h4>Ejercicio Guiado: El Compromiso de la 'Cláusula Kamikaze'</h4>
+                    <p><strong>Situación:</strong> Usemos la versión final y más clara del ejemplo. Antes de que el Retador decida, el Incumbente puede <strong>firmar un contrato público e irrevocable</strong> (ej. con un regulador) que le obliga a bajar sus precios a un nivel ruinoso si un competidor entra. Este contrato tiene un pequeño costo legal de 1.</p>
+                    <p><strong>Nuevo Árbol de Juego:</strong></p>
+                    <ol>
+                        <li><strong>Incumbente</strong> decide: <strong>Firmar Contrato</strong> o <strong>No Firmar</strong>.</li>
+                        <li><strong>Retador</strong> observa y decide: <strong>Entrar</strong> o <strong>No Entrar</strong>.</li>
+                        <li>Si se firmó el contrato y el Retador entra, el Incumbente está <strong>obligado a Luchar</strong>.</li>
+                    </ol>
+                    <div class="mermaid">
+                        graph TD
+                            A[1. Incumbente] -->|"No Firmar"| B[2. Retador]
+                            B -->|"No Entrar"| B1((0, 10))
+                            B -->|"Entrar"| B2[3. Incumbente]
+                            B2 -->|"Luchar"| B3["(-5, -5)"]
+                            B2 -->|"Acomodarse"| B4((5, 5))
+                    
+                            A -->|"Firmar Contrato (-1 costo)"| C[2. Retador]
+                            C -->|"No Entrar"| C1((0, 9))
+                            C -->|"Entrar"| C2{3. Lucha Forzada}
+                            C2 -->|"Contrato se activa"| C3["(-10, -11)"]
+
+                            style A fill:#28a745,color:#fff,stroke:#333,stroke-width:2px
+                            style B fill:#007bff,color:#fff,stroke:#333,stroke-width:2px
+                            style C fill:#007bff,color:#fff,stroke:#333,stroke-width:2px
+                            style B2 fill:#28a745,color:#fff,stroke:#333,stroke-width:2px
+                            style C2 fill:#dc3545,color:#fff,stroke:#333,stroke-width:2px
+                    </div>
+                </div>
+    
+                <h4>Solución Paso a Paso:</h4>
+                <p class="step">Paso 1: Analizar la rama superior (No Firmar).</p>
+                <p>Esta rama es idéntica a nuestro primer ejercicio. Ya sabemos por inducción hacia atrás que el resultado aquí es <strong>(Entrar, Acomodarse)</strong> con pagos <strong>(5, 5)</strong>.</p>
+                
+                <p class="step">Paso 2: Analizar la rama inferior (Firmar Contrato).</p>
+                <p>Nos situamos en la decisión del <strong>Retador</strong> (nodo C). Si elige "No Entrar", su pago es 0. Si elige "Entrar", sabe que el contrato obliga al Incumbente a Luchar, resultando en un pago de <strong class="text-danger">-10</strong> para él. Entre 0 y -10, el Retador elige <strong>No Entrar</strong>. El resultado en esta rama es <strong>(0, 9)</strong> (el 9 viene de 10 de monopolio menos 1 del costo del contrato).</p>
+
+                <p class="step">Paso 3: Retroceder a la decisión inicial del Incumbente.</p>
+                <p>El Incumbente ahora compara los resultados finales de sus dos opciones iniciales:</p>
+                <ul>
+                    <li>Si elige <strong>No Firmar</strong>, el juego termina con un pago de <strong class="text-secondary">5</strong> para él.</li>
+                    <li>Si elige <strong>Firmar Contrato</strong>, el juego termina con un pago de <strong class="text-success">9</strong> para él.</li>
+                </ul>
+                <p>Racionalmente, el Incumbente elige <strong>Firmar el Contrato</strong>. El compromiso, aunque costoso, le ha permitido disuadir al retador y obtener un beneficio mayor.</p>
+                <p><strong>EPS: (Incumbente: Firmar; Retador: No Entrar si firma, Entrar si no firma; Incumbente: Acomodarse si no firma y el retador entra).</strong></p>
+            </div>
+        </details>
+    
+        <!-- Módulo 4: Aplicaciones -->
+        <details open>
+            <summary>4. Aplicaciones: Disuasión y Negociación</summary>
+            <div class="content">
+                <h4>Aplicación a la Disuasión</h4>
+                <p>El juego de la entrada al mercado con compromiso es un ejemplo perfecto de <span class="concept">disuasión estratégica</span>. El objetivo del Incumbente no es luchar, sino <strong>evitar la lucha</strong> convenciendo al Retador de que entrar no es una buena idea. El compromiso (la inversión costosa, el contrato público) es la herramienta que hace efectiva la disuasión.</p>
+                <blockquote>Ejemplos del mundo real: La doctrina de "Destrucción Mutua Asegurada" durante la Guerra Fría. Construir el arsenal nuclear era el "compromiso costoso" que hacía creíble la amenaza de una represalia devastadora, disuadiendo un primer ataque.</blockquote>
+    
+                <h4>Aplicación a la Negociación: El Juego del Ultimátum</h4>
+                <p>Este es un juego simple que ilustra el poder y los límites de la racionalidad en la negociación.</p>
+                <div class="exercise">
+                    <p><strong>Situación:</strong> Hay dos jugadores y $100 para repartir.</p>
+                    <ol>
+                        <li>El <strong>Jugador 1</strong> propone una división (ej: $99 para mí, $1 para ti).</li>
+                        <li>El <strong>Jugador 2</strong> observa la oferta y solo puede responder de dos maneras: <strong>Aceptar</strong> (se realiza la división) o <strong>Rechazar</strong> (nadie recibe nada, ambos obtienen $0).</li>
+                    </ol>
+                    <div class="mermaid">
+                        graph TD
+                            A[1. Jugador 1] -->|"Propone (99, 1)"| B[2. Jugador 2]
+                            B -->|"Aceptar"| B1((99, 1))
+                            B -->|"Rechazar"| B2((0, 0))
+                            
+                            A -->|"Propone (50, 50)"| C[2. Jugador 2]
+                            C -->|"Aceptar"| C1((50, 50))
+                            C -->|"Rechazar"| C2((0, 0))
+
+                            A -->|"...otras propuestas..."| D[...]
+
+                            style A fill:#007bff,color:#fff,stroke:#333,stroke-width:2px
+                            style B fill:#28a745,color:#fff,stroke:#333,stroke-width:2px
+                            style C fill:#28a745,color:#fff,stroke:#333,stroke-width:2px
+                    </div>
+                </div>
+    
+                <h4>Solución Paso a Paso:</h4>
+                <p class="step">Paso 1: Analizar la decisión del Jugador 2.</p>
+                <p>El Jugador 2 se enfrenta a una oferta. Si la oferta es de $X (donde X > 0), sus opciones son:</p>
+                <ul>
+                    <li><strong>Aceptar:</strong> Recibe $X.</li>
+                    <li><strong>Rechazar:</strong> Recibe $0.</li>
+                </ul>
+                <p>Un jugador puramente racional, que solo se preocupa por su pago monetario, aceptará cualquier oferta mayor que cero. $1 es mejor que $0.</p>
+    
+                <p class="step">Paso 2: Retroceder a la decisión del Jugador 1.</p>
+                <p>El Jugador 1 anticipa esto. Sabe que el Jugador 2 aceptará cualquier cosa por encima de cero. Para maximizar su propio beneficio, el Jugador 1 debería ofrecer la menor cantidad posible que el Jugador 2 aceptaría.</p>
+                <p><strong>La predicción de la inducción hacia atrás es que el Jugador 1 ofrecerá $1, y el Jugador 2 aceptará.</strong> El resultado sería ($99, $1).</p>
+    
+                <blockquote><strong>Discusión para la clase:</strong> ¿Es esto lo que ocurre en la realidad? No. En experimentos, ofertas percibidas como "injustas" (por debajo de $20-$30) son frecuentemente rechazadas. Esto nos enseña una lección vital: los modelos de teoría de juegos asumen una racionalidad pura que no siempre captura las emociones humanas como el orgullo, el altruismo o el sentido de la justicia. El rechazo actúa como un "castigo" a una oferta injusta, aunque sea a un costo para uno mismo.</blockquote>
+            </div>
+        </details>
         <div class="text-center">
              <a href="index.html" class="cta-button">Volver al Temario</a>
         </div>
@@ -99,24 +352,9 @@
     <footer>
         <p>&copy; 2025 Dr. Marco Antonio Leon Zaragoza</p>
     </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const headers = document.querySelectorAll('.collapsible-header');
-            headers.forEach(header => {
-                header.addEventListener('click', function() {
-                    this.classList.toggle('active');
-                    const content = this.nextElementSibling;
-                    if (content.style.maxHeight) {
-                        content.style.maxHeight = null;
-                        content.classList.remove('show');
-                    } else {
-                        content.style.maxHeight = content.scrollHeight + "px";
-                        content.classList.add('show');
-                    }
-                });
-            });
-        });
-    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

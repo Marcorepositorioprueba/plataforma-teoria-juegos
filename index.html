@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -202,6 +201,102 @@
             padding-top: 1.5rem;
         }
 
+        /* Estilos para el Modal de Atención */
+        .modal-attention {
+            display: none; /* Oculto por defecto */
+            position: fixed; /* Permanece en su lugar */
+            z-index: 1001; /* Se superpone a todo */
+            left: 0;
+            top: 0;
+            width: 100%; /* Ancho completo */
+            height: 100%; /* Alto completo */
+            overflow: auto; /* Habilitar scroll si es necesario */
+            background-color: rgba(0,0,0,0.6); /* Fondo oscuro semi-transparente */
+            display: flex; /* Para centrar el contenido */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-attention-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 80%; /* Podría ser un porcentaje o un max-width */
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            animation-name: animatemodal;
+            animation-duration: 0.4s;
+        }
+
+        @keyframes animatemodal {
+            from {top: -300px; opacity: 0}
+            to {top: 0; opacity: 1}
+        }
+
+        .close-attention-modal {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-attention-modal:hover,
+        .close-attention-modal:focus {
+            color: black;
+            text-decoration: none;
+        }
+
+        .modal-attention-content h2 {
+            color: #d9534f; /* Color de advertencia */
+            font-size: 1.8rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-attention-content h2 .fas {
+            margin-right: 10px;
+        }
+
+        .modal-attention-content ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 1.5rem;
+        }
+
+        .modal-attention-content ul li {
+            margin-bottom: 1rem;
+        }
+
+        .modal-attention-content ul li a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .modal-attention-content ul li a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .modal-attention-content {
+                width: 95%; /* Ocupa casi todo el ancho en móviles */
+                padding: 20px; /* Reduce el padding */
+            }
+            .modal-attention-content h2 {
+                font-size: 1.5rem; /* Ajusta el tamaño del título */
+            }
+            .modal-attention-content ul li {
+                font-size: 0.95rem; /* Ajusta el tamaño del texto de la lista */
+            }
+        }
     </style>
 </head>
 <body>
@@ -263,6 +358,15 @@
                     <div class="session-buttons">
                         <a href="clase2.html" class="btn-theory">Ver Teoría</a>
                         <a href="clase2_practica.html" class="btn-practice">Hacer Práctica</a>
+                    </div>
+                </div>
+                <!-- Inducción a ArcMap -->
+                <div class="session-card">
+                    <div class="session-status available">Disponible</div>
+                    <h3>Inducción a ArcMap</h3>
+                    <p>Guía detallada para tus primeros pasos en ArcMap.</p>
+                    <div class="session-buttons">
+                        <a href="induccion_a_arcmap.html" class="btn-practice">Ver Guía</a>
                     </div>
                 </div>
                 <!-- Sesión 3 -->
@@ -372,6 +476,28 @@
         <p>&copy; 2025 Dr. Marco Antonio Leon Zaragoza</p>
     </footer>
 
+    <!-- Modal de Atención -->
+    <div id="attentionModal" class="modal-attention">
+        <div class="modal-attention-content">
+            <span class="close-attention-modal">&times;</span>
+            <h2><i class="fas fa-exclamation-triangle"></i> ¡Atención Importante!</h2>
+            <p>Por favor, revisa la siguiente información clave para el curso:</p>
+            <ul>
+                <li>
+                    <a href="clase2_practica.html#ejercicios-modelado">
+                        <strong>Instrucciones de Entrega:</strong> Trabajo de modelado de situaciones para Teoría de Juegos (Sesión 2).
+                    </a>
+                </li>
+                <li>
+                    <a href="induccion_a_arcmap.html">
+                        <strong>Guía Detallada:</strong> Inducción a ArcMap.
+                    </a>
+                </li>
+            </ul>
+            <p>Mantente al tanto de estas secciones para un mejor aprovechamiento del curso.</p>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const headers = document.querySelectorAll('.collapsible-header');
@@ -391,6 +517,27 @@
                         }
                     }
                 });
+            });
+
+            // Script para el modal de atención
+            const attentionModal = document.getElementById('attentionModal');
+            const closeAttentionModal = document.querySelector('.close-attention-modal');
+
+            // Mostrar el modal al cargar la página
+            window.addEventListener('load', function() {
+                attentionModal.style.display = 'flex';
+            });
+
+            // Cerrar el modal al hacer clic en la 'x'
+            closeAttentionModal.addEventListener('click', function() {
+                attentionModal.style.display = 'none';
+            });
+
+            // Cerrar el modal al hacer clic fuera del contenido
+            window.addEventListener('click', function(event) {
+                if (event.target == attentionModal) {
+                    attentionModal.style.display = 'none';
+                }
             });
         });
     </script>
