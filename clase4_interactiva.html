@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 4 (Interactivo) | Teoría de Juegos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .top-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 2.5rem; background-color: #fff;
+            border-bottom: 1px solid #dee2e6; position: sticky; top: 0; z-index: 1000;
+        }
+        .top-header .logo img { max-height: 75px; }
+        .main-nav a { margin: 0 1.5rem; text-decoration: none; color: #495057; font-weight: 600; transition: color 0.3s; }
+        .main-nav a:hover { color: #0056b3; }
+
+        .content-area { padding: 2rem 2.5rem 4rem 2.5rem; max-width: 1200px; margin: auto; }
+        .card {
+            background-color: #fff; border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+            padding: 2.5rem; margin-bottom: 2.5rem;
+        }
+        .card h2 {
+            font-size: 2.2rem; font-weight: 700; margin-top: 0; margin-bottom: 1.5rem;
+            color: #1a253c; border-bottom: 3px solid #c0392b; padding-bottom: 1rem;
+        }
+        .card h3 {
+            font-size: 1.6rem; font-weight: 600; color: #c0392b; margin-top: 2.5rem; margin-bottom: 1rem;
+        }
+        
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        .payoff-matrix {
+            border: 1px solid #e0e0e0; border-radius: 8px; padding: 1.5rem;
+            background-color: #fafafa;
+        }
+        .payoff-matrix h4 { margin-top: 0; text-align: center; font-size: 1.2rem; color: #333; }
+        .payoff-matrix table { width: 100%; border-collapse: collapse; text-align: center; }
+        .payoff-matrix th, .payoff-matrix td { padding: 0.8rem; border: 1px solid #ccc; }
+        .payoff-matrix th { background-color: #e9ecef; }
+        .payoff-matrix .player1-action { font-weight: 600; }
+        .payoff-matrix .payouts { font-family: 'Roboto Mono', monospace; font-weight: 500; }
+        .payout-you { color: #007bff; font-weight: 700; }
+        .payout-opponent { color: #c0392b; font-weight: 700; }
+
+        .interactive-console {
+            margin-top: 2rem; padding: 2rem; border-radius: 8px;
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            color: #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .slider-container { padding: 1rem 0; }
+        .slider-container label { display: block; font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; text-align: center; }
+        .slider { width: 100%; cursor: pointer; }
+        .belief-value { text-align: center; font-size: 1.3rem; font-family: 'Roboto Mono', monospace; margin-top: 0.5rem; font-weight: 700; color: #ecf0f1; }
+
+        .results-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;
+        }
+        .result-card {
+            background-color: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 8px;
+            border: 2px solid transparent; transition: border-color 0.3s, background-color 0.3s;
+        }
+        .result-card.best-response {
+            border-color: #28a745;
+            background-color: rgba(40, 167, 69, 0.15);
+        }
+        .result-card h4 { margin-top: 0; font-size: 1.3rem; color: #95a5a6; }
+        .result-card .expected-payoff { font-size: 1.8rem; font-weight: 700; font-family: 'Roboto Mono', monospace; color: #fff; text-align: center; margin: 1rem 0; }
+        .calculation { font-family: 'Roboto Mono', monospace; font-size: 0.9rem; color: #bdc3c7; white-space: pre-wrap; }
+
+        .analysis-box {
+            margin-top: 2.5rem; padding: 2rem; background-color: #ecf0f1;
+            border-radius: 8px; border-left: 5px solid #c0392b;
+        }
+        .analysis-box h3 { margin-top: 0; color: #2c3e50; }
+        .analysis-box p { line-height: 1.7; color: #34495e; }
+        .analysis-box strong { color: #2c3e50; }
+        .threshold-warning {
+            text-align: center; font-weight: 600; color: #c0392b;
+            padding: 1rem; background-color: #f9e5e3; border-radius: 5px;
+            margin-top: 1.5rem; display: none;
+        }
+        hr.section-divider {
+            border: 0;
+            height: 2px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0));
+            margin: 4rem 0;
+        }
+
+        footer { text-align: center; padding: 3rem 0; background-color: #34495e; color: #fff; }
+    </style>
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="logo"><a href="index.html"><img src="recursos/logoclh.jpg" alt="Logo del Curso"></a></div>
+        <nav class="main-nav">
+            <a href="clase4.html">Volver a la Clase Teórica</a>
+            <a href="index.html">Temario</a>
+            <a href="clase5.html">Sesión Siguiente</a>
+        </nav>
+    </header>
+
+    <main class="content-area">
+        <!-- SIMULADOR 1: CRISIS DE LA ESCALADA -->
+        <div class="card">
+            <h2><i class="fas fa-monument"></i> 1. Simulador Bayesiano: La Crisis de la Escalada</h2>
+            <p>Esta es una simulación de una crisis internacional, un problema clásico en ciencia política analizado con Teoría de Juegos. Jugarás como el líder de un país que debe tomar una decisión crítica bajo <strong>información incompleta</strong>.</p>
+            
+            <h3>El Escenario</h3>
+            <p>Tu país está en una disputa territorial con un país vecino. Tras semanas de tensión, debes decidir tu siguiente movimiento. Tienes dos opciones:</p>
+            <ul>
+                <li><strong>Escalar:</strong> Realizar una demostración de fuerza (movilizar tropas, emitir un ultimátum). Esto puede llevar a una gran victoria si el oponente cede, o a una guerra catastrófica si no lo hace.</li>
+                <li><strong>Negociar:</strong> Proponer una cumbre diplomática y buscar una solución pacífica. Evita la guerra, pero puede ser visto como debilidad, resultando en una pequeña concesión o manteniendo el status quo.</li>
+            </ul>
+            <p>El 'tipo' del líder oponente es información incompleta. No sabes si es un <strong>"Halcón"</strong> (resuelto a pelear) o una <strong>"Paloma"</strong> (prefiere la paz), pero tienes una creencia sobre la probabilidad de cada uno.</p>
+
+            <div class="scenario-grid">
+                <div class="payoff-matrix">
+                    <h4>Matriz de Pagos si el Oponente es <span class="payout-opponent">PALOMA</span> (Cede)</h4>
+                    <table>
+                        <tr><th></th><th>Oponente Cede</th></tr>
+                        <tr><td class="player1-action">Escalar</td><td class="payouts"><span class="payout-you">10</span> (Victoria)</td></tr>
+                        <tr><td class="player1-action">Negociar</td><td class="payouts"><span class="payout-you">1</span> (Status Quo)</td></tr>
+                    </table>
+                </div>
+                <div class="payoff-matrix">
+                    <h4>Matriz de Pagos si el Oponente es <span class="payout-opponent">HALCÓN</span> (Lucha)</h4>
+                    <table>
+                        <tr><th></th><th>Oponente Lucha</th></tr>
+                        <tr><td class="player1-action">Escalar</td><td class="payouts"><span class="payout-you">-10</span> (Guerra)</td></tr>
+                        <tr><td class="player1-action">Negociar</td><td class="payouts"><span class="payout-you">-2</span> (Concesión)</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="interactive-console">
+            <div class="slider-container">
+                <label for="belief-slider-crisis">Mi Creencia: ¿Qué probabilidad hay de que el líder oponente sea "Paloma"?</label>
+                <input type="range" id="belief-slider-crisis" class="slider" min="0" max="100" value="50" step="1">
+                <div id="belief-value-crisis" class="belief-value">P(Paloma) = 50% | P(Halcón) = 50%</div>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-card" id="escalar-card-crisis">
+                    <h4>Acción: Escalar</h4>
+                    <div class="expected-payoff" id="escalar-ep-crisis"></div>
+                    <p class="calculation" id="escalar-calc-crisis"></p>
+                </div>
+                <div class="result-card" id="negociar-card-crisis">
+                    <h4>Acción: Negociar</h4>
+                    <div class="expected-payoff" id="negociar-ep-crisis"></div>
+                    <p class="calculation" id="negociar-calc-crisis"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="analysis-box">
+                <h3><i class="fas fa-comment-dots"></i> Análisis Estratégico Dinámico</h3>
+                <p id="analysis-why-crisis"></p>
+                <p id="analysis-what-crisis"></p>
+                <div id="threshold-warning-crisis" class="threshold-warning"></div>
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- SIMULADOR 2: COMPETENCIA ELECTORAL -->
+        <div class="card">
+            <h2 style="border-bottom-color: #2980b9;"><i class="fas fa-vote-yea"></i> 2. Simulador Bayesiano: La Competencia Electoral</h2>
+            <p>Este simulador modela el dilema de un candidato al decidir su plataforma electoral. Debe elegir entre apelar al votante mediano o energizar a su base, sin saber con certeza cuál es el estado de ánimo del electorado.</p>
+            
+            <h3>El Escenario</h3>
+            <p>Eres el candidato de un partido en una elección presidencial. Debes definir el tono y contenido de tu plataforma:</p>
+            <ul>
+                <li><strong>Plataforma de Centro:</strong> Un discurso moderado, diseñado para atraer a votantes independientes y del centro del espectro político.</li>
+                <li><strong>Plataforma de Base:</strong> Un discurso con propuestas fuertes y definidas, diseñado para movilizar a los votantes más leales y comprometidos con tu partido.</li>
+            </ul>
+            <p>El 'tipo' del electorado es información incompleta. No sabes si el electorado está <strong>"Moderado"</strong> (donde el centro es clave) o <strong>"Polarizado"</strong> (donde la movilización de la base es más efectiva).</p>
+
+            <div class="scenario-grid">
+                <div class="payoff-matrix">
+                    <h4>Pagos si el Electorado es <span class="payout-opponent">MODERADO</span></h4>
+                    <table>
+                        <tr><th></th><th>Electorado Reacciona</th></tr>
+                        <tr><td class="player1-action">Plataforma de Centro</td><td class="payouts"><span class="payout-you">10</span> (Ganas)</td></tr>
+                        <tr><td class="player1-action">Plataforma de Base</td><td class="payouts"><span class="payout-you">-5</span> (Pierdes)</td></tr>
+                    </table>
+                </div>
+                <div class="payoff-matrix">
+                    <h4>Pagos si el Electorado es <span class="payout-opponent">POLARIZADO</span></h4>
+                    <table>
+                        <tr><th></th><th>Electorado Reacciona</th></tr>
+                        <tr><td class="player1-action">Plataforma de Centro</td><td class="payouts"><span class="payout-you">2</span> (Apático)</td></tr>
+                        <tr><td class="player1-action">Plataforma de Base</td><td class="payouts"><span class="payout-you">8</span> (Ganas)</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="interactive-console">
+            <div class="slider-container">
+                <label for="belief-slider-electoral">Mi Creencia: ¿Qué probabilidad hay de que el electorado sea "Moderado"?</label>
+                <input type="range" id="belief-slider-electoral" class="slider" min="0" max="100" value="50" step="1">
+                <div id="belief-value-electoral" class="belief-value">P(Moderado) = 50% | P(Polarizado) = 50%</div>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-card" id="centro-card-electoral">
+                    <h4>Acción: Plataforma de Centro</h4>
+                    <div class="expected-payoff" id="centro-ep-electoral"></div>
+                    <p class="calculation" id="centro-calc-electoral"></p>
+                </div>
+                <div class="result-card" id="base-card-electoral">
+                    <h4>Acción: Plataforma de Base</h4>
+                    <div class="expected-payoff" id="base-ep-electoral"></div>
+                    <p class="calculation" id="base-calc-electoral"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="analysis-box" style="border-left-color: #2980b9;">
+                <h3><i class="fas fa-comment-dots"></i> Análisis Estratégico Dinámico</h3>
+                <p id="analysis-why-electoral"></p>
+                <p id="analysis-what-electoral"></p>
+                <div id="threshold-warning-electoral" class="threshold-warning"></div>
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- SIMULADOR 3: DILEMA DE LA ALIANZA -->
+        <div class="card">
+            <h2 style="border-bottom-color: #27ae60;"><i class="fas fa-shield-alt"></i> 3. Simulador Bayesiano: El Dilema de la Alianza</h2>
+            <p>Este simulador explora el problema del "free-riding" (aprovecharse) en alianzas militares. Debes decidir el nivel de contribución de tu país sin saber cómo reaccionará tu principal aliado.</p>
+            
+            <h3>El Escenario</h3>
+            <p>Tu país es miembro de una alianza militar. Debes decidir tu política de gasto en defensa para el próximo año:</p>
+            <ul>
+                <li><strong>Contribuir Plenamente:</strong> Cumplir con el objetivo de gasto acordado (ej. 2% del PIB). Es costoso, pero mantiene la cohesión de la alianza.</li>
+                <li><strong>Aprovecharse (Free-ride):</strong> Reducir el gasto en defensa, confiando en que la seguridad será provista por los aliados más grandes. Ahorra dinero, pero arriesga la ira del aliado.</li>
+            </ul>
+            <p>El 'tipo' de tu principal aliado es información incompleta. No sabes si su postura es <strong>"Vigilante"</strong> (castigará a los que no pagan) o <strong>"Laxo"</strong> (lo tolerará para mantener la unidad).</p>
+
+            <div class="scenario-grid">
+                <div class="payoff-matrix">
+                    <h4>Pagos si el Aliado es <span class="payout-opponent">VIGILANTE</span></h4>
+                    <table>
+                        <tr><th></th><th>Aliado Reacciona</th></tr>
+                        <tr><td class="player1-action">Contribuir Plenamente</td><td class="payouts"><span class="payout-you">5</span> (Seguridad)</td></tr>
+                        <tr><td class="player1-action">Aprovecharse</td><td class="payouts"><span class="payout-you">-10</span> (Castigo)</td></tr>
+                    </table>
+                </div>
+                <div class="payoff-matrix">
+                    <h4>Pagos si el Aliado es <span class="payout-opponent">LAXO</span></h4>
+                    <table>
+                        <tr><th></th><th>Aliado Reacciona</th></tr>
+                        <tr><td class="player1-action">Contribuir Plenamente</td><td class="payouts"><span class="payout-you">2</span> (Pagaste de más)</td></tr>
+                        <tr><td class="player1-action">Aprovecharse</td><td class="payouts"><span class="payout-you">10</span> (Seguridad Gratis)</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="interactive-console">
+            <div class="slider-container">
+                <label for="belief-slider-alliance">Mi Creencia: ¿Qué probabilidad hay de que el aliado sea "Vigilante"?</label>
+                <input type="range" id="belief-slider-alliance" class="slider" min="0" max="100" value="50" step="1">
+                <div id="belief-value-alliance" class="belief-value">P(Vigilante) = 50% | P(Laxo) = 50%</div>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-card" id="contribuir-card-alliance">
+                    <h4>Acción: Contribuir Plenamente</h4>
+                    <div class="expected-payoff" id="contribuir-ep-alliance"></div>
+                    <p class="calculation" id="contribuir-calc-alliance"></p>
+                </div>
+                <div class="result-card" id="aprovechar-card-alliance">
+                    <h4>Acción: Aprovecharse</h4>
+                    <div class="expected-payoff" id="aprovechar-ep-alliance"></div>
+                    <p class="calculation" id="aprovechar-calc-alliance"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="analysis-box" style="border-left-color: #27ae60;">
+                <h3><i class="fas fa-comment-dots"></i> Análisis Estratégico Dinámico</h3>
+                <p id="analysis-why-alliance"></p>
+                <p id="analysis-what-alliance"></p>
+                <div id="threshold-warning-alliance" class="threshold-warning"></div>
+            </div>
+        </div>
+
+    
+        <hr class="section-divider">
+
+        <!-- SIMULADOR 4: PELEA DE GALLOS -->
+        <div class="card">
+            <h2 style="border-bottom-color: #d35400;"><i class="fas fa-fist-raised"></i> 4. Simulador Bayesiano: La Pelea de Gallos</h2>
+            <p>Este es un modelo simplificado de la decisión de un entrenador antes de una pelea de gallos. El entrenador debe decidir si acepta una pelea sin conocer la verdadera calidad del gallo oponente.</p>
+            
+            <h3>El Escenario</h3>
+            <p>Eres el dueño de un gallo de pelea que consideras "Promedio". Te ofrecen una pelea con una bolsa de premios considerable, pero el oponente es de un entrenador con reputación mixta. Tienes dos opciones:</p>
+            <ul>
+                <li><strong>Pelear:</strong> Aceptar el combate. Arriesgas a tu gallo y la cuota de entrada por la oportunidad de ganar el premio y la gloria.</li>
+                <li><strong>No Pelear:</strong> Retirarte del combate. No ganas ni pierdes nada, manteniendo a tu gallo seguro para otra ocasión.</li>
+            </ul>
+            <p>El 'tipo' del gallo oponente es información incompleta. No sabes si es un <strong>"Campeón"</strong> (un gallo de élite, muy probable que gane) o simplemente otro <strong>"Promedio"</strong> (con quien tendrías una pelea justa).</p>
+
+            <div class="scenario-grid">
+                <div class="payoff-matrix">
+                    <h4>Pagos si el Oponente es <span class="payout-opponent">CAMPEÓN</span></h4>
+                    <table>
+                        <tr><th></th><th>Oponente Reacciona</th></tr>
+                        <tr><td class="player1-action">Pelear</td><td class="payouts"><span class="payout-you">-50</span> (Derrota Segura)</td></tr>
+                        <tr><td class="player1-action">No Pelear</td><td class="payouts"><span class="payout-you">0</span> (Retirada)</td></tr>
+                    </table>
+                </div>
+                <div class="payoff-matrix">
+                    <h4>Pagos si el Oponente es <span class="payout-opponent">PROMEDIO</span></h4>
+                    <table>
+                        <tr><th></th><th>Oponente Reacciona</th></tr>
+                        <tr><td class="player1-action">Pelear</td><td class="payouts"><span class="payout-you">25</span> (Pelea Justa)</td></tr>
+                        <tr><td class="player1-action">No Pelear</td><td class="payouts"><span class="payout-you">0</span> (Retirada)</td></tr>
+                    </table>
+                </div>
+            </div>
+            <p style="font-size: 0.9rem; color: #777; margin-top: 1rem;">*Nota: El pago de +25 por una "Pelea Justa" es un pago esperado simplificado, asumiendo una probabilidad de 50/50 de ganar (+100) o perder (-50).</p>
+        </div>
+
+        <div class="interactive-console">
+            <div class="slider-container">
+                <label for="belief-slider-gallos">Mi Creencia: ¿Qué probabilidad hay de que el gallo oponente sea "Campeón"?</label>
+                <input type="range" id="belief-slider-gallos" class="slider" min="0" max="100" value="50" step="1">
+                <div id="belief-value-gallos" class="belief-value">P(Campeón) = 50% | P(Promedio) = 50%</div>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-card" id="pelear-card-gallos">
+                    <h4>Acción: Pelear</h4>
+                    <div class="expected-payoff" id="pelear-ep-gallos"></div>
+                    <p class="calculation" id="pelear-calc-gallos"></p>
+                </div>
+                <div class="result-card" id="no-pelear-card-gallos">
+                    <h4>Acción: No Pelear</h4>
+                    <div class="expected-payoff" id="no-pelear-ep-gallos"></div>
+                    <p class="calculation" id="no-pelear-calc-gallos"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="analysis-box" style="border-left-color: #d35400;">
+                <h3><i class="fas fa-comment-dots"></i> Análisis Estratégico Dinámico</h3>
+                <p id="analysis-why-gallos"></p>
+                <p id="analysis-what-gallos"></p>
+                <div id="threshold-warning-gallos" class="threshold-warning"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Dr. Marco Antonio Leon Zaragoza</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- SIMULADOR 1: CRISIS DE LA ESCALADA ---
+            (function() {
+                const payoffs = {
+                    escalar: { paloma: 10, halcon: -10 },
+                    negociar: { paloma: 1, halcon: -2 }
+                };
+                const slider = document.getElementById('belief-slider-crisis');
+                const beliefValueDisplay = document.getElementById('belief-value-crisis');
+                const escalarCard = document.getElementById('escalar-card-crisis');
+                const escalarEP = document.getElementById('escalar-ep-crisis');
+                const escalarCalc = document.getElementById('escalar-calc-crisis');
+                const negociarCard = document.getElementById('negociar-card-crisis');
+                const negociarEP = document.getElementById('negociar-ep-crisis');
+                const negociarCalc = document.getElementById('negociar-calc-crisis');
+                const analysisWhy = document.getElementById('analysis-why-crisis');
+                const analysisWhat = document.getElementById('analysis-what-crisis');
+                const thresholdWarning = document.getElementById('threshold-warning-crisis');
+
+                function updateSimulator() {
+                    const pPaloma = slider.value / 100;
+                    const pHalcon = 1 - pPaloma;
+                    beliefValueDisplay.textContent = `P(Paloma) = ${Math.round(pPaloma * 100)}% | P(Halcón) = ${Math.round(pHalcon * 100)}%`;
+                    const epEscalar = (pPaloma * payoffs.escalar.paloma) + (pHalcon * payoffs.escalar.halcon);
+                    const epNegociar = (pPaloma * payoffs.negociar.paloma) + (pHalcon * payoffs.negociar.halcon);
+                    escalarEP.textContent = epEscalar.toFixed(2);
+                    escalarCalc.textContent = `(${pPaloma.toFixed(2)} * ${payoffs.escalar.paloma}) + (${pHalcon.toFixed(2)} * ${payoffs.escalar.halcon})`;
+                    negociarEP.textContent = epNegociar.toFixed(2);
+                    negociarCalc.textContent = `(${pPaloma.toFixed(2)} * ${payoffs.negociar.paloma}) + (${pHalcon.toFixed(2)} * ${payoffs.negociar.halcon})`;
+                    
+                    escalarCard.classList.remove('best-response');
+                    negociarCard.classList.remove('best-response');
+
+                    let bestResponseText;
+                    if (epEscalar > epNegociar) {
+                        escalarCard.classList.add('best-response');
+                        bestResponseText = "<strong>Escalar</strong>";
+                    } else if (epNegociar > epEscalar) {
+                        negociarCard.classList.add('best-response');
+                        bestResponseText = "<strong>Negociar</strong>";
+                    } else {
+                        escalarCard.classList.add('best-response');
+                        negociarCard.classList.add('best-response');
+                        bestResponseText = "ambas acciones son igualmente óptimas";
+                    }
+
+                    analysisWhy.innerHTML = `<strong>El Porqué (La Lógica):</strong> Tu creencia de que el líder oponente es una 'Paloma' es del <strong>${Math.round(pPaloma * 100)}%</strong>. Al calcular tu pago esperado, le das ese peso al escenario de una 'Victoria Diplomática' y un <strong>${Math.round(pHalcon * 100)}%</strong> de peso al escenario de una 'Guerra'.`;
+                    if (bestResponseText.includes("Escalar")) {
+                        analysisWhat.innerHTML = `<strong>Qué Sucedería (La Consecuencia):</strong> Dada tu creencia, tu mejor respuesta es ${bestResponseText}. La probabilidad que le asignas a que el oponente sea una 'Paloma' es lo suficientemente alta como para que la tentación de una victoria decisiva (pago de <strong>${payoffs.escalar.paloma}</strong>) justifique el terrible riesgo de la guerra (pago de <strong>${payoffs.escalar.halcon}</strong>). Estratégicamente, estás apostando a que tu oponente está de farol (bluffing).`;
+                    } else if (bestResponseText.includes("Negociar")) {
+                        analysisWhat.innerHTML = `<strong>Qué Sucedería (La Consecuencia):</strong> Dada tu creencia, tu mejor respuesta es ${bestResponseText}. La probabilidad de que el oponente sea un 'Halcón' es demasiado alta. El riesgo de una guerra catastrófica (pago de <strong>${payoffs.escalar.halcon}</strong>) es tan grande que es preferible aceptar una pequeña concesión (pago de <strong>${payoffs.negociar.halcon}</strong>) para garantizar la paz. No vale la pena poner a prueba su resolución.`;
+                    } else {
+                         analysisWhat.innerHTML = `<strong>Qué Sucedería (La Consecuencia):</strong> Has encontrado el punto de indiferencia. Con esta creencia exacta, el riesgo y la recompensa de 'Escalar' se equilibran perfectamente con la seguridad de 'Negociar'. Cualquier cambio mínimo en tu creencia inclinará la balanza.`;
+                    }
+                    
+                    const threshold = (payoffs.negociar.halcon - payoffs.escalar.halcon) / (payoffs.escalar.paloma - payoffs.negociar.paloma - payoffs.escalar.halcon + payoffs.negociar.halcon);
+                    if (Math.abs(pPaloma - threshold) < 0.01) {
+                        thresholdWarning.style.display = 'block';
+                        thresholdWarning.innerHTML = `&#9888; ¡Estás en el Umbral de Indiferencia! (aprox. ${(threshold * 100).toFixed(0)}%) En este punto, ambas decisiones te dan el mismo pago esperado. Es el punto donde la disuasión se vuelve incierta.`;
+                    } else {
+                        thresholdWarning.style.display = 'none';
+                    }
+                }
+                slider.addEventListener('input', updateSimulator);
+                updateSimulator();
+            })();
+
+            // --- SIMULADOR 2: COMPETENCIA ELECTORAL ---
+            (function() {
+                const payoffs = {
+                    centro: { moderado: 10, polarizado: 2 },
+                    base: { moderado: -5, polarizado: 8 }
+                };
+                const slider = document.getElementById('belief-slider-electoral');
+                const beliefValueDisplay = document.getElementById('belief-value-electoral');
+                const centroCard = document.getElementById('centro-card-electoral');
+                const centroEP = document.getElementById('centro-ep-electoral');
+                const centroCalc = document.getElementById('centro-calc-electoral');
+                const baseCard = document.getElementById('base-card-electoral');
+                const baseEP = document.getElementById('base-ep-electoral');
+                const baseCalc = document.getElementById('base-calc-electoral');
+                const analysisWhy = document.getElementById('analysis-why-electoral');
+                const analysisWhat = document.getElementById('analysis-what-electoral');
+                const thresholdWarning = document.getElementById('threshold-warning-electoral');
+
+                function updateSimulator() {
+                    const pModerado = slider.value / 100;
+                    const pPolarizado = 1 - pModerado;
+                    beliefValueDisplay.textContent = `P(Moderado) = ${Math.round(pModerado * 100)}% | P(Polarizado) = ${Math.round(pPolarizado * 100)}%`;
+                    const epCentro = (pModerado * payoffs.centro.moderado) + (pPolarizado * payoffs.centro.polarizado);
+                    const epBase = (pModerado * payoffs.base.moderado) + (pPolarizado * payoffs.base.polarizado);
+                    centroEP.textContent = epCentro.toFixed(2);
+                    centroCalc.textContent = `(${pModerado.toFixed(2)} * ${payoffs.centro.moderado}) + (${pPolarizado.toFixed(2)} * ${payoffs.centro.polarizado})`;
+                    baseEP.textContent = epBase.toFixed(2);
+                    baseCalc.textContent = `(${pModerado.toFixed(2)} * ${payoffs.base.moderado}) + (${pPolarizado.toFixed(2)} * ${payoffs.base.polarizado})`;
+
+                    centroCard.classList.remove('best-response');
+                    baseCard.classList.remove('best-response');
+
+                    let bestResponseText;
+                    if (epCentro > epBase) {
+                        centroCard.classList.add('best-response');
+                        bestResponseText = "<strong>Plataforma de Centro</strong>";
+                    } else if (epBase > epCentro) {
+                        baseCard.classList.add('best-response');
+                        bestResponseText = "<strong>Plataforma de Base</strong>";
+                    } else {
+                        centroCard.classList.add('best-response');
+                        baseCard.classList.add('best-response');
+                        bestResponseText = "ambas plataformas son igualmente efectivas";
+                    }
+
+                    analysisWhy.innerHTML = `<strong>El Porqué (La Lógica):</strong> Crees que hay un <strong>${Math.round(pModerado * 100)}%</strong> de probabilidad de que el electorado sea 'Moderado'. Esta creencia determina si es más rentable asegurar al votante mediano o arriesgarse para movilizar a tus partidarios más leales.`;
+                    if (bestResponseText.includes("Centro")) {
+                        analysisWhat.innerHTML = `<strong>Qué Sucedería (La Consecuencia):</strong> Con esta creencia, tu mejor estrategia es una ${bestResponseText}. La alta probabilidad de un electorado 'Moderado' hace que la ganancia de atraer al centro (pago de <strong>${payoffs.centro.moderado}</strong>) sea más valiosa que el riesgo de alienarlos. Es la estrategia clásica del 'votante mediano'.`;
+                    } else if (bestResponseText.includes("Base")) {
+                        analysisWhat.innerHTML = `<strong>Qué Sucedería (La Consecuencia):</strong> Con esta creencia, tu mejor estrategia es una ${bestResponseText}. La probabilidad de un electorado 'Polarizado' es tan alta que la ganancia de energizar a tu base (pago de <strong>${payoffs.base.polarizado}</strong>) supera el riesgo de perder el centro. Estás apostando a que la movilización es más importante que la moderación.`;
+                    } else {
+                         analysisWhat.innerHTML = `<strong>Qué Sucedería (La Consecuencia):</strong> Has encontrado el punto de indiferencia. Con esta creencia, la estrategia de moderación y la de movilización te darían la misma probabilidad de ganar. El electorado es perfectamente ambiguo.`;
+                    }
+                    
+                    const threshold = (payoffs.base.polarizado - payoffs.centro.polarizado) / (payoffs.centro.moderado - payoffs.base.moderado - payoffs.centro.polarizado + payoffs.base.polarizado);
+                    if (Math.abs(pModerado - threshold) < 0.01) {
+                        thresholdWarning.style.display = 'block';
+                        thresholdWarning.innerHTML = `&#9888; ¡Estás en el Umbral de Indiferencia! (aprox. ${(threshold * 100).toFixed(0)}%) En este punto, la decisión entre apelar al centro o a la base es un volado.`;
+                    } else {
+                        thresholdWarning.style.display = 'none';
+                    }
+                }
+                slider.addEventListener('input', updateSimulator);
+                updateSimulator();
+            })();
+
+            // --- SIMULADOR 3: DILEMA DE LA ALIANZA ---
+            (function() {
+                const payoffs = {
+                    contribuir: { vigilante: 5, laxo: 2 },
+                    aprovechar: { vigilante: -10, laxo: 10 }
+                };
+                const slider = document.getElementById('belief-slider-alliance');
+                const beliefValueDisplay = document.getElementById('belief-value-alliance');
+                const contribuirCard = document.getElementById('contribuir-card-alliance');
+                const contribuirEP = document.getElementById('contribuir-ep-alliance');
+                const contribuirCalc = document.getElementById('contribuir-calc-alliance');
+                const aprovecharCard = document.getElementById('aprovechar-card-alliance');
+                const aprovecharEP = document.getElementById('aprovechar-ep-alliance');
+                const aprovecharCalc = document.getElementById('aprovechar-calc-alliance');
+                const analysisWhy = document.getElementById('analysis-why-alliance');
+                const analysisWhat = document.getElementById('analysis-what-alliance');
+                const thresholdWarning = document.getElementById('threshold-warning-alliance');
+
+                function updateSimulator() {
+                    const pVigilante = slider.value / 100;
+                    const pLaxo = 1 - pVigilante;
+                    beliefValueDisplay.textContent = `P(Vigilante) = ${Math.round(pVigilante * 100)}% | P(Laxo) = ${Math.round(pLaxo * 100)}%`;
+                    const epContribuir = (pVigilante * payoffs.contribuir.vigilante) + (pLaxo * payoffs.contribuir.laxo);
+                    const epAprovechar = (pVigilante * payoffs.aprovechar.vigilante) + (pLaxo * payoffs.aprovechar.laxo);
+                    contribuirEP.textContent = epContribuir.toFixed(2);
+                    contribuirCalc.textContent = `(${pVigilante.toFixed(2)} * ${payoffs.contribuir.vigilante}) + (${pLaxo.toFixed(2)} * ${payoffs.contribuir.laxo})`;
+                    aprovecharEP.textContent = epAprovechar.toFixed(2);
+                    aprovecharCalc.textContent = `(${pVigilante.toFixed(2)} * ${payoffs.aprovechar.vigilante}) + (${pLaxo.toFixed(2)} * ${payoffs.aprovechar.laxo})`;
+
+                    contribuirCard.classList.remove('best-response');
+                    aprovecharCard.classList.remove('best-response');
+
+                    let bestResponseText;
+                    if (epContribuir > epAprovechar) {
+                        contribuirCard.classList.add('best-response');
+                        bestResponseText = "<strong>Contribuir Plenamente</strong>";
+                    } else if (epAprovechar > epContribuir) {
+                        aprovecharCard.classList.add('best-response');
+                        bestResponseText = "<strong>Aprovecharse (Free-ride)</strong>";
+                    } else {
+                        contribuirCard.classList.add('best-response');
+                        aprovecharCard.classList.add('best-response');
+                        bestResponseText = "ambas políticas son igualmente racionales";
+                    }
+
+                    analysisWhy.innerHTML = `<strong>El Porqué (La Lógica):</strong> Tu creencia sobre si tu aliado es 'Vigilante' es del <strong>${Math.round(pVigilante * 100)}%</strong>. Esta probabilidad es crucial para decidir si el riesgo de ser castigado es mayor que el beneficio de ahorrar dinero.`;
+                    if (bestResponseText.includes("Contribuir")) {
+                        analysisWhat.innerHTML = `<strong>Qué Sucedería (La Consecuencia):</strong> Con esta creencia, tu mejor estrategia es ${bestResponseText}. El riesgo de ser castigado por un aliado 'Vigilante' (un pago de <strong>${payoffs.aprovechar.vigilante}</strong>) es demasiado alto. Prefieres la seguridad y la estabilidad de la alianza (pago de <strong>${payoffs.contribuir.vigilante}</strong>) a la tentación del 'free-riding'.`;
+                    } else if (bestResponseText.includes("Aprovecharse")) {
+                        analysisWhat.innerHTML = `<strong>Qué Sucedería (La Consecuencia):</strong> Con esta creencia, tu mejor estrategia es ${bestResponseText}. La probabilidad de que tu aliado sea 'Laxo' es tan alta que la tentación de obtener seguridad gratis (pago de <strong>${payoffs.aprovechar.laxo}</strong>) supera el bajo riesgo de ser castigado. Estás apostando a que tu aliado no tomará represalias.`;
+                    } else {
+                         analysisWhat.innerHTML = `<strong>Qué Sucedería (La Consecuencia):</strong> Has encontrado el punto de indiferencia. Con esta creencia, el beneficio del 'free-riding' se equilibra exactamente con el riesgo de ser castigado. La decisión es un dilema perfecto.`;
+                    }
+                    
+                    const threshold = (payoffs.aprovechar.laxo - payoffs.contribuir.laxo) / (payoffs.contribuir.vigilante - payoffs.aprovechar.vigilante - payoffs.contribuir.laxo + payoffs.aprovechar.laxo);
+                    if (Math.abs(pVigilante - threshold) < 0.01) {
+                        thresholdWarning.style.display = 'block';
+                        thresholdWarning.innerHTML = `&#9888; ¡Estás en el Umbral de Indiferencia! (aprox. ${(threshold * 100).toFixed(0)}%) En este punto, el incentivo para aprovecharse es igual al miedo al castigo.`;
+                    } else {
+                        thresholdWarning.style.display = 'none';
+                    }
+                }
+                slider.addEventListener('input', updateSimulator);
+                updateSimulator();
+            })();
+
+            // --- SIMULADOR 4: PELEA DE GALLOS ---
+            (function() {
+                const payoffs = {
+                    pelear: { campeon: -50, promedio: 25 },
+                    no_pelear: { campeon: 0, promedio: 0 }
+                };
+                const slider = document.getElementById('belief-slider-gallos');
+                const beliefValueDisplay = document.getElementById('belief-value-gallos');
+                const pelearCard = document.getElementById('pelear-card-gallos');
+                const pelearEP = document.getElementById('pelear-ep-gallos');
+                const pelearCalc = document.getElementById('pelear-calc-gallos');
+                const noPelearCard = document.getElementById('no-pelear-card-gallos');
+                const noPelearEP = document.getElementById('no-pelear-ep-gallos');
+                const noPelearCalc = document.getElementById('no-pelear-calc-gallos');
+                const analysisWhy = document.getElementById('analysis-why-gallos');
+                const analysisWhat = document.getElementById('analysis-what-gallos');
+                const thresholdWarning = document.getElementById('threshold-warning-gallos');
+
+                function updateSimulator() {
+                    const pCampeon = slider.value / 100;
+                    const pPromedio = 1 - pCampeon;
+                    beliefValueDisplay.textContent = `P(Campeón) = ${Math.round(pCampeon * 100)}% | P(Promedio) = ${Math.round(pPromedio * 100)}%`;
+                    
+                    const epPelear = (pCampeon * payoffs.pelear.campeon) + (pPromedio * payoffs.pelear.promedio);
+                    const epNoPelear = (pCampeon * payoffs.no_pelear.campeon) + (pPromedio * payoffs.no_pelear.promedio);
+
+                    pelearEP.textContent = epPelear.toFixed(2);
+                    pelearCalc.textContent = `(${pCampeon.toFixed(2)} * ${payoffs.pelear.campeon}) + (${pPromedio.toFixed(2)} * ${payoffs.pelear.promedio})`;
+                    noPelearEP.textContent = epNoPelear.toFixed(2);
+                    noPelearCalc.textContent = `(${pCampeon.toFixed(2)} * ${payoffs.no_pelear.campeon}) + (${pPromedio.toFixed(2)} * ${payoffs.no_pelear.promedio})`;
+
+                    pelearCard.classList.remove('best-response');
+                    noPelearCard.classList.remove('best-response');
+
+                    let bestResponseText;
+                    if (epPelear > epNoPelear) {
+                        pelearCard.classList.add('best-response');
+                        bestResponseText = "<strong>Pelear</strong>";
+                    } else if (epNoPelear > epPelear) {
+                        noPelearCard.classList.add('best-response');
+                        bestResponseText = "<strong>No Pelear</strong>";
+                    } else {
+                        pelearCard.classList.add('best-response');
+                        noPelearCard.classList.add('best-response');
+                        bestResponseText = "ambas decisiones son indiferentes";
+                    }
+
+                    analysisWhy.innerHTML = `<strong>El Porqué (La Lógica):</strong> Tu creencia sobre la calidad del oponente es del <strong>${Math.round(pCampeon * 100)}%</strong> para 'Campeón'. Esta creencia pondera el riesgo de una derrota segura contra la ganancia de una pelea justa.`;
+                    if (bestResponseText.includes("Pelear")) {
+                        analysisWhat.innerHTML = `<strong>Qué Sucedería (La Consecuencia):</strong> Con esta creencia, tu mejor respuesta es ${bestResponseText}. La probabilidad de que el oponente sea solo 'Promedio' es lo suficientemente alta como para que el pago esperado de una pelea justa (<strong>${payoffs.pelear.promedio}</strong>) justifique el riesgo de enfrentarse a un 'Campeón' (pago de <strong>${payoffs.pelear.campeon}</strong>). Es una apuesta calculada que vale la pena.`;
+                    } else if (bestResponseText.includes("No Pelear")) {
+                        analysisWhat.innerHTML = `<strong>Qué Sucedería (La Consecuencia):</strong> Con esta creencia, tu mejor respuesta es ${bestResponseText}. La probabilidad de que el oponente sea un 'Campeón' es demasiado alta. El riesgo de una pérdida casi segura (pago de <strong>${payoffs.pelear.campeon}</strong>) es tan grande que es preferible retirarse y no arriesgar nada (pago de <strong>0</strong>). La prudencia es la mejor estrategia.`;
+                    } else {
+                         analysisWhat.innerHTML = `<strong>Qué Sucedería (La Consecuencia):</strong> Has encontrado el punto de indiferencia. Con esta creencia exacta, el riesgo de 'Pelear' se equilibra perfectamente con la seguridad de 'No Pelear'. Cualquier cambio en tu creencia, por mínimo que sea, te hará preferir una opción sobre la otra.`;
+                    }
+                    
+                    const threshold = (payoffs.no_pelear.promedio - payoffs.pelear.promedio) / (payoffs.pelear.campeon - payoffs.no_pelear.campeon - payoffs.pelear.promedio + payoffs.no_pelear.promedio);
+                    if (Math.abs(pCampeon - threshold) < 0.01) {
+                        thresholdWarning.style.display = 'block';
+                        thresholdWarning.innerHTML = `&#9888; ¡Estás en el Umbral de Indiferencia! (aprox. ${(threshold * 100).toFixed(0)}%) En este punto, el valor esperado de pelear es cero, igual que retirarse.`;
+                    } else {
+                        thresholdWarning.style.display = 'none';
+                    }
+                }
+                slider.addEventListener('input', updateSimulator);
+                updateSimulator();
+            })();
+        });
+    </script>
+</body>
+</html>
