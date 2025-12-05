@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador: Negociación Salarial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f0f2f5; color: #333; }
+        .content-area { max-width: 900px; margin: 40px auto; padding: 2rem 2.5rem; background-color: #fff; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h1, h2 { border-bottom: 2px solid #ffc107; padding-bottom: 0.8rem; color: #343a40; }
+        h1 { font-size: 2.2rem; }
+        h2 { font-size: 1.8rem; margin-top: 2rem; }
+        .cta-button { background-color: #6c757d; color: #fff; padding: 0.8rem 1.5rem; border-radius: 5px; text-decoration: none; font-weight: 600; transition: background-color 0.3s; display: inline-block; margin-top: 1rem; }
+        .cta-button:hover { background-color: #5a6268; }
+        .sim-container { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem; }
+        .param-group { margin-bottom: 1.5rem; }
+        label { font-weight: 600; display: block; margin-bottom: 0.5rem; }
+        input[type="range"] { width: 100%; }
+        .btn { border: none; padding: 12px 20px; font-size: 1rem; font-weight: 600; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
+        .btn-warning { background-color: #ffc107; color: #212529; }
+        .btn-warning:hover { background-color: #e0a800; }
+        #results-area { margin-top: 1.5rem; }
+        #split-bar-container { border: 1px solid #ccc; border-radius: 5px; padding: 5px; }
+        #split-bar { display: flex; height: 50px; border-radius: 5px; overflow: hidden; text-align: center; line-height: 50px; color: white; font-weight: bold; }
+        #empresa-part { background-color: #007bff; }
+        #sindicato-part { background-color: #28a745; }
+        #strike-part { background-color: #dc3545; width: 100%; }
+        #results-text { margin-top: 1rem; padding: 1rem; background-color: #e9ecef; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <main class="content-area">
+        <a href="clase5.html" class="cta-button">&larr; Volver a la Clase 5</a>
+        <h1><i class="fas fa-handshake"></i> Simulador: Juego de Negociación</h1>
+        <h2>Caso de Estudio: Negociación Salarial Empresa vs. Sindicato</h2>
+        <p>Este simulador se basa en el <strong>Juego del Ultimátum</strong>. Hay un fondo de <strong>100 unidades</strong> de beneficio a repartir para el próximo año.</p>
+        <p>Tú, como la <strong>Empresa</strong>, debes proponer un reparto. El <strong>Sindicato</strong> (la IA) decidirá si acepta tu oferta. Si la rechaza, considerándola "injusta", nadie recibe nada y ambos sufren una penalización por la huelga.</p>
+        
+        <div class="sim-container">
+            <h3><i class="fas fa-sliders-h"></i> Tu Oferta como Empresa</h3>
+            <div class="param-group">
+                <label for="offer-slider">Beneficios para el Sindicato (de 100 unidades totales)</label>
+                <p>Tú ofreces: <strong id="sindicato-offer">50</strong> | Para la Empresa: <strong id="empresa-keep">50</strong></p>
+                <input type="range" id="offer-slider" min="0" max="100" value="50">
+            </div>
+            <button id="make-offer-btn" class="btn btn-warning">Presentar Oferta</button>
+        </div>
+
+        <div id="results-area">
+            <h2><i class="fas fa-chart-pie"></i> Resultado de la Negociación</h2>
+            <div id="split-bar-container">
+                <div id="split-bar">
+                    <div id="empresa-part" style="width: 50%;">50</div>
+                    <div id="sindicato-part" style="width: 50%;">50</div>
+                </div>
+            </div>
+            <div id="results-text">
+                <p>Mueve el control deslizante para proponer un reparto y presenta tu oferta.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const offerSlider = document.getElementById('offer-slider');
+        const sindicatoOfferEl = document.getElementById('sindicato-offer');
+        const empresaKeepEl = document.getElementById('empresa-keep');
+        const makeOfferBtn = document.getElementById('make-offer-btn');
+        
+        const empresaPart = document.getElementById('empresa-part');
+        const sindicatoPart = document.getElementById('sindicato-part');
+        const splitBar = document.getElementById('split-bar');
+        const resultsText = document.getElementById('results-text');
+
+        const UNION_FAIRNESS_THRESHOLD = 30; // El sindicato rechazará cualquier oferta por debajo de 30
+        const STRIKE_PAYOFF = -20; // El costo de la huelga para ambos
+
+        offerSlider.addEventListener('input', () => {
+            const offer = parseInt(offerSlider.value);
+            const keep = 100 - offer;
+            sindicatoOfferEl.textContent = offer;
+            empresaKeepEl.textContent = keep;
+        });
+
+        makeOfferBtn.addEventListener('click', () => {
+            const offerToUnion = parseInt(offerSlider.value);
+            const keepForCompany = 100 - offerToUnion;
+
+            if (offerToUnion >= UNION_FAIRNESS_THRESHOLD) {
+                // Oferta Aceptada
+                splitBar.innerHTML = `
+                    <div id="empresa-part" style="width: ${keepForCompany}%;">${keepForCompany}</div>
+                    <div id="sindicato-part" style="width: ${offerToUnion}%;">${offerToUnion}</div>
+                `;
+                resultsText.innerHTML = `
+                    <h3>¡Oferta Aceptada!</h3>
+                    <p>El Sindicato considera que la oferta de <strong>${offerToUnion}</strong> es justa y la acepta.</p>
+                    <p><strong>Pagos Finales:</strong> Empresa: ${keepForCompany}, Sindicato: ${offerToUnion}.</p>
+                `;
+            } else {
+                // Oferta Rechazada -> Huelga
+                splitBar.innerHTML = `
+                    <div id="strike-part">¡HUELGA!</div>
+                `;
+                resultsText.innerHTML = `
+                    <h3>¡Oferta Rechazada!</h3>
+                    <p>El Sindicato considera que la oferta de <strong>${offerToUnion}</strong> es inaceptable y convoca una huelga.</p>
+                    <p><strong>Pagos Finales:</strong> Empresa: ${STRIKE_PAYOFF}, Sindicato: ${STRIKE_PAYOFF}.</p>
+                `;
+            }
+        });
+    });
+    </script>
+</body>
+</html>

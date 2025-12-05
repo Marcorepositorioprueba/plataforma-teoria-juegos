@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador: El Dilema de la OPEP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f0f2f5; color: #333; }
+        .content-area { max-width: 900px; margin: 40px auto; padding: 2rem 2.5rem; background-color: #fff; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h1, h2 { border-bottom: 2px solid #dc3545; padding-bottom: 0.8rem; color: #343a40; }
+        h1 { font-size: 2.2rem; }
+        h2 { font-size: 1.8rem; margin-top: 2rem; }
+        .cta-button { background-color: #6c757d; color: #fff; padding: 0.8rem 1.5rem; border-radius: 5px; text-decoration: none; font-weight: 600; transition: background-color 0.3s; display: inline-block; margin-top: 1rem; }
+        .cta-button:hover { background-color: #5a6268; }
+        .sim-container { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem; }
+        .game-board { display: flex; justify-content: space-around; align-items: center; }
+        .player-card { text-align: center; }
+        .btn { border: none; padding: 12px 20px; font-size: 1rem; font-weight: 600; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; margin: 0 5px; }
+        .btn-cooperate { background-color: #28a745; color: white; }
+        .btn-cooperate:hover { background-color: #218838; }
+        .btn-defect { background-color: #dc3545; color: white; }
+        .btn-defect:hover { background-color: #c82333; }
+        #game-info { margin-top: 1.5rem; padding: 1rem; border-radius: 5px; background-color: #e9ecef; text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+        th, td { border: 1px solid #ccc; padding: 12px; text-align: center; }
+        th { background-color: #343a40; color: white; }
+        .payoff-matrix th { background-color: #6c757d; }
+    </style>
+</head>
+<body>
+    <main class="content-area">
+        <a href="clase5.html" class="cta-button">&larr; Volver a la Clase 5</a>
+        <h1><i class="fas fa-sync-alt"></i> Simulador: Juego Repetido</h1>
+        <h2>Caso de Estudio: El Dilema de la OPEP</h2>
+        <p>Este simulador representa el dilema de los países productores de petróleo. Cada país (jugador) debe decidir si <strong>Cooperar</strong> (respetar la cuota de producción para mantener precios altos) o <strong>Traicionar</strong> (producir más para ganar más a corto plazo, arriesgando una caída de precios).</p>
+        <p>Tú eres el <strong>País A</strong>. Jugarás contra el <strong>País B</strong> (la computadora), que usará la estrategia <strong>"Tit-for-Tat" (Ojo por Ojo)</strong>: comenzará cooperando y luego imitará tu movimiento de la ronda anterior.</p>
+
+        <h2><i class="fas fa-gamepad"></i> Tablero de Juego</h2>
+        <div class="sim-container">
+            <div id="game-info">
+                <p><strong>Ronda:</strong> <span id="round-number">0</span></p>
+                <p><strong>Puntaje Acumulado:</strong> Tú (País A): <span id="user-score">0</span> | País B: <span id="ai-score">0</span></p>
+                <p id="ai-reasoning">El juego no ha comenzado. El País B cooperará en la primera ronda.</p>
+            </div>
+            <div class="game-board">
+                <div class="player-card">
+                    <h3>Tú (País A)</h3>
+                    <p>Elige tu acción para la siguiente ronda:</p>
+                    <button id="cooperate-btn" class="btn btn-cooperate">Cooperar</button>
+                    <button id="defect-btn" class="btn btn-defect">Traicionar</button>
+                </div>
+            </div>
+        </div>
+
+        <h2><i class="fas fa-history"></i> Historial de Rondas</h2>
+        <table id="history-table">
+            <thead>
+                <tr>
+                    <th>Ronda</th>
+                    <th>Tu Jugada</th>
+                    <th>Jugada País B</th>
+                    <th>Tu Pago</th>
+                    <th>Pago País B</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- El historial se llenará aquí -->
+            </tbody>
+        </table>
+        
+        <h2 style="margin-top: 2.5rem;"><i class="fas fa-calculator"></i> Matriz de Pagos (por ronda)</h2>
+        <table class="payoff-matrix">
+             <tr>
+                <th></th>
+                <th>País B Coopera</th>
+                <th>País B Traiciona</th>
+            </tr>
+            <tr>
+                <td><strong>Tú Cooperas</strong></td>
+                <td>(5, 5)</td>
+                <td>(-5, 10)</td>
+            </tr>
+            <tr>
+                <td><strong>Tú Traicionas</strong></td>
+                <td>(10, -5)</td>
+                <td>(0, 0)</td>
+            </tr>
+        </table>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let userScore = 0;
+            let aiScore = 0;
+            let round = 0;
+            let userPreviousMove = 'cooperate'; // Para la lógica del AI en la ronda 2
+
+            const roundNumberEl = document.getElementById('round-number');
+            const userScoreEl = document.getElementById('user-score');
+            const aiScoreEl = document.getElementById('ai-score');
+            const aiReasoningEl = document.getElementById('ai-reasoning');
+            const historyBody = document.querySelector('#history-table tbody');
+
+            const payoffs = {
+                'cooperate-cooperate': { user: 5, ai: 5 },
+                'cooperate-defect':    { user: -5, ai: 10 },
+                'defect-cooperate':    { user: 10, ai: -5 },
+                'defect-defect':       { user: 0, ai: 0 }
+            };
+
+            function playRound(userMove) {
+                round++;
+                
+                // Lógica Tit-for-Tat del AI: Juega lo que el usuario jugó en la ronda anterior.
+                // En la ronda 1, el AI siempre coopera.
+                const aiMove = (round === 1) ? 'cooperate' : userPreviousMove;
+
+                const roundResult = payoffs[`${userMove}-${aiMove}`];
+                userScore += roundResult.user;
+                aiScore += roundResult.ai;
+
+                // Actualizar marcadores
+                roundNumberEl.textContent = round;
+                userScoreEl.textContent = userScore;
+                aiScoreEl.textContent = aiScore;
+
+                // Actualizar historial
+                const newRow = historyBody.insertRow(0); // Insertar al principio
+                newRow.innerHTML = `
+                    <td>${round}</td>
+                    <td>${userMove === 'cooperate' ? 'Cooperar' : 'Traicionar'}</td>
+                    <td>${aiMove === 'cooperate' ? 'Cooperar' : 'Traicionar'}</td>
+                    <td>${roundResult.user}</td>
+                    <td>${roundResult.ai}</td>
+                `;
+
+                // Explicar la jugada del AI para la siguiente ronda
+                if (userMove === 'cooperate') {
+                    aiReasoningEl.textContent = "Cooperaste, así que el País B cooperará en la siguiente ronda.";
+                } else {
+                    aiReasoningEl.textContent = "Traicionaste, así que el País B te castigará traicionando en la siguiente ronda.";
+                }
+
+                // Guardar la jugada actual del usuario para la siguiente ronda del AI
+                userPreviousMove = userMove;
+            }
+
+            document.getElementById('cooperate-btn').addEventListener('click', () => playRound('cooperate'));
+            document.getElementById('defect-btn').addEventListener('click', () => playRound('defect'));
+        });
+    </script>
+</body>
+</html>

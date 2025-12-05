@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador: Amenaza de Aranceles</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f0f2f5; color: #333; }
+        .content-area { max-width: 900px; margin: 40px auto; padding: 2rem 2.5rem; background-color: #fff; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h1, h2 { border-bottom: 2px solid #007bff; padding-bottom: 0.8rem; color: #343a40; }
+        h1 { font-size: 2.2rem; }
+        h2 { font-size: 1.8rem; margin-top: 2rem; }
+        .cta-button { background-color: #6c757d; color: #fff; padding: 0.8rem 1.5rem; border-radius: 5px; text-decoration: none; font-weight: 600; transition: background-color 0.3s; display: inline-block; margin-top: 1rem; }
+        .cta-button:hover { background-color: #5a6268; }
+        .sim-container { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem; }
+        .param-group { margin-bottom: 1.5rem; }
+        label { font-weight: 600; display: block; margin-bottom: 0.5rem; }
+        input[type="range"] { width: 100%; }
+        .btn-primary { background-color: #007bff; color: #fff; border: none; padding: 12px 20px; font-size: 1rem; font-weight: 600; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
+        .btn-primary:hover { background-color: #0056b3; }
+        #results { margin-top: 1.5rem; padding: 1rem; border-radius: 5px; background-color: #e9ecef; line-height: 1.8; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { border: 1px solid #ccc; padding: 12px; text-align: center; transition: background-color 0.3s ease; }
+        th { background-color: #007bff; color: white; }
+        .highlight { background-color: #ffc107; font-weight: bold; }
+        .text-highlight { background-color: #ffc107; padding: 2px 5px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+    <main class="content-area">
+        <a href="clase5.html" class="cta-button">&larr; Volver a la Clase 5</a>
+        <h1><i class="fas fa-satellite-dish"></i> Simulador: Juego de Señalización</h1>
+        <h2>Caso de Estudio: Amenaza de Aranceles</h2>
+        <p>Este simulador modela un conflicto comercial entre dos países, que llamaremos <strong>País A</strong> (el que amenaza) y <strong>País B</strong> (el que recibe la amenaza).</p>
+        <p>El <strong>País A</strong> tiene información privada: puede ser de tipo <strong>"Firme"</strong> (está dispuesto a ir a una guerra comercial para conseguir sus objetivos) o de tipo <strong>"Flexible"</strong> (prefiere ceder antes que una guerra comercial). El País B no conoce este tipo, solo tiene una creencia inicial.</p>
+        
+        <div class="sim-container">
+            <h3><i class="fas fa-sliders-h"></i> Parámetros de la Simulación</h3>
+            <div class="param-group">
+                <label for="probFirme">Creencia inicial del País B: ¿Cuál es la probabilidad de que el País A sea "Firme"?</label>
+                <span id="probFirmeValue">50%</span>
+                <input type="range" id="probFirme" min="0" max="100" value="50">
+            </div>
+            <button id="runSim" class="btn-primary">Ejecutar Simulación</button>
+        </div>
+
+        <div id="results">
+            <p>Ajusta la creencia inicial y ejecuta la simulación para ver el resultado más probable y los pagos asociados.</p>
+        </div>
+
+        <h2><i class="fas fa-calculator"></i> Matriz de Pagos</h2>
+        <p>Los pagos (País A, País B) dependen del tipo real de A y de la acción de B.</p>
+        <table id="matrizFirme">
+            <caption><strong>Si País A es "Firme"</strong></caption>
+            <tr>
+                <th></th>
+                <th>País B Cede</th>
+                <th>País B se Mantiene</th>
+            </tr>
+            <tr>
+                <td><strong>País A amenaza</strong></td>
+                <td id="firme-cede">(10, -5)</td>
+                <td id="firme-mantiene">(-10, -10)</td>
+            </tr>
+        </table>
+        <table id="matrizFlexible">
+            <caption><strong>Si País A es "Flexible"</strong></caption>
+            <tr>
+                <th></th>
+                <th>País B Cede</th>
+                <th>País B se Mantiene</th>
+            </tr>
+            <tr>
+                <td><strong>País A amenaza</strong></td>
+                <td id="flexible-cede">(10, -5)</td>
+                <td id="flexible-mantiene">(-5, 5)</td>
+            </tr>
+        </table>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const probFirmeSlider = document.getElementById('probFirme');
+            const probFirmeValue = document.getElementById('probFirmeValue');
+            const runSimBtn = document.getElementById('runSim');
+            const resultsDiv = document.getElementById('results');
+
+            probFirmeSlider.addEventListener('input', () => {
+                probFirmeValue.textContent = `${probFirmeSlider.value}%`;
+            });
+
+            runSimBtn.addEventListener('click', () => {
+                // 1. Limpiar resaltados anteriores
+                const allCells = document.querySelectorAll('td[id]');
+                allCells.forEach(cell => cell.classList.remove('highlight'));
+
+                // 2. Obtener parámetros
+                const pFirme = probFirmeSlider.value / 100;
+                const pFlexible = 1 - pFirme;
+
+                // 3. Calcular la decisión racional del País B
+                const pagoBCede = -5;
+                const pagoBMantiene_siAFirme = -10;
+                const pagoBMantiene_siAFlexible = 5;
+                const expectedPayoffMantenerse = (pFirme * pagoBMantiene_siAFirme) + (pFlexible * pagoBMantiene_siAFlexible);
+                
+                const decisionB = (expectedPayoffMantenerse > pagoBCede) ? "Mantenerse Firme" : "Ceder";
+
+                // 4. Simular el tipo real del País A y determinar el resultado
+                const tipoRealA = Math.random() < pFirme ? "Firme" : "Flexible";
+                
+                let resultadoFinal = "";
+                let pagosFinales = "";
+                let finalCellId = "";
+
+                if (decisionB === "Ceder") {
+                    finalCellId = tipoRealA === "Firme" ? "firme-cede" : "flexible-cede";
+                    resultadoFinal = "El País B decide Ceder para evitar riesgos.";
+                    pagosFinales = "Pagos Finales -> País A: 10, País B: -5.";
+                } else { // País B se Mantiene Firme
+                    if (tipoRealA === "Firme") {
+                        finalCellId = "firme-mantiene";
+                        resultadoFinal = "El País B se Mantiene Firme, pero el País A también era Firme. ¡Hay guerra comercial!";
+                        pagosFinales = "Pagos Finales -> País A: -10, País B: -10.";
+                    } else { // Tipo real es Flexible
+                        finalCellId = "flexible-mantiene";
+                        resultadoFinal = "El País B se Mantiene Firme y descubre que el País A estaba de farol (era Flexible). ¡El País B gana!";
+                        pagosFinales = "Pagos Finales -> País A: -5, País B: 5.";
+                    }
+                }
+
+                // 5. Resaltar la celda del resultado en la matriz
+                document.getElementById(finalCellId).classList.add('highlight');
+
+                // 6. Mostrar los resultados en el panel
+                resultsDiv.innerHTML = `
+                    <p><strong>Análisis del País B:</strong></p>
+                    <ul>
+                        <li>Pago esperado si Cede: <strong>${pagoBCede.toFixed(2)}</strong></li>
+                        <li>Pago esperado si se Mantiene Firme: <span class="text-highlight">${expectedPayoffMantenerse.toFixed(2)}</span></li>
+                    </ul>
+                    <p><strong>Decisión Racional del País B:</strong> <span class="text-highlight">${decisionB}</span></p>
+                    <hr>
+                    <p><strong>Resultado de la Simulación:</strong></p>
+                    <p>El tipo real del País A era: <strong>${tipoRealA}</strong>.</p>
+                    <p>${resultadoFinal}</p>
+                    <p><strong>${pagosFinales}</strong></p>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>

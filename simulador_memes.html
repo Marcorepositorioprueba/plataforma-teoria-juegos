@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador: La Guerra de los Memes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f0f2f5; color: #333; }
+        .content-area { max-width: 900px; margin: 40px auto; padding: 2rem 2.5rem; background-color: #fff; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h1, h2 { border-bottom: 2px solid #17a2b8; padding-bottom: 0.8rem; color: #343a40; }
+        h1 { font-size: 2.2rem; }
+        h2 { font-size: 1.8rem; margin-top: 2rem; }
+        .cta-button { background-color: #6c757d; color: #fff; padding: 0.8rem 1.5rem; border-radius: 5px; text-decoration: none; font-weight: 600; transition: background-color 0.3s; display: inline-block; margin-top: 1rem; }
+        .cta-button:hover { background-color: #5a6268; }
+        .sim-container { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem; }
+        .param-group { margin-bottom: 1.5rem; }
+        label { font-weight: 600; display: block; margin-bottom: 0.5rem; }
+        input[type="range"] { width: 100%; }
+        .btn { border: none; padding: 12px 20px; font-size: 1rem; font-weight: 600; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; margin: 0 5px; }
+        .btn-info { background-color: #17a2b8; color: white; }
+        .btn-info:hover { background-color: #138496; }
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-secondary:hover { background-color: #5a6268; }
+        #results-area { margin-top: 1.5rem; }
+        #population-bar { display: flex; height: 40px; border-radius: 5px; overflow: hidden; margin-bottom: 1rem; border: 1px solid #ccc;}
+        #novedoso-part { background-color: #17a2b8; transition: width 0.5s ease; }
+        #popular-part { background-color: #ffc107; transition: width 0.5s ease; }
+        #chart-container { margin-top: 1.5rem; border: 1px solid #dee2e6; border-radius: 5px; padding: 10px; }
+        #payoff-results { background-color: #e9ecef; padding: 1rem; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+        th, td { border: 1px solid #ccc; padding: 12px; text-align: center; }
+        .payoff-matrix th { background-color: #6c757d; color: white; }
+    </style>
+</head>
+<body>
+    <main class="content-area">
+        <a href="clase5.html" class="cta-button">&larr; Volver a la Clase 5</a>
+        <h1><i class="fas fa-dna"></i> Simulador: Juego Evolutivo</h1>
+        <h2>Caso de Estudio: La Guerra de los Memes</h2>
+        <p>Este simulador modela cómo las tendencias emergen y mueren en una red social. Imaginemos una población de usuarios donde cada uno puede adoptar una de dos estrategias:</p>
+        <ul>
+            <li><strong>Contenido Novedoso:</strong> Crear algo original. Es arriesgado, pero puede tener una gran recompensa si se vuelve popular.</li>
+            <li><strong>Contenido Popular:</strong> Subirse a una tendencia existente. Es seguro, pero la recompensa es menor porque hay mucha competencia.</li>
+        </ul>
+        <p>La "selección natural" actúa aquí: las estrategias que generan más "engagement" (pago) se vuelven más comunes en la siguiente "generación" (periodo de tiempo).</p>
+
+        <div class="sim-container">
+            <h3><i class="fas fa-sliders-h"></i> Parámetros Iniciales</h3>
+            <div class="param-group">
+                <label for="pop-slider">Proporción inicial de la población que publica "Contenido Novedoso"</label>
+                <span id="pop-value">50%</span>
+                <input type="range" id="pop-slider" min="1" max="99" value="50">
+            </div>
+            <button id="run-generation" class="btn btn-info">Pasar 1 Generación</button>
+            <button id="run-full-sim" class="btn btn-secondary">Simulación Completa (50 Gen.)</button>
+            <button id="reset-sim" class="btn">Reiniciar</button>
+        </div>
+
+        <div id="results-area">
+            <h2><i class="fas fa-chart-bar"></i> Estado de la Población (Gen: <span id="gen-counter">0</span>)</h2>
+            <div id="population-bar">
+                <div id="novedoso-part" style="width: 50%;"><span id="novedoso-percent">50% Novedoso</span></div>
+                <div id="popular-part" style="width: 50%;"><span id="popular-percent">50% Popular</span></div>
+            </div>
+            <div id="payoff-results"></div>
+            <div id="chart-container">
+                <svg id="history-chart" width="100%" height="250"></svg>
+            </div>
+        </div>
+        
+        <h2 style="margin-top: 2.5rem;"><i class="fas fa-calculator"></i> Matriz de Pagos (Engagement)</h2>
+        <table class="payoff-matrix">
+             <tr>
+                <th></th>
+                <th>Oponente es Novedoso</th>
+                <th>Oponente es Popular</th>
+            </tr>
+            <tr>
+                <td><strong>Tú eres Novedoso</strong></td>
+                <td>2</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td><strong>Tú eres Popular</strong></td>
+                <td>4</td>
+                <td>1</td>
+            </tr>
+        </table>
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const popSlider = document.getElementById('pop-slider');
+        const popValue = document.getElementById('pop-value');
+        const runGenBtn = document.getElementById('run-generation');
+        const runFullSimBtn = document.getElementById('run-full-sim');
+        const resetBtn = document.getElementById('reset-sim');
+        const genCounter = document.getElementById('gen-counter');
+        const novedosoPart = document.getElementById('novedoso-part');
+        const popularPart = document.getElementById('popular-part');
+        const novedosoPercent = document.getElementById('novedoso-percent');
+        const popularPercent = document.getElementById('popular-percent');
+        const payoffResults = document.getElementById('payoff-results');
+        const chart = document.getElementById('history-chart');
+
+        let populationHistory = [];
+        let generation = 0;
+        let isRunningFullSim = false;
+
+        const payoffs = { nn: 2, np: 3, pn: 4, pp: 1 };
+
+        function setInitialState() {
+            generation = 0;
+            const initialNovedoso = popSlider.value / 100;
+            populationHistory = [initialNovedoso];
+            updateUI();
+            drawChart();
+        }
+
+        function updateUI() {
+            const pNovedoso = populationHistory[generation];
+            const pPopular = 1 - pNovedoso;
+
+            genCounter.textContent = generation;
+            novedosoPart.style.width = `${pNovedoso * 100}%`;
+            popularPart.style.width = `${pPopular * 100}%`;
+            novedosoPercent.textContent = `${(pNovedoso * 100).toFixed(1)}% Novedoso`;
+            popularPercent.textContent = `${(pPopular * 100).toFixed(1)}% Popular`;
+            popValue.textContent = `${(pNovedoso * 100).toFixed(0)}%`;
+            popSlider.value = (pNovedoso * 100).toFixed(0);
+
+            const payoffNovedoso = pNovedoso * payoffs.nn + pPopular * payoffs.np;
+            const payoffPopular = pNovedoso * payoffs.pn + pPopular * payoffs.pp;
+            
+            payoffResults.innerHTML = `
+                <p>Pago promedio para "Novedoso": <strong>${payoffNovedoso.toFixed(2)}</strong></p>
+                <p>Pago promedio para "Popular": <strong>${payoffPopular.toFixed(2)}</strong></p>
+            `;
+        }
+
+        function runGeneration() {
+            if (generation >= 200) return; 
+
+            const pNovedoso = populationHistory[generation];
+            const pPopular = 1 - pNovedoso;
+
+            const payoffNovedoso = pNovedoso * payoffs.nn + pPopular * payoffs.np;
+            const payoffPopular = pNovedoso * payoffs.pn + pPopular * payoffs.pp;
+            const totalAvgPayoff = pNovedoso * payoffNovedoso + pPopular * payoffPopular;
+
+            if (totalAvgPayoff === 0) return;
+
+            const nextPNovedoso = pNovedoso * (payoffNovedoso / totalAvgPayoff);
+            
+            generation++;
+            populationHistory.push(nextPNovedoso);
+            
+            updateUI();
+            drawChart();
+        }
+
+        function drawChart() {
+            chart.innerHTML = '';
+            const width = chart.clientWidth;
+            const height = chart.clientHeight;
+            const padding = 20;
+
+            const maxX = populationHistory.length - 1;
+            const minX = 0;
+            const maxY = 1;
+            const minY = 0;
+
+            const points = populationHistory.map((p, i) => {
+                const x = padding + (i / (maxX || 1)) * (width - 2 * padding);
+                const y = height - padding - (p / maxY) * (height - 2 * padding);
+                return `${x},${y}`;
+            }).join(' ');
+
+            const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+            polyline.setAttribute('points', points);
+            polyline.setAttribute('fill', 'none');
+            polyline.setAttribute('stroke', '#007bff');
+            polyline.setAttribute('stroke-width', '2');
+            chart.appendChild(polyline);
+
+            // Draw ESS line
+            const ess = (payoffs.pp - payoffs.np) / (payoffs.nn - payoffs.pn - payoffs.np + payoffs.pp);
+            if (ess > 0 && ess < 1) {
+                const y = height - padding - (ess / maxY) * (height - 2 * padding);
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', padding);
+                line.setAttribute('y1', y);
+                line.setAttribute('x2', width - padding);
+                line.setAttribute('y2', y);
+                line.setAttribute('stroke', '#dc3545');
+                line.setAttribute('stroke-dasharray', '5,5');
+                line.setAttribute('stroke-width', '2');
+                chart.appendChild(line);
+            }
+        }
+
+        function runFullSim() {
+            if(isRunningFullSim) return;
+            isRunningFullSim = true;
+            const interval = setInterval(() => {
+                if (generation < 50) {
+                    runGeneration();
+                } else {
+                    clearInterval(interval);
+                    isRunningFullSim = false;
+                }
+            }, 100);
+        }
+
+        popSlider.addEventListener('input', setInitialState);
+        runGenBtn.addEventListener('click', runGeneration);
+        runFullSimBtn.addEventListener('click', runFullSim);
+        resetBtn.addEventListener('click', setInitialState);
+
+        setInitialState();
+    });
+    </script>
+</body>
+</html>

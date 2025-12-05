@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clase 4 | Teoría de Juegos</title>
+    <title>Clase 5 | Teoría de Juegos</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -32,6 +32,10 @@
         .top-header .logo img { max-height: 75px; }
         .main-nav a { margin: 0 1.5rem; text-decoration: none; color: #495057; font-weight: 600; transition: color 0.3s; }
         .main-nav a:hover { color: #007bff; }
+        .main-nav a.active {
+            color: #007bff;
+            font-weight: 700;
+        }
 
         .content-area { padding: 2rem 2.5rem 4rem 2.5rem; }
         .card {
@@ -47,23 +51,6 @@
         }
         .card h2 .fa { margin-right: 1rem; color: #007bff; }
         
-        footer {
-            text-align: center; padding: 3rem 0;
-            background-color: #343a40;
-            color: #fff;
-        }
-        .cta-button {
-            background-color: #007bff;
-            color: #fff;
-            padding: 0.8rem 1.5rem;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: background-color 0.3s;
-            display: inline-block;
-            margin-top: 1rem;
-        }
-        .cta-button:hover { background-color: #0056b3; }
         .collapsible-header {
             cursor: pointer;
             display: flex;
@@ -72,7 +59,7 @@
             padding: 0.8rem 0;
             border-bottom: 1px solid #eee;
             margin-bottom: 1rem;
-            font-size: 1.8rem; /* Adjust as needed */
+            font-size: 1.8rem;
             font-weight: 700;
             color: #007bff;
             transition: color 0.3s ease;
@@ -91,15 +78,32 @@
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.5s ease-out, padding 0.5s ease-out;
-            padding-left: 1rem; /* Indent content slightly */
+            padding-left: 1rem;
             border-left: 3px solid #007bff;
             margin-bottom: 1.5rem;
         }
         .collapsible-content.show {
-            max-height: 2000px; /* Arbitrary large value, adjust if content is longer */
-            padding-top: 1rem; /* Add some padding when shown */
-            padding-bottom: 1rem; /* Add some padding when shown */
+            max-height: 2000px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
             transition: max-height 0.7s ease-in, padding 0.7s ease-in;
+        }
+        .cta-button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+        .cta-button:hover { background-color: #0056b3; }
+        footer {
+            text-align: center; padding: 3rem 0;
+            background-color: #343a40;
+            color: #fff;
         }
     </style>
 </head>
@@ -110,126 +114,129 @@
             <a href="index.html"><img src="recursos/logoclh.jpg" alt="Logo del Curso"></a>
         </div>
         <nav class="main-nav">
-            <a href="clase3.html">Sesión Anterior</a>
             <a href="index.html">Temario</a>
-            <a href="clase5.html">Sesión Siguiente</a>
-            <a href="induccion_a_arcmap.html">Inducción ArcMap</a>
+            <a href="clase1.html">Sesión 1</a>
+            <a href="clase2.html">Sesión 2</a>
+            <a href="clase3.html">Sesión 3</a>
+            <a href="clase4.html">Sesión 4</a>
+            <a href="clase5.html" class="active">Sesión 5</a>
         </nav>
     </header>
 
     <main class="content-area">
-        <div id="clase4-contenido" class="card">
-            <h2><i class="fas fa-chalkboard-teacher"></i> Sesión 4: Juegos Estáticos con Información Incompleta (Juegos Bayesianos)</h2>
+        <div id="clase5-contenido" class="card">
+            <h2><i class="fas fa-cogs"></i> Sesión 5: Modelos Avanzados, Diseño de Mecanismos y Aplicaciones</h2>
             
-            <h3 class="collapsible-header">Introducción a los Juegos con Información Incompleta <i class="fas fa-chevron-right icon"></i></h3>
+            <h3 class="collapsible-header">Introducción a los Modelos Avanzados <i class="fas fa-chevron-right icon"></i></h3>
             <div class="collapsible-content">
-                <p>Hasta ahora, hemos analizado juegos bajo el supuesto de <strong>información completa</strong>, donde todos los jugadores conocen perfectamente la estructura del juego, incluyendo las funciones de pagos de los demás. Sin embargo, en el mundo real, esta suposición rara vez se cumple. Los actores políticos, económicos y sociales a menudo operan con información limitada sobre las preferencias, capacidades o intenciones de sus oponentes.</p>
-                <p>Los <strong>Juegos con Información Incompleta</strong> abordan esta realidad. En estos juegos, al menos un jugador no conoce algún aspecto relevante del juego. Por ejemplo, un candidato político puede no saber la verdadera ideología de un votante, o una empresa puede no conocer los costos de producción de su competidor.</p>
-                <p>La clave para modelar la información incompleta es el concepto de <strong>"tipo"</strong> de un jugador. Cada jugador puede ser de diferentes tipos, y su tipo determina su función de pagos o sus estrategias disponibles. La información incompleta surge cuando un jugador no conoce el tipo de otro jugador.</p>
-                <h4>Información Incompleta vs. Información Imperfecta</h4>
+                <p>Hasta ahora, hemos explorado juegos con información completa o incompleta, en formatos estáticos y dinámicos. Sin embargo, el mundo real a menudo presenta situaciones más complejas que requieren modelos más sofisticados. En esta sesión final, integramos y expandimos nuestros conocimientos para abordar estos escenarios.</p>
+                <p>A continuación, se presentan algunos ejemplos de <strong>modelos avanzados</strong> que combinan y extienden los conceptos que hemos visto:</p>
                 <ul>
-                    <li><strong>Información Incompleta:</strong> Un jugador no conoce la función de pagos o los tipos de otros jugadores. Es decir, no conoce todos los elementos del juego.</li>
-                    <li><strong>Información Imperfecta:</strong> Un jugador no conoce las acciones que otros jugadores han tomado previamente en el juego. Esto es común en juegos dinámicos donde las acciones son simultáneas o no observables.</li>
+                    <li><strong>Juegos Dinámicos con Información Incompleta (Juegos Bayesianos Dinámicos):</strong> En estos juegos, los jugadores no solo actúan secuencialmente, sino que también tienen información privada. A medida que el juego se desarrolla, actualizan sus creencias sobre los otros jugadores usando la Regla de Bayes. Son fundamentales para entender la <strong>reputación</strong>, la <strong>señalización</strong> y las negociaciones complejas.
+                        <br><em>Ejemplo actual:</em> Las negociaciones comerciales bajo amenaza de aranceles (como las vistas entre EE.UU. y México o China), donde un país intenta construir una reputación de "duro" para forzar concesiones, y el otro debe interpretar si la amenaza es real o un farol.<br>
+                        <a href="simulador_aranceles.html" class="cta-button" target="_blank" style="margin-top: 10px; background-color: #28a745; padding: 0.5rem 1rem; font-size: 0.9rem;">Abrir Simulador</a>
+                    </li>
+                    <li><strong>Juegos Repetidos:</strong> Analizan cómo la sombra del futuro afecta el comportamiento presente. Cuando los jugadores saben que interactuarán repetidamente, la cooperación puede surgir incluso en situaciones donde el interés propio a corto plazo dictaría lo contrario.
+                        <br><em>Ejemplo actual:</em> La OPEP (Organización de Países Exportadores de Petróleo). Cada país tiene un incentivo a corto plazo para producir más petróleo del acordado, pero la amenaza de una guerra de precios futura (un castigo) ayuda a mantener la disciplina y los precios estables.<br>
+                        <a href="simulador_opep.html" class="cta-button" target="_blank" style="margin-top: 10px; background-color: #28a745; padding: 0.5rem 1rem; font-size: 0.9rem;">Abrir Simulador</a>
+                    </li>
+                    <li><strong>Juegos Evolutivos:</strong> Aplican la lógica de la selección natural a la teoría de juegos. Las estrategias que obtienen mejores resultados se vuelven más comunes con el tiempo. El concepto clave es la <strong>Estrategia Evolutivamente Estable (EES)</strong>.
+                        <br><em>Ejemplo actual:</em> La propagación de tendencias o "memes" en redes sociales. Los tipos de contenido (estrategias) que generan más interacción ("éxito") son replicados y se esparcen por la población de usuarios, mientras que los que no lo logran, desaparecen.<br>
+                        <a href="simulador_memes.html" class="cta-button" target="_blank" style="margin-top: 10px; background-color: #28a745; padding: 0.5rem 1rem; font-size: 0.9rem;">Abrir Simulador</a>
+                    </li>
+                    <li><strong>Juegos de Negociación:</strong> Se enfocan en cómo dos o más partes se reparten un excedente. Un ejemplo famoso es el <strong>Juego del Ultimátum</strong>, que revela ideas profundas sobre la aversión a la inequidad y las normas sociales.
+                        <br><em>Ejemplo actual:</em> Las negociaciones salariales anuales entre un sindicato y una gran empresa. Ambas partes negocian la división de las ganancias de la empresa, y una huelga representa el costoso resultado de no llegar a un acuerdo.<br>
+                        <a href="simulador_negociacion.html" class="cta-button" target="_blank" style="margin-top: 10px; background-color: #28a745; padding: 0.5rem 1rem; font-size: 0.9rem;">Abrir Simulador</a>
+                    </li>
+                    <li><strong>Juegos Cooperativos (o de Coalición):</strong> Aquí los jugadores pueden formar alianzas y firmar acuerdos vinculantes. La pregunta central es cómo distribuir las ganancias de la cooperación de manera justa. El <strong>Valor de Shapley</strong> es una solución fundamental para esta pregunta.
+                        <br><em>Ejemplo actual:</em> Los acuerdos internacionales sobre el cambio climático. Las naciones deben formar una coalición para un bien común (reducir emisiones), y el debate se centra en cómo distribuir los costos de manera justa, una pregunta que el Valor de Shapley ayuda a conceptualizar.<br>
+                        <a href="simulador_cooperativo.html" class="cta-button" target="_blank" style="margin-top: 10px; background-color: #28a745; padding: 0.5rem 1rem; font-size: 0.9rem;">Abrir Calculadora</a>
+                    </li>
                 </ul>
-                <p>En esta sesión, nos centraremos en juegos estáticos con información incompleta, que se resuelven utilizando el concepto de <strong>Equilibrio de Nash Bayesiano</strong>.</p>
             </div>
 
             <hr style="margin: 2.5rem 0;">
 
-            <h3 class="collapsible-header">Juegos Bayesianos: Tipos y Creencias <i class="fas fa-chevron-right icon"></i></h3>
+            <h3 class="collapsible-header">Diseño de Mecanismos: La Ingeniería Inversa de la Teoría de Juegos <i class="fas fa-chevron-right icon"></i></h3>
             <div class="collapsible-content">
-                <p>Para modelar la información incompleta, Harsanyi (Premio Nobel 1994) propuso transformar un juego con información incompleta en un juego con información completa pero imperfecta, introduciendo el concepto de <strong>"tipos"</strong> y <strong>"creencias"</strong>.</p>
-                <h4>Tipos de Jugadores</h4>
-                <p>Cada jugador tiene un <strong>tipo</strong>, que es información privada conocida solo por ese jugador. El tipo de un jugador resume toda la información relevante que solo él conoce y que afecta sus pagos o estrategias. Por ejemplo:</p>
+                <p>El <strong>Diseño de Mecanismos</strong> es una rama de la teoría de juegos que adopta una perspectiva de "ingeniería". En lugar de tomar un juego como dado y analizar su resultado, el objetivo es <strong>diseñar las reglas del juego</strong> para lograr un resultado deseado, asumiendo que los participantes actuarán estratégicamente en su propio interés.</p>
+                <p>El diseñador del mecanismo establece la estructura del juego (las reglas), pero no controla las acciones de los jugadores. El desafío es crear un sistema donde el comportamiento egoísta de los individuos conduzca a un resultado socialmente óptimo.</p>
+                <p><em>Ejemplo moderno:</em> Las plataformas de VTC (como Uber o Cabify) no obligan a los conductores a aceptar viajes ni a los usuarios a pedir coches. En su lugar, diseñan un mecanismo (precios dinámicos o "surge pricing") que ajusta las tarifas en tiempo real para equilibrar la oferta y la demanda, logrando su objetivo de maximizar el número de viajes completados.</p>
+                
+                <h4 style="margin-top: 1.5rem; border-bottom: 1px solid #ccc; padding-bottom: 0.5rem;">Componentes Clave en Acción: Ejemplo Unificador</h4>
+                <p>Imaginemos que un ayuntamiento quiere asignar un número limitado de permisos para <em>food trucks</em> en un parque. El objetivo es que los permisos vayan a quienes más los valoran (y probablemente ofrezcan un mejor servicio). Así se aplican los componentes clave:</p>
                 <ul>
-                    <li>En una subasta, el tipo de un postor podría ser su valoración privada del objeto.</li>
-                    <li>En política, el tipo de un votante podría ser su ideología o su nivel de interés en un tema.</li>
-                    <li>En un conflicto, el tipo de un país podría ser su fuerza militar o su determinación.</li>
+                    <li><strong>Compatibilidad de Incentivos (Decir la verdad):</strong> La regla principal es que a cada jugador le convenga más decir la verdad. Si el ayuntamiento usa una <strong>subasta de segundo precio</strong> (el ganador paga el precio de la segunda oferta más alta), la mejor estrategia para cada vendedor es pujar su <em>verdadera</em> valoración. No tienen incentivo a mentir.</li>
+                    <li><strong>Racionalidad Individual (Querer participar):</strong> A cada jugador le debe convenir más participar que no hacerlo. Un vendedor solo participará en la subasta si cree que puede obtener un beneficio. El mecanismo de segundo precio garantiza que el ganador nunca paga más de lo que valora el permiso, asegurando que su participación fue provechosa.</li>
+                    <li><strong>Principio de Revelación (La simplicidad funciona):</strong> Este principio nos dice que, si existe alguna forma de lograr el objetivo, entonces debe existir un mecanismo (como la subasta de segundo precio) donde simplemente pedir a los vendedores que "revelen" su valoración honestamente es suficiente para que el sistema funcione de manera óptima.</li>
                 </ul>
-                <p>El conjunto de tipos posibles para un jugador se conoce como el <strong>espacio de tipos</strong> de ese jugador.</p>
-                <h4>Creencias</h4>
-                <p>Aunque un jugador no conoce el tipo exacto de otro, sí tiene <strong>creencias</strong> sobre los tipos posibles de los demás. Estas creencias se expresan como una distribución de probabilidad sobre el espacio de tipos de los otros jugadores. Estas probabilidades son de conocimiento común (conocimiento común de las creencias).</p>
-                <p>Por ejemplo, un candidato político puede no saber si un votante es de "izquierda" o "derecha", pero puede creer que hay un 60% de probabilidad de que sea de izquierda y un 40% de que sea de derecha.</p>
-                <p>Un <strong>Juego Bayesiano</strong> es un juego donde los jugadores tienen tipos privados y creencias probabilísticas sobre los tipos de los demás. La estrategia de un jugador en un juego Bayesiano es un plan de acción que especifica qué acción tomar para cada tipo posible que podría ser.</p>
             </div>
 
             <hr style="margin: 2.5rem 0;">
 
-            <h3 class="collapsible-header">Equilibrio de Nash Bayesiano <i class="fas fa-chevron-right icon"></i></h3>
+            <h3 class="collapsible-header">Aplicación Práctica 1: Diseño de Subastas <i class="fas fa-chevron-right icon"></i></h3>
             <div class="collapsible-content">
-                <p>El <strong>Equilibrio de Nash Bayesiano (ENB)</strong> es el concepto de solución para juegos estáticos con información incompleta. Es una extensión del Equilibrio de Nash que incorpora los tipos y las creencias de los jugadores.</p>
-                <p>Una combinación de estrategias es un ENB si cada jugador elige una estrategia que maximiza su pago esperado, dadas sus creencias sobre los tipos de los otros jugadores y dadas las estrategias que los otros jugadores están siguiendo.</p>
-                <p>Formalmente, para cada jugador y para cada tipo posible de ese jugador, la estrategia elegida debe ser una mejor respuesta a las estrategias de los otros jugadores, promediando sobre las creencias del jugador sobre los tipos de los demás.</p>
-                <h4>Características Clave del ENB:</h4>
-                <ul>
-                    <li><strong>Maximización del pago esperado:</strong> Los jugadores eligen acciones que maximizan su utilidad esperada, considerando las probabilidades de los tipos de los oponentes.</li>
-                    <li><strong>Consistencia de creencias:</strong> Las creencias de los jugadores sobre los tipos de los demás son consistentes con la distribución de probabilidad común de los tipos.</li>
-                    <li><strong>Estrategias dependientes del tipo:</strong> La estrategia de un jugador puede variar según su propio tipo.</li>
-                </ul>
-                <h4>Ejemplo: El Juego del "Dilema del Prisionero" con Información Incompleta</h4>
-                <p>Imagina un Dilema del Prisionero donde el Jugador 1 no sabe si el Jugador 2 es "cooperador" (siempre coopera si el otro coopera) o "egoísta" (siempre traiciona). El Jugador 1 cree que el Jugador 2 es cooperador con probabilidad 'p' y egoísta con probabilidad '1-p'.</p>
-                <p>El Jugador 2 conoce su propio tipo. El Jugador 1 debe decidir si coopera o traiciona, sin saber el tipo de Jugador 2. El Jugador 2, si es cooperador, decidirá si coopera o traiciona, y si es egoísta, también decidirá. El ENB implicaría que el Jugador 1 elige su mejor respuesta esperada, y el Jugador 2 elige su mejor respuesta para cada uno de sus tipos.</p>
-                <p>Este tipo de análisis permite modelar situaciones donde la incertidumbre sobre las motivaciones o características de los oponentes es un factor clave.</p>
-            </div>
-
-            <hr style="margin: 2.5rem 0;">
-
-            <h3 class="collapsible-header">Aplicaciones en Subastas <i class="fas fa-chevron-right icon"></i></h3>
-            <div class="collapsible-content">
-                <p>Las subastas son un campo fértil para la aplicación de los juegos Bayesianos, ya que la valoración que cada postor tiene del objeto es típicamente información privada (su "tipo").</p>
+                <p>Las subastas son uno de los ejemplos más exitosos y estudiados del diseño de mecanismos. Se utilizan para asignar bienes, desde obras de arte hasta licencias de espectro radioeléctrico.</p>
                 <h4>Tipos Comunes de Subastas:</h4>
                 <ul>
-                    <li><strong>Subasta Inglesa (Ascendente):</strong> El precio sube gradualmente, y los postores se retiran hasta que solo queda uno.</li>
-                    <li><strong>Subasta Holandesa (Descendente):</strong> El precio baja gradualmente desde un máximo, y el primer postor que acepta el precio gana.</li>
-                    <li><strong>Subasta de Primer Precio Sellado:</strong> Los postores presentan sus ofertas en secreto, y el que ofrece más alto gana y paga su oferta.</li>
-                    <li><strong>Subasta de Segundo Precio Sellado (Vickrey):</strong> Los postores presentan sus ofertas en secreto, el que ofrece más alto gana, pero paga el precio de la segunda oferta más alta.</li>
+                    <li><strong>Subasta Inglesa (Ascendente):</strong> El precio sube hasta que solo queda un postor. Es estratégicamente simple: seguir pujando hasta que el precio alcance tu valoración.</li>
+                    <li><strong>Subasta Holandesa (Descendente):</strong> El precio comienza alto y baja hasta que un postor lo acepta.</li>
+                    <li><strong>Subasta de Primer Precio en Sobre Cerrado:</strong> Todos los postores presentan una oferta secreta. El ganador es el que hace la oferta más alta y paga el monto de su propia oferta. La estrategia aquí es compleja: debes ofertar por debajo de tu valoración real.</li>
+                    <li><strong>Subasta de Segundo Precio en Sobre Cerrado (Vickrey):</strong> El ganador es el que hace la oferta más alta, pero paga el monto de la <strong>segunda oferta más alta</strong>. Esta subasta tiene una propiedad mágica: la estrategia dominante es ofertar tu verdadera valoración. Es un mecanismo veraz.</li>
                 </ul>
-                <p>En cada tipo de subasta, la estrategia óptima de un postor depende de su propia valoración (su tipo) y de sus creencias sobre las valoraciones de los otros postores. El ENB nos ayuda a determinar la estrategia de puja óptima.</p>
-                <h4>Ejemplo: Subasta de Segundo Precio Sellado (Vickrey)</h4>
-                <p>En una subasta Vickrey, la estrategia dominante (y por lo tanto parte de un ENB) para un postor es pujar su verdadera valoración del objeto, independientemente de sus creencias sobre los otros postores. Esto se debe a que pujar más bajo podría hacerle perder el objeto si su valoración es mayor que la segunda oferta más alta, y pujar más alto podría hacerle ganar el objeto a un precio mayor que su propia valoración.</p>
-                <p>Este resultado es muy importante porque simplifica la estrategia para los participantes y fomenta la revelación de la verdadera valoración.</p>
+                <p>El <strong>Teorema de Equivalencia de Ingresos</strong> establece que, bajo ciertas condiciones, los cuatro tipos de subasta generan el mismo ingreso esperado para el vendedor.</p>
+                <h4>Caso de Estudio: Subastas de Espectro de la FCC</h4>
+                <p>En la década de 1990, la Comisión Federal de Comunicaciones (FCC) de EE. UU. contrató a teóricos de juegos para diseñar una subasta para vender licencias de espectro para telecomunicaciones. El resultado fue la <strong>subasta ascendente simultánea</strong>, un mecanismo complejo que permitió a las empresas pujar por múltiples licencias en diferentes regiones al mismo tiempo, recaudando miles de millones de dólares y asignando los recursos de manera eficiente.</p>
             </div>
 
             <hr style="margin: 2.5rem 0;">
 
-            <h3 class="collapsible-header">Aplicaciones en Modelos de Votante <i class="fas fa-chevron-right icon"></i></h3>
+            <h3 class="collapsible-header">Aplicación Práctica 2: Votaciones y Elección Social <i class="fas fa-chevron-right icon"></i></h3>
             <div class="collapsible-content">
-                <p>Los juegos Bayesianos son esenciales para modelar el comportamiento de los votantes y los candidatos en contextos electorales donde la información es incompleta.</p>
-                <h4>Votantes con Información Privada</h4>
-                <p>En muchos modelos, los votantes tienen información privada sobre sus preferencias ideológicas, su nivel de interés en la política, o su valoración de los candidatos. Los candidatos, por su parte, no conocen el tipo exacto de cada votante, pero tienen creencias sobre la distribución de estos tipos en la población.</p>
-                <p>Un ENB en este contexto implicaría que:</p>
+                <p>El diseño de sistemas de votación es un problema clásico de diseño de mecanismos. ¿Cómo podemos agregar las preferencias individuales de los votantes para llegar a una decisión colectiva "justa"?</p>
+                <h4>Resultados de Imposibilidad:</h4>
+                <p>Lamentablemente, la teoría nos muestra que no existe un sistema de votación perfecto.</p>
                 <ul>
-                    <li>Cada votante, dado su tipo privado, vota por el candidato que maximiza su utilidad esperada.</li>
-                    <li>Cada candidato elige una plataforma o estrategia de campaña que maximiza su probabilidad de ganar (o su margen de victoria), dadas sus creencias sobre los tipos de los votantes y cómo estos reaccionarán.</li>
+                    <li><strong>Teorema de Imposibilidad de Arrow:</strong> Demuestra que no existe un sistema de votación por ranking que pueda convertir las preferencias individuales en una clasificación comunitaria coherente que cumpla simultáneamente con un conjunto de criterios de justicia aparentemente razonables (como la no dictadura, la eficiencia de Pareto y la independencia de alternativas irrelevantes).</li>
+                    <li><strong>Teorema de Gibbard-Satterthwaite:</strong> Un resultado aún más fuerte que establece que, para tres o más alternativas, cualquier sistema de votación determinista es una dictadura o es susceptible al <strong>voto estratégico</strong> (es decir, los votantes tienen un incentivo para no votar por su verdadera preferencia).</li>
                 </ul>
-                <h4>Ejemplo: Campaña Electoral con Votantes Indecisos</h4>
-                <p>Imagina dos candidatos y un grupo de votantes indecisos. Los votantes indecisos pueden ser de "tipo A" (ligeramente inclinados a un candidato) o "tipo B" (ligeramente inclinados al otro), pero los candidatos no saben el tipo exacto de cada votante, solo la proporción de cada tipo.</p>
-                <p>Los candidatos deben decidir si enfocan su campaña en temas económicos o sociales. La estrategia óptima de cada candidato dependerá de sus creencias sobre la distribución de los tipos de votantes y de cómo cada tipo reaccionaría a los diferentes mensajes de campaña. El ENB nos ayudaría a predecir las plataformas que los candidatos elegirían y el comportamiento de voto de los diferentes tipos de votantes.</p>
-            </div>
-
-            <hr style="margin: 2.5rem 0;">
-
-            <h3 class="collapsible-header">Señalización (Introducción) <i class="fas fa-chevron-right icon"></i></h3>
-            <div class="collapsible-content">
-                <p>En juegos con información incompleta, un jugador con información privada (el "informado") puede intentar <strong>señalizar</strong> su tipo a otros jugadores (los "no informados") a través de sus acciones. La señalización es una acción costosa que solo ciertos tipos de jugadores estarían dispuestos a realizar, revelando así su información privada.</p>
-                <h4>Ejemplo Clásico: Educación como Señal</h4>
-                <p>Un ejemplo clásico es el de la educación en el mercado laboral. Los empleadores no saben la "productividad" real de un candidato (su tipo). Los candidatos pueden obtener un título universitario.</p>
+                <h4>Voto por Aprobación y Voto Cuadrático</h4>
+                <p>A pesar de estos resultados pesimistas, el diseño de mecanismos busca sistemas "mejores".</p>
                 <ul>
-                    <li>Si obtener un título es más fácil para los candidatos de alta productividad que para los de baja productividad (es decir, el costo de la educación es menor para los productivos), entonces un título puede servir como una señal creíble de alta productividad.</li>
-                    <li>Los empleadores, al observar el título, infieren el tipo del candidato y ofrecen salarios acordes.</li>
+                    <li><strong>Voto por Aprobación:</strong> Los votantes pueden votar por tantos candidatos como deseen. Es simple y reduce los incentivos para el voto estratégico en comparación con otros sistemas.</li>
+                    <li><strong>Voto Cuadrático:</strong> Un sistema más novedoso donde los votantes reciben "créditos de voto" que pueden distribuir entre diferentes temas. El costo de los votos aumenta cuadráticamente (1 voto = 1 crédito, 2 votos = 4 créditos, etc.). Esto permite a los votantes expresar la <strong>intensidad</strong> de sus preferencias.</li>
                 </ul>
-                <p>La señalización es un concepto fundamental en juegos dinámicos con información incompleta, pero su introducción aquí nos permite entender cómo los jugadores intentan gestionar la asimetría de información.</p>
             </div>
 
             <hr style="margin: 2.5rem 0;">
 
-            <h3 class="collapsible-header">Conclusiones de la Sesión 4 <i class="fas fa-chevron-right icon"></i></h3>
+            <h3 class="collapsible-header">Aplicación Práctica 3: Matching Markets (Mercados de Emparejamiento) <i class="fas fa-chevron-right icon"></i></h3>
             <div class="collapsible-content">
-                <p>En esta sesión, hemos abordado la complejidad de los <strong>Juegos Estáticos con Información Incompleta</strong>, un paso crucial para acercar la teoría de juegos a la realidad. Hemos introducido los conceptos de <strong>tipos</strong> y <strong>creencias</strong> como herramientas fundamentales para modelar la información privada de los jugadores.</p>
-                <p>El <strong>Equilibrio de Nash Bayesiano</strong> nos ha proporcionado un marco para analizar cómo los jugadores toman decisiones óptimas cuando no conocen con certeza las características de sus oponentes, maximizando su pago esperado dadas sus creencias.</p>
-                <p>Las aplicaciones en <strong>subastas</strong> y <strong>modelos de votante</strong> demuestran la potencia de estos conceptos para entender fenómenos económicos y políticos donde la asimetría de información es clave. Finalmente, hemos tenido una breve introducción a la <strong>señalización</strong>, un mecanismo por el cual los jugadores informados intentan revelar su tipo a través de acciones creíbles.</p>
-                <p>La próxima sesión continuará explorando la información incompleta, pero en el contexto de juegos dinámicos, lo que nos llevará a conceptos aún más sofisticados como el Equilibrio Bayesiano Perfecto.</p>
+                <p>En muchos mercados, el precio no es el único factor. Pensemos en la asignación de estudiantes a escuelas, de médicos residentes a hospitales, o de donantes de riñón a pacientes. Estos son <strong>mercados de emparejamiento</strong> (matching markets).</p>
+                <h4>El Algoritmo de Aceptación Diferida (Gale-Shapley)</h4>
+                <p>Este algoritmo, desarrollado por David Gale y Lloyd Shapley (quien ganó el Premio Nobel por este trabajo), proporciona una solución estable para problemas de emparejamiento. Por ejemplo, en el contexto de la asignación de residentes a hospitales:</p>
+                <ol>
+                    <li>Cada residente propone al hospital que más prefiere.</li>
+                    <li>Cada hospital revisa las propuestas que ha recibido, rechaza a los candidatos menos preferidos y mantiene "temporalmente" a los mejores.</li>
+                    <li>Los residentes que fueron rechazados proponen a su siguiente hospital preferido.</li>
+                    <li>El proceso se repite hasta que no hay más propuestas ni rechazos.</li>
+                </ol>
+                <p>Este algoritmo produce un <strong>emparejamiento estable</strong>, lo que significa que no hay un par residente-hospital que prefieran mutuamente ser emparejados entre sí en lugar de con sus asignaciones actuales. Este algoritmo es la base del <strong>Programa Nacional de Emparejamiento de Residentes (NRMP)</strong> en EE. UU.</p>
+                <h4>Caso de Estudio: Intercambio de Riñones</h4>
+                <p>Alvin Roth (otro ganador del Nobel) adaptó estas ideas para crear mercados de intercambio de riñones. Si un paciente necesita un riñón y tiene un donante dispuesto pero incompatible, el diseño de mecanismos permite encontrar cadenas o ciclos de pares donante-paciente en la misma situación para que puedan "intercambiar" donantes, salvando múltiples vidas.</p>
             </div>
+
+            <hr style="margin: 2.5rem 0;">
+
+            <h3 class="collapsible-header">Conclusiones Finales del Curso <i class="fas fa-chevron-right icon"></i></h3>
+            <div class="collapsible-content">
+                <p>A lo largo de este curso, hemos viajado desde los fundamentos del pensamiento estratégico hasta las fronteras del diseño de mecanismos. Hemos visto que la Teoría de Juegos no es solo un ejercicio matemático abstracto, sino una poderosa lente para analizar, predecir y dar forma a las interacciones humanas en política, economía y sociedad.</p>
+                <p>Los conceptos de Equilibrio de Nash, información incompleta, juegos dinámicos y diseño de mecanismos nos proporcionan un lenguaje formal para discutir sobre racionalidad, incentivos, cooperación y conflicto. La habilidad para modelar una situación estratégica es el primer paso para comprenderla profundamente y, en última instancia, para intervenir de manera más efectiva.</p>
+                <p>El verdadero desafío ahora es aplicar estas herramientas a sus propias preguntas de investigación, utilizando el modelado formal no como un fin en sí mismo, sino como un medio para generar nuevas ideas, hipótesis comprobables y una comprensión más clara del complejo mundo de la interacción estratégica.</p>
+            </div>
+        </div>
+        <div class="text-center">
+             <a href="index.html" class="cta-button">Volver al Temario</a>
         </div>
     </main>
 
@@ -243,7 +250,7 @@
             headers.forEach(header => {
                 header.addEventListener('click', function() {
                     this.classList.toggle('active');
-                    const content = this.nextElementSibling; // Assuming content is immediately after header
+                    const content = this.nextElementSibling;
                     if (content.style.maxHeight) {
                         content.style.maxHeight = null;
                         content.classList.remove('show');

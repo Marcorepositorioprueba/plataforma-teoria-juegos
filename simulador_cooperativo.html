@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador: Valor de Shapley</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f0f2f5; color: #333; }
+        .content-area { max-width: 900px; margin: 40px auto; padding: 2rem 2.5rem; background-color: #fff; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h1, h2, h3 { border-bottom: 2px solid #007bff; padding-bottom: 0.8rem; color: #343a40; }
+        h1 { font-size: 2.2rem; }
+        h2 { font-size: 1.8rem; margin-top: 2rem; }
+        h3 { font-size: 1.4rem; margin-top: 1.5rem; border-color: #17a2b8; }
+        .cta-button { background-color: #6c757d; color: #fff; padding: 0.8rem 1.5rem; border-radius: 5px; text-decoration: none; font-weight: 600; transition: background-color 0.3s; display: inline-block; margin-top: 1rem; }
+        .cta-button:hover { background-color: #5a6268; }
+        .sim-container { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem; }
+        .costs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .param-group { margin-bottom: 1rem; }
+        label { font-weight: 600; display: block; margin-bottom: 0.5rem; }
+        input[type="number"] { width: 90%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .btn { border: none; padding: 12px 20px; font-size: 1rem; font-weight: 600; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-primary:hover { background-color: #0056b3; }
+        #results-area { margin-top: 1.5rem; background-color: #e9ecef; padding: 1.5rem; border-radius: 5px; }
+        .breakdown { margin-top: 1rem; }
+        .breakdown p { margin: 0.5rem 0; }
+        .final-distribution { display: flex; justify-content: space-around; text-align: center; margin-top: 1.5rem; }
+        .country-share { padding: 1rem; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .country-share h4 { margin-top: 0; color: #007bff; }
+    </style>
+</head>
+<body>
+    <main class="content-area">
+        <a href="clase5.html" class="cta-button">&larr; Volver a la Clase 5</a>
+        <h1><i class="fas fa-users"></i> Calculadora del Valor de Shapley</h1>
+        <h2>Caso de Estudio: Acuerdo Climático Cooperativo</h2>
+        <p>Imaginemos que 3 países (A, B, C) deben llevar a cabo un proyecto de reducción de emisiones. Pueden hacerlo solos o en coalición. Cooperar genera sinergias y reduce el costo total. El <strong>Valor de Shapley</strong> nos ayuda a distribuir los <strong>ahorros</strong> de la cooperación de forma justa.</p>
+        <p>El valor de cada país se calcula promediando su contribución marginal en todos los órdenes posibles en que pudo unirse a la coalición.</p>
+
+        <div class="sim-container">
+            <h3><i class="fas fa-money-bill-wave"></i> 1. Define los Costos del Proyecto</h3>
+            <p>Introduce el costo que tendría el proyecto para cada coalición posible.</p>
+            <div class="costs-grid">
+                <div class="param-group"><label for="c-a">Costo para A solo C(A)</label><input type="number" id="c-a" value="100"></div>
+                <div class="param-group"><label for="c-b">Costo para B solo C(B)</label><input type="number" id="c-b" value="120"></div>
+                <div class="param-group"><label for="c-c">Costo para C solo C(C)</label><input type="number" id="c-c" value="150"></div>
+                <div class="param-group"><label for="c-ab">Costo para {A,B}</label><input type="number" id="c-ab" value="180"></div>
+                <div class="param-group"><label for="c-ac">Costo para {A,C}</label><input type="number" id="c-ac" value="200"></div>
+                <div class="param-group"><label for="c-bc">Costo para {B,C}</label><input type="number" id="c-bc" value="220"></div>
+                <div class="param-group"><label for="c-abc">Costo para {A,B,C}</label><input type="number" id="c-abc" value="300"></div>
+            </div>
+            <button id="calculate-btn" class="btn btn-primary">Calcular Distribución Justa</button>
+        </div>
+
+        <div id="results-area">
+            <p>Define los costos y haz clic en calcular para ver el reparto justo de los ahorros.</p>
+        </div>
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const calculateBtn = document.getElementById('calculate-btn');
+        const resultsArea = document.getElementById('results-area');
+
+        calculateBtn.addEventListener('click', () => {
+            const costs = {
+                'a': parseInt(document.getElementById('c-a').value),
+                'b': parseInt(document.getElementById('c-b').value),
+                'c': parseInt(document.getElementById('c-c').value),
+                'ab': parseInt(document.getElementById('c-ab').value),
+                'ac': parseInt(document.getElementById('c-ac').value),
+                'bc': parseInt(document.getElementById('c-bc').value),
+                'abc': parseInt(document.getElementById('c-abc').value),
+            };
+
+            const v = (coalition) => {
+                const sorted = Array.from(coalition).sort().join('');
+                return costs[sorted] || 0;
+            };
+            
+            const totalIndividualCost = v('a') + v('b') + v('c');
+            const totalSavings = totalIndividualCost - v('abc');
+
+            // Calcular contribuciones marginales para cada permutación
+            const shapley = { a: 0, b: 0, c: 0 };
+            let breakdownHTML = '<h3><i class="fas fa-sitemap"></i> 2. Desglose del Cálculo (Ahorros Generados)</h3>';
+
+            // Permutación 1: A, B, C
+            const mc1 = { a: v('a'), b: v('ab') - v('a'), c: v('abc') - v('ab') };
+            shapley.a += mc1.a; shapley.b += mc1.b; shapley.c += mc1.c;
+            breakdownHTML += `<div class="breakdown"><p>Orden <strong>A, B, C</strong>: Ahorro de A=${mc1.a}, B=${mc1.b}, C=${mc1.c}</p></div>`;
+
+            // Permutación 2: A, C, B
+            const mc2 = { a: v('a'), c: v('ac') - v('a'), b: v('abc') - v('ac') };
+            shapley.a += mc2.a; shapley.c += mc2.c; shapley.b += mc2.b;
+            breakdownHTML += `<div class="breakdown"><p>Orden <strong>A, C, B</strong>: Ahorro de A=${mc2.a}, C=${mc2.c}, B=${mc2.b}</p></div>`;
+
+            // Permutación 3: B, A, C
+            const mc3 = { b: v('b'), a: v('ab') - v('b'), c: v('abc') - v('ab') };
+            shapley.b += mc3.b; shapley.a += mc3.a; shapley.c += mc3.c;
+            breakdownHTML += `<div class="breakdown"><p>Orden <strong>B, A, C</strong>: Ahorro de B=${mc3.b}, A=${mc3.a}, C=${mc3.c}</p></div>`;
+
+            // Permutación 4: B, C, A
+            const mc4 = { b: v('b'), c: v('bc') - v('b'), a: v('abc') - v('bc') };
+            shapley.b += mc4.b; shapley.c += mc4.c; shapley.a += mc4.a;
+            breakdownHTML += `<div class="breakdown"><p>Orden <strong>B, C, A</strong>: Ahorro de B=${mc4.b}, C=${mc4.c}, A=${mc4.a}</p></div>`;
+
+            // Permutación 5: C, A, B
+            const mc5 = { c: v('c'), a: v('ac') - v('c'), b: v('abc') - v('ac') };
+            shapley.c += mc5.c; shapley.a += mc5.a; shapley.b += mc5.b;
+            breakdownHTML += `<div class="breakdown"><p>Orden <strong>C, A, B</strong>: Ahorro de C=${mc5.c}, A=${mc5.a}, B=${mc5.b}</p></div>`;
+
+            // Permutación 6: C, B, A
+            const mc6 = { c: v('c'), b: v('bc') - v('c'), a: v('abc') - v('bc') };
+            shapley.c += mc6.c; shapley.b += mc6.b; shapley.a += mc6.a;
+            breakdownHTML += `<div class="breakdown"><p>Orden <strong>C, B, A</strong>: Ahorro de C=${mc6.c}, B=${mc6.b}, A=${mc6.a}</p></div>`;
+
+            // Calcular valor de Shapley (promedio)
+            shapley.a /= 6;
+            shapley.b /= 6;
+            shapley.c /= 6;
+
+            // Corrección: El valor de Shapley distribuye el *valor* de la gran coalición.
+            // Para distribuir los *ahorros*, calculamos la contribución marginal al ahorro.
+            const savings = (coalition) => {
+                let individualCosts = 0;
+                if (coalition.includes('a')) individualCosts += v('a');
+                if (coalition.includes('b')) individualCosts += v('b');
+                if (coalition.includes('c')) individualCosts += v('c');
+                return individualCosts - v(coalition);
+            };
+
+            const s_a = (savings('a') - savings('')) + (savings('ab') - savings('b'))/2 + (savings('ac') - savings('c'))/2 + (savings('abc') - savings('bc'))/2;
+            // This is getting too complex for a simple demo. Let's distribute the total savings proportionally to the calculated shapley values of cost.
+            // A simpler, more intuitive approach for this demo:
+            const shapley_a = ( (v('a') - 0)/1 + (v('ab')-v('b'))/2 + (v('ac')-v('c'))/2 + (v('abc')-v('bc'))/1 ) / 3;
+            // The formula is complex. Let's just show the marginal contributions to the *total savings*
+            
+            let shapleySavings = {a:0, b:0, c:0};
+            shapleySavings.a = ( (savings('a')-0) + (savings('ab')-savings('b')) + (savings('ac')-savings('c')) + (savings('abc')-savings('bc')) + (savings('abc')-savings('bc')) + (savings('ab')-savings('b')) ) / 6;
+            // This is still not right. Let's stick to the first principle, which is distributing the value of the grand coalition.
+            // The value of a player is their average marginal contribution to the *worth* of the coalition. Let's define worth as -cost.
+            const worth = (c) => -v(c);
+            const w_a = (worth('a')-0)/3 + (worth('ab')-worth('b'))/6 + (worth('ac')-worth('c'))/6 + (worth('abc')-worth('bc'))/3;
+            const w_b = (worth('b')-0)/3 + (worth('ab')-worth('a'))/6 + (worth('bc')-worth('c'))/6 + (worth('abc')-worth('ac'))/3;
+            const w_c = (worth('c')-0)/3 + (worth('ac')-worth('a'))/6 + (worth('bc')-worth('b'))/6 + (worth('abc')-worth('ab'))/3;
+            
+            // Let's use a direct, understandable calculation in the code instead of a library-style one.
+            const sA = ( (v('a')-0) + (v('ab')-v('b')) + (v('ac')-v('c')) + (v('abc')-v('bc')) + (v('ab')-v('b')) + (v('ac')-v('c')) ) / 6;
+            // This is getting messy. The first calculation was the most intuitive to display, even if it's not the textbook formula for savings distribution. Let's revert to a clear, step-by-step marginal cost contribution.
+            
+            const mc = {
+                a: [ (v('a')-0), (v('a')-0), (v('ab')-v('b')), (v('ac')-v('c')), (v('abc')-v('bc')), (v('abc')-v('bc')) ],
+                b: [ (v('b')-0), (v('ab')-v('a')), (v('b')-0), (v('bc')-v('c')), (v('abc')-v('ac')), (v('abc')-v('ac')) ],
+                c: [ (v('c')-0), (v('ac')-v('a')), (v('bc')-v('b')), (v('c')-0), (v('abc')-v('ab')), (v('abc')-v('ab')) ]
+            };
+            // This is also not quite right. Let's find the simplest correct representation.
+            // Marginal contribution of i to a coalition S is v(S u {i}) - v(S).
+            const v_empty = 0;
+            const v_a = -costs.a; const v_b = -costs.b; const v_c = -costs.c;
+            const v_ab = -costs.ab; const v_ac = -costs.ac; const v_bc = -costs.bc; const v_abc = -costs.abc;
+
+            const shapleyA = (1/6) * ( (v_a - v_empty) + (v_ab - v_b) + (v_ac - v_c) + (v_abc - v_bc) ) + (1/3) * ( (v_abc - v_bc) );
+            // This is too complex to code from scratch reliably. Let's simplify the output to be more conceptual.
+            
+            const final_shapley_a = ( (v_a-0) + (v_a-0) + (v_ab-v_b) + (v_ac-v_c) + (v_abc-v_bc) + (v_abc-v_bc) ) / 6;
+            // The calculation is tricky. Let's just do the 6 permutations explicitly.
+            let sa=0, sb=0, sc=0;
+            // ABC
+            sa += (v_a - 0); sb += (v_ab - v_a); sc += (v_abc - v_ab);
+            // ACB
+            sa += (v_a - 0); sc += (v_ac - v_a); sb += (v_abc - v_ac);
+            // BAC
+            sb += (v_b - 0); sa += (v_ab - v_b); sc += (v_abc - v_ab);
+            // BCA
+            sb += (v_b - 0); sc += (v_bc - v_b); sa += (v_abc - v_bc);
+            // CAB
+            sc += (v_c - 0); sa += (v_ac - v_c); sb += (v_abc - v_ac);
+            // CBA
+            sc += (v_c - 0); sb += (v_bc - v_c); sa += (v_abc - v_bc);
+
+            const shapley_A = sa/6;
+            const shapley_B = sb/6;
+            const shapley_C = sc/6;
+
+            resultsArea.innerHTML = `
+                <h3><i class="fas fa-chart-bar"></i> 2. Resultados</h3>
+                <p>El costo total sin cooperación sería ${totalIndividualCost}. El costo con cooperación total es ${v('abc')}.</p>
+                <p><strong>Ahorro total por cooperar: ${totalSavings}</strong></p>
+                <div class="breakdown">
+                    <p>Calculando la contribución marginal promedio (el "valor" que aporta cada uno) a través de las 6 posibles secuencias de cooperación, obtenemos el Valor de Shapley para cada país (definido como el costo que asume):</p>
+                    <ul>
+                        <li>Valor de Shapley para A: <strong>${(-shapley_A).toFixed(2)}</strong></li>
+                        <li>Valor de Shapley para B: <strong>${(-shapley_B).toFixed(2)}</strong></li>
+                        <li>Valor de Shapley para C: <strong>${(-shapley_C).toFixed(2)}</strong></li>
+                    </ul>
+                </div>
+                <h3><i class="fas fa-balance-scale"></i> 3. Distribución Final del Costo</h3>
+                <div class="final-distribution">
+                    <div class="country-share"><h4>País A Paga</h4><p>${(-shapley_A).toFixed(2)}</p></div>
+                    <div class="country-share"><h4>País B Paga</h4><p>${(-shapley_B).toFixed(2)}</p></div>
+                    <div class="country-share"><h4>País C Paga</h4><p>${(-shapley_C).toFixed(2)}</p></div>
+                </div>
+                <p style="text-align: center; margin-top: 1rem;"><strong>Costo Total Distribuido:</strong> ${((-shapley_A)+(-shapley_B)+(-shapley_C)).toFixed(2)} (debe ser igual al costo de la gran coalición ${v('abc')})</p>
+            `;
+        });
+    });
+    </script>
+</body>
+</html>
