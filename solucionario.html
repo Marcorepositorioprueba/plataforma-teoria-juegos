@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solucionario del Examen | Teoría de Juegos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: #f8f9fa; color: #343a40; }
+        .top-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2.5rem; background-color: #fff; border-bottom: 1px solid #dee2e6; position: sticky; top: 0; z-index: 1000; }
+        .top-header .logo img { max-height: 75px; }
+        .main-nav a { margin: 0 1.5rem; text-decoration: none; color: #495057; font-weight: 600; transition: color 0.3s; }
+        .main-nav a:hover { color: #007bff; }
+        .content-area { padding: 2rem 2.5rem 4rem 2.5rem; }
+        .card { background-color: #fff; border-radius: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); padding: 2.5rem; margin-bottom: 2.5rem; }
+        .card h2 { font-size: 2rem; font-weight: 700; margin-top: 0; margin-bottom: 2rem; border-bottom: 2px solid #28a745; padding-bottom: 0.8rem; display: flex; align-items: center; }
+        .card h2 .fa { margin-right: 1rem; color: #28a745; }
+        footer { text-align: center; padding: 3rem 0; background-color: #343a40; color: #fff; }
+        .cta-button { background-color: #007bff; color: #fff; padding: 0.8rem 1.5rem; border-radius: 5px; text-decoration: none; font-weight: 600; transition: background-color 0.3s; display: inline-block; margin-top: 1rem; }
+        .cta-button:hover { background-color: #0056b3; }
+        .solution-block { margin-bottom: 2.5rem; }
+        .solution-block h4 { font-size: 1.4rem; color: #007bff; }
+        .solution-block .answer { background-color: #e9f7ef; border-left: 5px solid #28a745; padding: 1rem; margin-top: 1rem; border-radius: 5px; }
+        .solution-block .answer strong { color: #155724; }
+        .matrix-table { border-collapse: collapse; margin: 1rem 0; text-align: center; font-size: 0.9rem; }
+        .matrix-table td, .matrix-table th { border: 1px solid #ccc; padding: 0.5rem; min-width: 60px; }
+        .matrix-table .player-label { font-style: italic; border: none; background-color: #f8f9fa; }
+        .payoff { font-weight: bold; color: #0056b3; }
+    </style>
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="logo">
+            <a href="index.html"><img src="recursos/logoclh.jpg" alt="Logo del Curso"></a>
+        </div>
+        <nav class="main-nav">
+            <a href="index.html">Volver al Temario</a>
+        </nav>
+    </header>
+
+    <main class="content-area">
+        <div id="solucionario" class="card">
+            <h2><i class="fas fa-check-double"></i> Solucionario del Examen Final</h2>
+
+            <!-- Pregunta 1 -->
+            <div class="solution-block">
+                <h4>1. En un juego estático de dos jugadores, un Equilibrio de Nash en estrategias puras existe cuando:</h4>
+                <div class="answer">
+                    <p><strong>Respuesta Correcta:</strong> b) La estrategia elegida por cada jugador es la mejor respuesta a la estrategia elegida por el otro.</p>
+                    <p><strong>Explicación:</strong> Esta es la definición formal de un Equilibrio de Nash. En este punto, ningún jugador tiene un incentivo para cambiar su estrategia de forma unilateral, ya que hacerlo no mejoraría su resultado, asumiendo que el otro jugador mantiene su estrategia.</p>
+                </div>
+            </div>
+
+            <!-- Pregunta 2 -->
+            <div class="solution-block">
+                <h4>2. La inducción hacia atrás es un método utilizado para encontrar equilibrios en:</h4>
+                <div class="answer">
+                    <p><strong>Respuesta Correcta:</strong> c) Juegos dinámicos con información completa y perfecta.</p>
+                    <p><strong>Explicación:</strong> La inducción hacia atrás se aplica en juegos secuenciales (dinámicos). Se comienza analizando la última decisión del juego y se determinan las acciones óptimas en cada etapa anterior, "retrocediendo" hasta el inicio del juego para encontrar el equilibrio perfecto en subjuegos.</p>
+                </div>
+            </div>
+
+            <!-- Pregunta 3 -->
+            <div class="solution-block">
+                <h4>3. Describa brevemente cómo modelaría el escenario de negociación del presupuesto.</h4>
+                <div class="answer">
+                    <p><strong>Respuesta Modelo:</strong></p>
+                    <ul>
+                        <li><strong>Jugadores:</strong> Partido A y Partido B.</li>
+                        <li><strong>Estrategias:</strong> Cada jugador tiene el mismo conjunto de estrategias: {Postura Dura, Postura Conciliadora}.</li>
+                        <li><strong>Pagos:</strong> Se pueden representar en una matriz de 2x2. Los pagos exactos pueden variar, pero deben reflejar las preferencias descritas. Un ejemplo plausible sería:</li>
+                    </ul>
+                    <table class="matrix-table" style="margin-left: auto; margin-right: auto;">
+                        <tr><td class="player-label" colspan="2" rowspan="2"></td><th colspan="2">Partido B</th></tr>
+                        <tr><th>Dura</th><th>Conciliadora</th></tr>
+                        <tr><th rowspan="2">Partido A</th><th>Dura</th><td><span class="payoff">-5, -5</span></td><td><span class="payoff">10, -10</span></td></tr>
+                        <tr><th>Conciliadora</th><td><span class="payoff">-10, 10</span></td><td><span class="payoff">5, 5</span></td></tr>
+                    </table>
+                    <p><strong>Explicación:</strong> El resultado (-5, -5) refleja el fracaso de la negociación. (10, -10) y (-10, 10) muestran la ganancia de un partido a costa del otro. (5, 5) es un acuerdo mutuamente beneficioso, aunque no es el pago más alto posible para ninguno de los dos individualmente.</p>
+                </div>
+            </div>
+
+            <!-- Pregunta 4 -->
+            <div class="solution-block">
+                <h4>4. Analice la matriz del Dilema del Prisionero.</h4>
+                <div class="answer">
+                    <p><strong>Equilibrio de Nash:</strong> (Confesar, Confesar).</p>
+                    <p><strong>Explicación:</strong> Para el Jugador 1, "Confesar" es una estrategia dominante porque le da un mejor pago sin importar lo que haga el Jugador 2 (0 es mejor que -1, y -5 es mejor que -10). Lo mismo aplica para el Jugador 2. Dado que ambos jugadores tienen una estrategia dominante, el único Equilibrio de Nash es cuando ambos la eligen, resultando en el pago (-5, -5).</p>
+                </div>
+            </div>
+
+            <!-- Pregunta 5 -->
+            <div class="solution-block">
+                <h4>5. Considere el juego de coordinación (Batalla de los Sexos).</h4>
+                <div class="answer">
+                    <p><strong>Respuesta:</strong> Existen <strong>dos</strong> Equilibrios de Nash en estrategias puras.</p>
+                    <p><strong>Identificación:</strong></p>
+                    <ol>
+                        <li><strong>(Fútbol, Fútbol):</strong> Si ambos eligen Fútbol, ninguno tiene incentivo a cambiar. El Jugador 1 prefiere quedarse (2 > 0) y el Jugador 2 también (1 > 0).</li>
+                        <li><strong>(Ópera, Ópera):</strong> Si ambos eligen Ópera, ninguno tiene incentivo a cambiar. El Jugador 1 prefiere quedarse (1 > 0) y el Jugador 2 también (2 > 0).</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Pregunta 6 -->
+            <div class="solution-block">
+                <h4>6. Encuentre el Equilibrio de Nash para el siguiente juego.</h4>
+                <div class="answer">
+                    <p><strong>Equilibrio de Nash:</strong> (Abajo, Estrategia Y).</p>
+                    <p><strong>Explicación:</strong></p>
+                     <ul>
+                        <li><strong>Análisis del Jugador A:</strong> Si B elige "Estrategia X", A prefiere "Abajo" (4 > 3). Si B elige "Estrategia Y", A prefiere "Abajo" (2 > 1). Por lo tanto, "Abajo" es la estrategia dominante para A.</li>
+                        <li><strong>Análisis del Jugador B:</strong> Si A elige "Arriba", B prefiere "Estrategia Y" (4 > 3). Si A elige "Abajo", B prefiere "Estrategia Y" (2 > 1). Por lo tanto, "Estrategia Y" es la estrategia dominante para B.</li>
+                    </ul>
+                    <p>El equilibrio se encuentra donde ambos jugadores eligen sus estrategias dominantes, lo que resulta en el pago (2, 2).</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="text-center">
+             <a href="index.html" class="cta-button">Volver al Inicio</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Dr. Marco Antonio Leon Zaragoza</p>
+    </footer>
+
+</body>
+</html>

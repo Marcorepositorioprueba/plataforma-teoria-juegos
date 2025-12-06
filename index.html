@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plataforma | Teoría de Juegos</title>
     
-
     <!-- Meta etiquetas para vista previa (Open Graph) -->
     <meta property="og:title" content="Curso de Doctorado: Teoría de Juegos y Modelado Formal">
     <meta property="og:description" content="Curso para el análisis de situaciones estratégicas complejas en ciencia política y administración pública.">
@@ -99,6 +98,8 @@
             transition: background-color 0.3s;
             display: inline-block;
             margin-top: 1rem;
+            cursor: pointer;
+            border: none;
         }
         .cta-button:hover { background-color: #0056b3; }
 
@@ -155,7 +156,7 @@
             gap: 10px;
             margin-top: auto; /* Pushes buttons to the bottom */
         }
-        .session-buttons a {
+        .session-buttons a, .session-buttons span {
             flex: 1;
             text-align: center;
             padding: 0.75rem;
@@ -176,12 +177,11 @@
             border: 1px solid #28a745;
         }
         .btn-practice:hover { background-color: #1e7e34; }
-        .btn-theory.disabled {
+        .btn-practice.disabled, .btn-theory.disabled {
             background-color: #e9ecef;
             color: #adb5bd;
             border-color: #dee2e6;
             cursor: not-allowed;
-            pointer-events: none;
         }
 
         .collapsible-header .icon {
@@ -201,9 +201,8 @@
             padding-top: 1.5rem;
         }
 
-        /* Estilos para el Modal de Atención */
+        /* Estilos para Modales */
         .modal-attention {
-            display: none; /* Oculto por defecto */
             position: fixed; /* Permanece en su lugar */
             z-index: 1001; /* Se superpone a todo */
             left: 0;
@@ -222,7 +221,7 @@
             margin: auto;
             padding: 30px;
             border: 1px solid #888;
-            width: 80%; /* Podría ser un porcentaje o un max-width */
+            width: 80%;
             max-width: 600px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
@@ -236,7 +235,7 @@
             to {top: 0; opacity: 1}
         }
 
-        .close-attention-modal {
+        .close-attention-modal, .close-exam-modal {
             color: #aaa;
             position: absolute;
             top: 10px;
@@ -246,56 +245,57 @@
             cursor: pointer;
         }
 
-        .close-attention-modal:hover,
-        .close-attention-modal:focus {
+        .close-attention-modal:hover, .close-attention-modal:focus,
+        .close-exam-modal:hover, .close-exam-modal:focus {
             color: black;
             text-decoration: none;
         }
 
         .modal-attention-content h2 {
-            color: #d9534f; /* Color de advertencia */
             font-size: 1.8rem;
             margin-top: 0;
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
         }
+        .modal-attention-content h2 .fas { margin-right: 10px; }
+        #attentionModal .modal-attention-content h2 { color: #d9534f; } /* Color de advertencia */
+        #examModal .modal-attention-content h2 { color: #007bff; } /* Color principal */
 
-        .modal-attention-content h2 .fas {
-            margin-right: 10px;
+        .modal-attention-content ul { list-style: none; padding: 0; margin-top: 1.5rem; }
+        .modal-attention-content ul li { margin-bottom: 1rem; }
+        .modal-attention-content ul li a { color: #007bff; text-decoration: none; font-weight: 600; }
+        .modal-attention-content ul li a:hover { text-decoration: underline; }
+
+        .exam-question { margin-bottom: 1.5rem; }
+        .exam-question p { font-size: 1.1rem; }
+        .exam-question label { display: block; margin-bottom: 0.5rem; font-size: 1rem; }
+
+        .matrix-table {
+            border-collapse: collapse;
+            margin: 1rem auto;
+            text-align: center;
+            font-size: 0.9rem;
         }
-
-        .modal-attention-content ul {
-            list-style: none;
-            padding: 0;
-            margin-top: 1.5rem;
+        .matrix-table td, .matrix-table th {
+            border: 1px solid #ccc;
+            padding: 0.5rem;
+            min-width: 60px;
         }
-
-        .modal-attention-content ul li {
-            margin-bottom: 1rem;
+        .matrix-table .player-label {
+            font-style: italic;
+            border: none;
+            background-color: #f8f9fa;
         }
-
-        .modal-attention-content ul li a {
-            color: #007bff;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .modal-attention-content ul li a:hover {
-            text-decoration: underline;
+        .payoff { 
+            font-weight: bold; 
+            color: #0056b3;
         }
 
         @media (max-width: 768px) {
-            .modal-attention-content {
-                width: 95%; /* Ocupa casi todo el ancho en móviles */
-                padding: 20px; /* Reduce el padding */
-            }
-            .modal-attention-content h2 {
-                font-size: 1.5rem; /* Ajusta el tamaño del título */
-            }
-            .modal-attention-content ul li {
-                font-size: 0.95rem; /* Ajusta el tamaño del texto de la lista */
-            }
+            .modal-attention-content { width: 95%; padding: 20px; }
+            .modal-attention-content h2 { font-size: 1.5rem; }
+            .modal-attention-content ul li { font-size: 0.95rem; }
         }
     </style>
 </head>
@@ -399,11 +399,12 @@
                 </div>
                 <!-- Evaluación Final -->
                 <div class="session-card">
-                    <div class="session-status upcoming">Próximamente</div>
+                    <div class="session-status" style="background-color: #d9534f;">Examen Final</div>
                     <h3>Evaluación (06/Dic)</h3>
                     <p>Evaluación Final y Presentación de Proyectos de Investigación.</p>
                     <div class="session-buttons">
-                        <a href="evaluacion_final.html" class="btn-practice disabled">Iniciar Evaluación</a>
+                        <span class="btn-practice disabled">Examen Final</span>
+                        <a href="solucionario.html" class="btn-theory">Solucionario</a>
                     </div>
                 </div>
             </div>
@@ -440,30 +441,151 @@
         <p>&copy; 2025 Dr. Marco Antonio Leon Zaragoza</p>
     </footer>
 
-    <!-- Modal de Guía de Evaluación Final -->
-    <div id="attentionModal" class="modal-attention">
+    <!-- Modal de Guía de Evaluación Final (Oculto por defecto) -->
+    <div id="attentionModal" class="modal-attention" style="display: none;">
         <div class="modal-attention-content">
             <span class="close-attention-modal">&times;</span>
             <h2><i class="fas fa-clipboard-check"></i> Guía de Evaluación Final</h2>
+            <p>Detalles sobre la evaluación final.</p>
+            <a href="evaluacion_guia.html" class="cta-button">Ver Guía Completa</a>
+        </div>
+    </div>
+
+    <!-- Modal de Examen Final -->
+    <div id="examModal" class="modal-attention" style="display: none;">
+        <div class="modal-attention-content">
+            <span class="close-exam-modal">&times;</span>
             
-            <div style="text-align: center; font-size: 3rem; color: #d9534f; margin-bottom: 1rem;">
-                <i class="fas fa-exclamation-triangle"></i>
+            <!-- Vista de Login -->
+            <div id="exam-login-view" style="text-align: center;">
+                <div style="font-size: 3rem; color: #007bff; margin-bottom: 1rem;">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <h2 style="justify-content: center;"><i class="fas fa-exclamation-triangle" style="color: #f0ad4e; margin-right: 15px;"></i> Ingreso al exámen final 06/12/2025</h2>
+                <p>Por favor, ingrese la contraseña para comenzar.</p>
+                <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px; text-align: left;">
+                    <input type="password" id="exam-password" placeholder="Contraseña" style="padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;">
+                    <button id="exam-login-btn" class="cta-button" style="margin-top: 0;">Acceder</button>
+                    <p id="exam-error-msg" style="color: #d9534f; text-align: center; display: none;">Contraseña incorrecta.</p>
+                </div>
             </div>
 
-            <p>A continuación se detalla la estructura de la evaluación final del curso. El objetivo es valorar la aplicación práctica y teórica de los conceptos aprendidos.</p>
+            <!-- Vista de Preguntas -->
+            <div id="exam-questions-view" style="display: none;">
+                <h2><i class="fas fa-file-alt"></i> Examen Final: Teoría de Juegos</h2>
+                <form id="exam-form">
+                    <!-- Pregunta 1 -->
+                    <div class="exam-question">
+                        <p><strong>1. En un juego estático de dos jugadores, un Equilibrio de Nash en estrategias puras existe cuando:</strong></p>
+                        <label><input type="radio" name="q1" value="a"> a) Ambos jugadores tienen una estrategia dominante.</label><br>
+                        <label><input type="radio" name="q1" value="b"> b) La estrategia elegida por cada jugador es la mejor respuesta a la estrategia elegida por el otro.</label><br>
+                        <label><input type="radio" name="q1" value="c"> c) El resultado del juego es el más justo para ambos jugadores.</label><br>
+                    </div>
+                    <hr style="margin: 2rem 0;">
+                    <!-- Pregunta 2 -->
+                    <div class="exam-question">
+                        <p><strong>2. La inducción hacia atrás es un método utilizado para encontrar equilibrios en:</strong></p>
+                        <label><input type="radio" name="q2" value="a"> a) Juegos estáticos con información incompleta.</label><br>
+                        <label><input type="radio" name="q2" value="b"> b) Juegos de suma cero.</label><br>
+                        <label><input type="radio" name="q2" value="c"> c) Juegos dinámicos con información completa y perfecta.</label><br>
+                    </div>
+                    <hr style="margin: 2rem 0;">
+                    <!-- Pregunta 3 -->
+                    <div class="exam-question">
+                        <p><strong>3. Describa brevemente cómo modelaría el siguiente escenario como un juego:</strong></p>
+                        <p><i>"Dos partidos políticos (Partido A y Partido B) deben decidir si adoptar una postura 'dura' o 'conciliadora' en la negociación del presupuesto anual. Si ambos son conciliadores, llegan a un acuerdo beneficioso para ambos pero menor que si uno solo es conciliador. Si ambos son duros, no hay acuerdo y ambos pierden. Si uno es duro y el otro conciliador, el partido duro obtiene una gran victoria política y el conciliador una gran derrota."</i></p>
+                        <textarea name="q3" rows="6" style="width: 95%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;" placeholder="Identifique: Jugadores, Estrategias y posibles Pagos (ej. una matriz de pagos 2x2)."></textarea>
+                    </div>
 
-            <h4 style="margin-top: 1.5rem; color: #007bff;">Parte 1: Examen Escrito</h4>
-            <p>Consistirá en la resolución de problemas de modelado estratégico. Se evaluará la capacidad para formalizar un escenario político en un juego y encontrar su equilibrio.</p>
+                    <hr style="margin: 2rem 0;">
+                    <!-- Pregunta 4 -->
+                    <div class="exam-question">
+                        <p><strong>4. Analice la siguiente matriz de juego (Dilema del Prisionero).</strong> Los pagos se listan como (Jugador 1, Jugador 2).</p>
+                        <table class="matrix-table">
+                            <tr>
+                                <td class="player-label" colspan="2" rowspan="2"></td>
+                                <th colspan="2">Jugador 2</th>
+                            </tr>
+                            <tr>
+                                <th>Confesar</th>
+                                <th>Callar</th>
+                            </tr>
+                            <tr>
+                                <th rowspan="2" style="writing-mode: vertical-rl; text-orientation: mixed;">Jugador 1</th>
+                                <th>Confesar</th>
+                                <td><span class="payoff">-5, -5</span></td>
+                                <td><span class="payoff">0, -10</span></td>
+                            </tr>
+                            <tr>
+                                <th>Callar</th>
+                                <td><span class="payoff">-10, 0</span></td>
+                                <td><span class="payoff">-1, -1</span></td>
+                            </tr>
+                        </table>
+                        <p>¿Cuál es el Equilibrio de Nash del juego? Explique su razonamiento.</p>
+                        <textarea name="q4" rows="4" style="width: 95%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;" placeholder="Identifique el equilibrio y explique brevemente su razonamiento."></textarea>
+                    </div>
 
-            <h4 style="margin-top: 1.5rem; color: #007bff;">Parte 2: Presentación de Proyecto</h4>
-            <p>Presentación oral de 20 minutos del proyecto de investigación final. Se valorará la originalidad, el rigor en la aplicación de la teoría de juegos y la claridad de la exposición.</p>
+                    <hr style="margin: 2rem 0;">
+                    <!-- Pregunta 5 -->
+                    <div class="exam-question">
+                        <p><strong>5. Considere el siguiente juego de coordinación (Batalla de los Sexos).</strong></p>
+                        <table class="matrix-table">
+                             <tr>
+                                <td class="player-label" colspan="2" rowspan="2"></td>
+                                <th colspan="2">Jugador 2</th>
+                            </tr>
+                            <tr>
+                                <th>Fútbol</th>
+                                <th>Ópera</th>
+                            </tr>
+                            <tr>
+                                <th rowspan="2" style="writing-mode: vertical-rl; text-orientation: mixed;">Jugador 1</th>
+                                <th>Fútbol</th>
+                                <td><span class="payoff">2, 1</span></td>
+                                <td><span class="payoff">0, 0</span></td>
+                            </tr>
+                            <tr>
+                                <th>Ópera</th>
+                                <td><span class="payoff">0, 0</span></td>
+                                <td><span class="payoff">1, 2</span></td>
+                            </tr>
+                        </table>
+                        <p>¿Cuántos Equilibrios de Nash en estrategias puras existen? Identifíquelos.</p>
+                        <textarea name="q5" rows="3" style="width: 95%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;" placeholder="Liste los equilibrios encontrados."></textarea>
+                    </div>
 
-            <div style="margin-top: 1.5rem; padding: 1rem; background-color: #e9ecef; border-radius: 8px;">
-                <h5 style="margin-top: 0; font-weight: 600;">Objetivo Principal de la Evaluación:</h5>
-                <p style="margin-bottom: 0;">Demostrar maestría en el modelado de interacciones estratégicas y proponer un diseño de investigación original y relevante.</p>
+                    <hr style="margin: 2rem 0;">
+                    <!-- Pregunta 6 -->
+                    <div class="exam-question">
+                        <p><strong>6. Encuentre el Equilibrio de Nash para el siguiente juego.</strong></p>
+                        <table class="matrix-table">
+                             <tr>
+                                <td class="player-label" colspan="2" rowspan="2"></td>
+                                <th colspan="2">Jugador B</th>
+                            </tr>
+                            <tr>
+                                <th>Estrategia X</th>
+                                <th>Estrategia Y</th>
+                            </tr>
+                            <tr>
+                                <th rowspan="2" style="writing-mode: vertical-rl; text-orientation: mixed;">Jugador A</th>
+                                <th>Arriba</th>
+                                <td><span class="payoff">3, 3</span></td>
+                                <td><span class="payoff">1, 4</span></td>
+                            </tr>
+                            <tr>
+                                <th>Abajo</th>
+                                <td><span class="payoff">4, 1</span></td>
+                                <td><span class="payoff">2, 2</span></td>
+                            </tr>
+                        </table>
+                        <textarea name="q6" rows="3" style="width: 95%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;" placeholder="Escriba el resultado del Equilibrio de Nash."></textarea>
+                    </div>
+
+                    <button type="submit" class="cta-button" style="width: 95%; text-align: center; margin-top: 2rem; background-color: #28a745;">Finalizar Examen</button>
+                </form>
             </div>
-
-            <a href="evaluacion_guia.html" class="cta-button" style="width: 95%; text-align: center; margin-top: 2rem;">Ver Guía Completa de Evaluación</a>
         </div>
     </div>
 
@@ -480,32 +602,59 @@
                             content.style.maxHeight = null;
                             content.classList.remove('show');
                         } else {
-                            // Set max-height to scrollHeight for smooth transition
                             content.style.maxHeight = content.scrollHeight + "px";
                             content.classList.add('show');
                         }
                     }
                 });
             });
+            
+            // --- Script para el Modal de Examen ---
+            const examModal = document.getElementById('examModal');
+            const closeExamModal = document.querySelector('.close-exam-modal');
+            
+            const examLoginView = document.getElementById('exam-login-view');
+            const examQuestionsView = document.getElementById('exam-questions-view');
+            const examPasswordInput = document.getElementById('exam-password');
+            const examLoginBtn = document.getElementById('exam-login-btn');
+            const examErrorMsg = document.getElementById('exam-error-msg');
+            const examForm = document.getElementById('exam-form');
 
-            // Script para el modal de atención
-            const attentionModal = document.getElementById('attentionModal');
-            const closeAttentionModal = document.querySelector('.close-attention-modal');
-
-            // Mostrar el modal al cargar la página
+            // Mostrar el modal de examen al cargar la página
             window.addEventListener('load', function() {
-                attentionModal.style.display = 'flex';
+                if(examModal) examModal.style.display = 'flex';
             });
 
-            // Cerrar el modal al hacer clic en la 'x'
-            closeAttentionModal.addEventListener('click', function() {
-                attentionModal.style.display = 'none';
-            });
+            if(closeExamModal) {
+                closeExamModal.addEventListener('click', function() {
+                    examModal.style.display = 'none';
+                });
+            }
 
-            // Cerrar el modal al hacer clic fuera del contenido
+            if(examLoginBtn) {
+                examLoginBtn.addEventListener('click', function() {
+                    if (examPasswordInput.value === 'final25') {
+                        examLoginView.style.display = 'none';
+                        examQuestionsView.style.display = 'block';
+                        examErrorMsg.style.display = 'none';
+                    } else {
+                        examErrorMsg.style.display = 'block';
+                    }
+                });
+            }
+
+            if(examForm) {
+                examForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Examen finalizado. Gracias.');
+                    examModal.style.display = 'none';
+                });
+            }
+
+            // Cerrar modales al hacer clic fuera
             window.addEventListener('click', function(event) {
-                if (event.target == attentionModal) {
-                    attentionModal.style.display = 'none';
+                if (event.target == examModal) {
+                    examModal.style.display = 'none';
                 }
             });
         });
